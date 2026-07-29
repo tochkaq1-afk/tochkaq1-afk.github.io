@@ -82,22 +82,24 @@ const art = (shape, tint) => `
 
 /* ─── Каталог ──────────────────────────────────────────────── */
 
+/* kind — как называется предмет в единственном числе: идёт в описание
+   фотографии для скринридеров, где «Кресла «Тулуза»» звучало бы неряшливо */
 const PRODUCTS = [
-  { id:'barokko', name:'Барокко',  cat:'Диваны', shape:'sofa',     tint:'#2E5A4B', price:148900,
+  { id:'barokko', name:'Барокко',  cat:'Диваны', kind:'Диван',         shape:'sofa',     tint:'#2E5A4B', price:148900,
     size:'240 × 96 × 84 см', fabric:'велюр Alpaca', extra:'спальное место 200 × 145', tag:'хит' },
-  { id:'nord',    name:'Норд',     cat:'Диваны', shape:'corner',   tint:'#2C3D5A', price:214500,
+  { id:'nord',    name:'Норд',     cat:'Диваны', kind:'Угловой диван', shape:'corner',   tint:'#2C3D5A', price:214500,
     size:'296 × 176 × 82 см', fabric:'рогожка Malta', extra:'оттоманка меняется местами' },
-  { id:'chester', name:'Честер',   cat:'Диваны', shape:'chester',  tint:'#6B2B33', price:176000,
+  { id:'chester', name:'Честер',   cat:'Диваны', kind:'Диван',         shape:'chester',  tint:'#6B2B33', price:176000,
     size:'196 × 92 × 78 см', fabric:'велюр Bergamo', extra:'каретная стяжка вручную', tag:'ручная стяжка' },
-  { id:'mila',    name:'Мила',     cat:'Диваны', shape:'daybed',   tint:'#8A7355', price:118000,
+  { id:'mila',    name:'Мила',     cat:'Диваны', kind:'Кушетка',       shape:'daybed',   tint:'#8A7355', price:118000,
     size:'204 × 84 × 76 см', fabric:'лён Toscana', extra:'кушетка с валиком в комплекте' },
-  { id:'tuluza',  name:'Тулуза',   cat:'Кресла', shape:'armchair', tint:'#5A5C3A', price:64900,
+  { id:'tuluza',  name:'Тулуза',   cat:'Кресла', kind:'Кресло',        shape:'armchair', tint:'#5A5C3A', price:64900,
     size:'88 × 92 × 104 см', fabric:'букле Nube', extra:'высокая спинка с «ушами»' },
-  { id:'oval',    name:'Овал',     cat:'Кресла', shape:'shell',    tint:'#8C4A32', price:57500,
+  { id:'oval',    name:'Овал',     cat:'Кресла', kind:'Кресло',        shape:'shell',    tint:'#8C4A32', price:57500,
     size:'82 × 80 × 74 см', fabric:'шенилл Roma', extra:'гнутая скорлупа, опоры из бука', tag:'новинка' },
-  { id:'lotta',   name:'Лотта',    cat:'Пуфы',   shape:'bench',    tint:'#4A4844', price:27400,
+  { id:'lotta',   name:'Лотта',    cat:'Пуфы',   kind:'Банкетка',      shape:'bench',    tint:'#4A4844', price:27400,
     size:'120 × 42 × 46 см', fabric:'антивандальный велюр', extra:'банкетка для прихожей' },
-  { id:'kube',    name:'Кубе',     cat:'Пуфы',   shape:'pouf',     tint:'#8A6B22', price:18900,
+  { id:'kube',    name:'Кубе',     cat:'Пуфы',   kind:'Пуф',           shape:'pouf',     tint:'#8A6B22', price:18900,
     size:'60 × 60 × 42 см', fabric:'микрофибра Suet', extra:'ящик для хранения под крышкой', tag:'в наличии' }
 ];
 
@@ -141,6 +143,33 @@ function renderGrid(cat = 'all') {
     </article>`).join('');
 
   grid.querySelectorAll('.rv').forEach(el => observer.observe(el));
+
+  // Пробуем заменить чертежи фотографиями
+  list.forEach(p => {
+    const box = grid.querySelector(`[data-add="${p.id}"]`)?.closest('.card')?.querySelector('.card__art');
+    if (box) usePhotoIfExists(box, p.id, `${p.kind} «${p.name}»`);
+  });
+}
+
+/* ─── Фотографии товаров ────────────────────────────────────────
+   Файлы кладутся в папку images/ с именем по id товара:
+   images/barokko.jpg, images/nord.jpg и так далее.
+   Если файла нет — просто остаётся штриховой чертёж, ничего не ломается.
+   Так сайт работает и без фотографий, и с ними, без правок кода.      */
+
+function usePhotoIfExists(box, id, alt, eager = false) {
+  const probe = new Image();
+
+  probe.onload = () => {
+    const img = document.createElement('img');
+    img.src = probe.src;
+    img.alt = alt;
+    if (!eager) img.loading = 'lazy';
+    // Метка остаётся на месте: подменяем только чертёж
+    box.querySelector('svg')?.replaceWith(img);
+  };
+
+  probe.src = `images/${id}.jpg`;
 }
 
 /* ─── Корзина ──────────────────────────────────────────────── */
@@ -357,9 +386,44 @@ function toast(text) {
   toastTimer = setTimeout(() => toastEl.classList.remove('is-on'), 2600);
 }
 
-/* ─── Старт ────────────────────────────────────────────────── */
+/* ─── Диван на обложке: 3D-наклон вслед за курсором ─────────── */
 
-document.getElementById('heroArt').innerHTML = art('sofa', '#2E5A4B');
+const heroArt = document.getElementById('heroArt');
+heroArt.setAttribute('tabindex', '0');
+heroArt.setAttribute('aria-label', 'Диван «Барокко»');
+heroArt.innerHTML = art('sofa', '#2E5A4B');
+usePhotoIfExists(heroArt, 'hero', 'Диван «Барокко» в интерьере', true);
+
+const MAX_TILT_X = 9;   // наклон вперёд/назад, градусы
+const MAX_TILT_Y = 12;  // наклон влево/вправо, градусы
+
+function tiltHeroArt(e) {
+  const svg = heroArt.firstElementChild; // чертёж или фотография — неважно
+  if (!svg) return;
+  const r = heroArt.getBoundingClientRect();
+  const px = (e.clientX - r.left) / r.width;   // 0 слева .. 1 справа
+  const py = (e.clientY - r.top)  / r.height;  // 0 сверху .. 1 снизу
+  const rotX = (0.5 - py) * MAX_TILT_X * 2;
+  const rotY = (px - 0.5) * MAX_TILT_Y * 2;
+  svg.style.transform = `rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) scale(1.04)`;
+}
+
+function resetHeroArtTilt() {
+  const svg = heroArt.firstElementChild;
+  if (svg) svg.style.transform = '';
+}
+
+/* pointermove покрывает мышь, перо и палец разом */
+heroArt.addEventListener('pointermove', tiltHeroArt);
+heroArt.addEventListener('pointerleave', resetHeroArtTilt);
+
+/* клавиатурный фокус даёт тот же наклон в фиксированное положение —
+   без этого пользователи Tab не увидят эффект вовсе */
+heroArt.addEventListener('focus', () => {
+  const svg = heroArt.firstElementChild;
+  if (svg) svg.style.transform = `rotateX(4deg) rotateY(10deg) scale(1.04)`;
+});
+heroArt.addEventListener('blur', resetHeroArtTilt);
 renderGrid();
 renderCart();
 document.querySelectorAll('.rv').forEach(el => observer.observe(el));

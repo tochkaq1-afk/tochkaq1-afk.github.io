@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════
-   ЛЕКАЛО — ателье мягкой мебели
+   ЛЕКАЛО — производство мягкой мебели
    Графит + латунь. Товары подаются как чертежи мастерской.
    ═══════════════════════════════════════════════════════════ */
 
@@ -114,14 +114,45 @@ img,svg{ display:block; max-width:100%; }
   padding:clamp(48px,7vw,104px) var(--pad) clamp(40px,6vw,80px);
 }
 
-.hero__eyebrow{
-  grid-column:1/-1;
-  font-size:12px; letter-spacing:.28em; text-transform:uppercase; color:var(--brass);
-  margin-bottom:26px;
+/* Северное сияние на обложке.
+   Приём: поверх «полосатого» градиента цвета фона лежит цветной градиент,
+   копия обоих в ::after вычитается режимом difference — от этого по экрану
+   ползут мягкие светящиеся полосы. Радиальная маска гасит эффект к низу. */
+.aurora{
+  /* z-index:-1 уводит сияние под содержимое, не трогая позиционирование детей */
+  position:absolute; inset:0; z-index:-1;
+  overflow:hidden; pointer-events:none;
+  -webkit-mask-image:radial-gradient(ellipse at 100% 0%, #000 10%, transparent 70%);
+          mask-image:radial-gradient(ellipse at 100% 0%, #000 10%, transparent 70%);
 }
-.hero__eyebrow::before{
-  content:''; display:inline-block; width:46px; height:1px;
-  background:var(--brass); vertical-align:middle; margin-right:14px;
+
+.aurora__veil{
+  --band:   repeating-linear-gradient(100deg,
+              var(--ink) 0%, var(--ink) 7%, transparent 10%, transparent 12%, var(--ink) 16%);
+  --sheets: repeating-linear-gradient(100deg,
+              #C9A227 10%, #E3C463 15%, #2E5A4B 20%, #7A6320 25%, #C9A227 30%);
+
+  position:absolute; inset:-10px;
+  opacity:.42;
+  filter:blur(11px);
+  background-image:var(--band), var(--sheets);
+  background-size:300% 200%;
+  background-position:50% 50%, 50% 50%;
+  will-change:transform;
+}
+
+.aurora__veil::after{
+  content:''; position:absolute; inset:0;
+  background-image:var(--band), var(--sheets);
+  background-size:200% 100%;
+  background-attachment:fixed;
+  mix-blend-mode:difference;
+  animation:aurora 60s linear infinite;
+}
+
+@keyframes aurora{
+  from{ background-position:50%  50%, 50%  50%; }
+  to  { background-position:350% 50%, 350% 50%; }
 }
 
 .hero__title{
@@ -139,11 +170,36 @@ img,svg{ display:block; max-width:100%; }
 
 /* Чертёж дивана — визуальный герой первого экрана */
 .hero__art{
-  grid-column:2; grid-row:2/6;
+  grid-column:2; grid-row:1/4; /* ряды сдвинулись после удаления верхней строки обложки */
   align-self:center;
   animation:float 9s ease-in-out infinite;
+  cursor:pointer;
+  border-radius:8px; /* форма для фокус-кольца при Tab */
+  perspective:900px; /* глубина сцены для 3D-наклона дивана внутри */
 }
 @keyframes float{ 50%{ transform:translateY(-14px); } }
+
+/* Наклон в 3D считает JS (script.js, tiltHeroArt) — он читает позицию
+   курсора и крутит содержимое по осям X/Y, а тут только плавный возврат.
+   Правила общие для чертежа и для фотографии, если она появится. */
+.hero__art>*{
+  transition:transform .4s var(--ease);
+  transform-style:preserve-3d;
+  will-change:transform;
+}
+
+/* Небольшое свечение вокруг линий чертежа */
+.hero__art svg{
+  filter:
+    drop-shadow(0 0 8px rgba(201,162,39,.35))
+    drop-shadow(0 0 18px rgba(46,90,75,.28));
+}
+
+.hero__art img{
+  width:100%; height:auto;
+  border-radius:3px;
+  box-shadow:0 26px 60px rgba(0,0,0,.55);
+}
 
 .hero__vert{
   position:absolute; right:calc(var(--pad) - 22px); top:46%;
@@ -200,10 +256,6 @@ img,svg{ display:block; max-width:100%; }
 .sec--workshop>*{ max-width:var(--max); margin-inline:auto; }
 
 .sec__head{ margin-bottom:44px; }
-.sec__num{
-  font-family:'Bodoni Moda',serif; font-size:13px; letter-spacing:.3em; color:var(--brass);
-  margin-bottom:10px;
-}
 .sec__title{ font-size:clamp(34px,5vw,60px); line-height:1.02; }
 .sec__note{ max-width:52ch; margin-top:16px; color:var(--mute); font-weight:300; }
 
@@ -244,6 +296,14 @@ img,svg{ display:block; max-width:100%; }
 .card__art svg{ width:100%; height:auto; transition:transform .5s var(--ease); }
 .card:hover .card__art svg{ transform:translateY(-6px); }
 
+/* Фотография товара, если файл найден в папке images/ */
+.card__art img{
+  width:100%; height:auto;
+  aspect-ratio:420/264; object-fit:cover;
+  transition:transform .5s var(--ease);
+}
+.card:hover .card__art img{ transform:scale(1.045); }
+
 .card__tag{
   position:absolute; top:12px; left:12px;
   padding:5px 10px; font-size:11px; letter-spacing:.14em; text-transform:uppercase;
@@ -281,8 +341,7 @@ img,svg{ display:block; max-width:100%; }
   background:var(--line);
 }
 .step{ padding:30px 26px; background:var(--ink-2); }
-.step__n{ font-family:'Bodoni Moda',serif; font-size:13px; letter-spacing:.3em; color:var(--brass); }
-.step h3{ margin:14px 0 12px; font-size:24px; }
+.step h3{ margin:0 0 12px; font-size:24px; }
 .step p{ font-size:15px; font-weight:300; color:var(--mute); }
 
 .trust{
