@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════
-   ЛЕКАЛО — ателье мягкой мебели
+   ЛЕКАЛО — производство мягкой мебели
    Графит + латунь. Товары подаются как чертежи мастерской.
    ═══════════════════════════════════════════════════════════ */
 
@@ -155,16 +155,6 @@ img,svg{ display:block; max-width:100%; }
   to  { background-position:350% 50%, 350% 50%; }
 }
 
-.hero__eyebrow{
-  grid-column:1/-1;
-  font-size:12px; letter-spacing:.28em; text-transform:uppercase; color:var(--brass);
-  margin-bottom:26px;
-}
-.hero__eyebrow::before{
-  content:''; display:inline-block; width:46px; height:1px;
-  background:var(--brass); vertical-align:middle; margin-right:14px;
-}
-
 .hero__title{
   font-size:clamp(46px,8.2vw,104px); line-height:.94; letter-spacing:-.02em;
 }
@@ -180,7 +170,7 @@ img,svg{ display:block; max-width:100%; }
 
 /* Чертёж дивана — визуальный герой первого экрана */
 .hero__art{
-  grid-column:2; grid-row:2/6;
+  grid-column:2; grid-row:1/4; /* ряды сдвинулись после удаления верхней строки обложки */
   align-self:center;
   animation:float 9s ease-in-out infinite;
   cursor:pointer;
@@ -189,16 +179,26 @@ img,svg{ display:block; max-width:100%; }
 }
 @keyframes float{ 50%{ transform:translateY(-14px); } }
 
-/* Небольшое свечение вокруг линий дивана. Сам наклон в 3D считает JS
-   (script.js, tiltHeroArt) — он читает позицию курсора и крутит svg
-   по осям X/Y, а тут только плавный возврат в исходное положение. */
+/* Наклон в 3D считает JS (script.js, tiltHeroArt) — он читает позицию
+   курсора и крутит содержимое по осям X/Y, а тут только плавный возврат.
+   Правила общие для чертежа и для фотографии, если она появится. */
+.hero__art>*{
+  transition:transform .4s var(--ease);
+  transform-style:preserve-3d;
+  will-change:transform;
+}
+
+/* Небольшое свечение вокруг линий чертежа */
 .hero__art svg{
   filter:
     drop-shadow(0 0 8px rgba(201,162,39,.35))
     drop-shadow(0 0 18px rgba(46,90,75,.28));
-  transition:transform .4s var(--ease);
-  transform-style:preserve-3d;
-  will-change:transform;
+}
+
+.hero__art img{
+  width:100%; height:auto;
+  border-radius:3px;
+  box-shadow:0 26px 60px rgba(0,0,0,.55);
 }
 
 .hero__vert{
@@ -256,10 +256,6 @@ img,svg{ display:block; max-width:100%; }
 .sec--workshop>*{ max-width:var(--max); margin-inline:auto; }
 
 .sec__head{ margin-bottom:44px; }
-.sec__num{
-  font-family:'Bodoni Moda',serif; font-size:13px; letter-spacing:.3em; color:var(--brass);
-  margin-bottom:10px;
-}
 .sec__title{ font-size:clamp(34px,5vw,60px); line-height:1.02; }
 .sec__note{ max-width:52ch; margin-top:16px; color:var(--mute); font-weight:300; }
 
@@ -300,6 +296,14 @@ img,svg{ display:block; max-width:100%; }
 .card__art svg{ width:100%; height:auto; transition:transform .5s var(--ease); }
 .card:hover .card__art svg{ transform:translateY(-6px); }
 
+/* Фотография товара, если файл найден в папке images/ */
+.card__art img{
+  width:100%; height:auto;
+  aspect-ratio:420/264; object-fit:cover;
+  transition:transform .5s var(--ease);
+}
+.card:hover .card__art img{ transform:scale(1.045); }
+
 .card__tag{
   position:absolute; top:12px; left:12px;
   padding:5px 10px; font-size:11px; letter-spacing:.14em; text-transform:uppercase;
@@ -337,8 +341,7 @@ img,svg{ display:block; max-width:100%; }
   background:var(--line);
 }
 .step{ padding:30px 26px; background:var(--ink-2); }
-.step__n{ font-family:'Bodoni Moda',serif; font-size:13px; letter-spacing:.3em; color:var(--brass); }
-.step h3{ margin:14px 0 12px; font-size:24px; }
+.step h3{ margin:0 0 12px; font-size:24px; }
 .step p{ font-size:15px; font-weight:300; color:var(--mute); }
 
 .trust{
