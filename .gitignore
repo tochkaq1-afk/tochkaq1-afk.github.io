@@ -1,0 +1,10 @@
+# Локальные настройки Claude Code — у каждого свои, в репозиторий не нужны
+.claude/settings.local.json
+
+# Служебные файлы Windows и macOS
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Временные файлы предпросмотра
+_preview.html

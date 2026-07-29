@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ЛЕКАЛО — ателье мягкой мебели</title>
+<meta name="description" content="Диваны, кресла и пуфы, сшитые по вашей мерке. Ателье мягкой мебели ЛЕКАЛО: собственное производство, 10 лет гарантии на каркас.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ─── Шапка ─────────────────────────────────────────────── -->
+<header class="hdr">
+  <a class="brand" href="#top">
+    <span class="brand__mark" aria-hidden="true">Л</span>
+    <span class="brand__name">ЛЕКАЛО</span>
+    <span class="brand__sub">ателье мягкой мебели</span>
+  </a>
+
+  <nav class="nav" aria-label="Основная навигация">
+    <a href="#catalog">Каталог</a>
+    <a href="#workshop">Мастерская</a>
+    <a href="#reviews">Отзывы</a>
+    <a href="#delivery">Доставка</a>
+  </nav>
+
+  <button class="cart-btn" id="cartOpen" aria-label="Открыть корзину">
+    <span class="cart-btn__txt">Корзина</span>
+    <span class="cart-btn__count" id="cartCount" aria-live="polite">0</span>
+  </button>
+</header>
+
+<main id="top">
+
+  <!-- ─── Обложка ─────────────────────────────────────────── -->
+  <section class="hero">
+    <p class="hero__eyebrow rv" style="--d:0ms">Собственное производство · с 2009 года</p>
+
+    <h1 class="hero__title">
+      <span class="rv" style="--d:80ms">Мягкая мебель,</span>
+      <span class="rv" style="--d:180ms">сшитая <em>по вашей</em></span>
+      <span class="rv" style="--d:280ms">мерке</span>
+    </h1>
+
+    <p class="hero__lead rv" style="--d:400ms">
+      Каркас из просушенного бука, беспружинные блоки высокой плотности
+      и 140 тканей на выбор. Мы шьём каждый диван в собственном цеху
+      в Подмосковье — без посредников и складских остатков.
+    </p>
+
+    <div class="hero__cta rv" style="--d:500ms">
+      <a class="btn btn--solid" href="#catalog">Смотреть каталог</a>
+      <a class="btn btn--ghost" href="#workshop">Как мы шьём</a>
+    </div>
+
+    <div class="hero__art rv" style="--d:300ms" id="heroArt" aria-hidden="true"></div>
+
+    <p class="hero__vert" aria-hidden="true">Москва · собственный цех 1 200 м²</p>
+
+    <dl class="hero__facts rv" style="--d:620ms">
+      <div><dt>10 лет</dt><dd>гарантия на каркас</dd></div>
+      <div><dt>140</dt><dd>тканей в подборе</dd></div>
+      <div><dt>21 день</dt><dd>средний срок пошива</dd></div>
+    </dl>
+  </section>
+
+  <!-- ─── Бегущая строка материалов ───────────────────────── -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track">
+      <span>велюр</span><i>·</i><span>букле</span><i>·</i><span>рогожка</span><i>·</i>
+      <span>шенилл</span><i>·</i><span>микрофибра</span><i>·</i><span>массив бука</span><i>·</i>
+      <span>лён</span><i>·</i><span>антивандальный велюр</span><i>·</i>
+      <span>велюр</span><i>·</i><span>букле</span><i>·</i><span>рогожка</span><i>·</i>
+      <span>шенилл</span><i>·</i><span>микрофибра</span><i>·</i><span>массив бука</span><i>·</i>
+      <span>лён</span><i>·</i><span>антивандальный велюр</span><i>·</i>
+    </div>
+  </div>
+
+  <!-- ─── 01 Каталог ──────────────────────────────────────── -->
+  <section class="sec" id="catalog">
+    <div class="sec__head">
+      <p class="sec__num">01</p>
+      <h2 class="sec__title">Каталог</h2>
+      <p class="sec__note">
+        Цена указана за базовую комплектацию в ткани категории&nbsp;I.
+        Размер, ткань и жёсткость меняем под вас.
+      </p>
+    </div>
+
+    <div class="filters" id="filters" role="tablist" aria-label="Фильтр по категориям">
+      <button class="chip is-on" data-cat="all" role="tab" aria-selected="true">Всё</button>
+      <button class="chip" data-cat="Диваны" role="tab" aria-selected="false">Диваны</button>
+      <button class="chip" data-cat="Кресла" role="tab" aria-selected="false">Кресла</button>
+      <button class="chip" data-cat="Пуфы" role="tab" aria-selected="false">Пуфы и банкетки</button>
+    </div>
+
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <!-- ─── 02 Мастерская ───────────────────────────────────── -->
+  <section class="sec sec--workshop" id="workshop">
+    <div class="sec__head">
+      <p class="sec__num">02</p>
+      <h2 class="sec__title">Мастерская</h2>
+      <p class="sec__note">
+        Мы не перепродаём чужие фабрики. Всё, что вы видите в каталоге,
+        собрано руками восьми мастеров на Каширском шоссе.
+      </p>
+    </div>
+
+    <ol class="steps">
+      <li class="step rv">
+        <span class="step__n">01</span>
+        <h3>Замер и эскиз</h3>
+        <p>Приезжаем с чемоданом тканей, снимаем размеры проёмов и лифта,
+           рисуем габаритный чертёж. Бесплатно по Москве и в пределах 30 км.</p>
+      </li>
+      <li class="step rv">
+        <span class="step__n">02</span>
+        <h3>Каркас</h3>
+        <p>Клеёный буковый брус камерной сушки 12 %, соединения на шканты
+           и стяжки — не на скобы. Каждый каркас нагружаем 150 кг перед обивкой.</p>
+      </li>
+      <li class="step rv">
+        <span class="step__n">03</span>
+        <h3>Наполнение</h3>
+        <p>Мебельный ППУ плотностью 30–35 кг/м³, слой холлофайбера
+           и латексная прослойка в посадочной зоне. Не проседает 7–8 лет.</p>
+      </li>
+      <li class="step rv">
+        <span class="step__n">04</span>
+        <h3>Обивка и сдача</h3>
+        <p>Раскрой по лазерным лекалам, ручная утяжка каретной стяжки.
+           Привозим, собираем, забираем упаковку — и подписываем гарантию.</p>
+      </li>
+    </ol>
+
+    <div class="trust">
+      <div class="trust__num"><b>4 200</b><span>заказов с 2009 года</span></div>
+      <div class="trust__num"><b>8</b><span>мастеров в цеху</span></div>
+      <div class="trust__num"><b>10 лет</b><span>гарантия на каркас</span></div>
+      <div class="trust__num"><b>0 ₽</b><span>замер и доставка по Москве</span></div>
+    </div>
+  </section>
+
+  <!-- ─── 03 Отзывы ───────────────────────────────────────── -->
+  <section class="sec" id="reviews">
+    <div class="sec__head">
+      <p class="sec__num">03</p>
+      <h2 class="sec__title">Отзывы</h2>
+    </div>
+
+    <div class="quotes">
+      <figure class="quote rv">
+        <blockquote>Диван привезли в квартиру с узкой лестницей — собрали на месте
+          за сорок минут. Через два года посадка как в первый день.</blockquote>
+        <figcaption>Ирина К. <span>ЖК «Сколково парк», диван «Барокко»</span></figcaption>
+      </figure>
+      <figure class="quote rv">
+        <blockquote>Просил жёстче стандарта и на 12 см глубже. Сделали ровно так,
+          доплата вышла символической. Ткань подобрали под кота — держится.</blockquote>
+        <figcaption>Артём В. <span>Химки, угловой диван «Норд»</span></figcaption>
+      </figure>
+      <figure class="quote rv">
+        <blockquote>Заказывала четыре банкетки для салона. Обивка выдержала
+          полтора года потока клиентов, ни одной затяжки.</blockquote>
+        <figcaption>Мария Д. <span>салон красоты, банкетка «Лотта»</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ─── 04 Доставка ─────────────────────────────────────── -->
+  <section class="sec sec--delivery" id="delivery">
+    <div class="sec__head">
+      <p class="sec__num">04</p>
+      <h2 class="sec__title">Доставка и оплата</h2>
+    </div>
+
+    <div class="cards">
+      <article class="card-i rv">
+        <h3>Москва и до 30 км</h3>
+        <p>Бесплатно. Подъём на этаж и сборка входят в стоимость,
+           упаковку забираем с собой.</p>
+      </article>
+      <article class="card-i rv">
+        <h3>Регионы России</h3>
+        <p>Транспортной компанией в жёсткой обрешётке. Считаем по тарифу
+           перевозчика — обычно 4 000–12 000 ₽.</p>
+      </article>
+      <article class="card-i rv">
+        <h3>Оплата</h3>
+        <p>50 % при заказе, остаток — после приёмки у вас дома.
+           Карта, счёт для юрлиц, рассрочка на 6 месяцев.</p>
+      </article>
+      <article class="card-i rv">
+        <h3>Если не подошло</h3>
+        <p>14 дней на возврат серийных моделей в исходном состоянии.
+           Мебель по индивидуальным размерам возврату не подлежит.</p>
+      </article>
+    </div>
+
+    <div class="cta">
+      <h3 class="cta__title">Не нашли нужный размер?</h3>
+      <p>Расскажите про комнату — пришлём эскиз и смету за один рабочий день.</p>
+      <a class="btn btn--solid" href="tel:+74951234567">+7 495 123-45-67</a>
+    </div>
+  </section>
+</main>
+
+<footer class="ftr">
+  <div class="ftr__brand">
+    <span class="brand__name">ЛЕКАЛО</span>
+    <p>Ателье мягкой мебели. Москва, Каширское шоссе 24, стр. 3.<br>
+       Цех и шоурум: ежедневно 10:00–20:00.</p>
+  </div>
+  <div class="ftr__col">
+    <h4>Каталог</h4>
+    <a href="#catalog">Диваны</a>
+    <a href="#catalog">Кресла</a>
+    <a href="#catalog">Пуфы и банкетки</a>
+  </div>
+  <div class="ftr__col">
+    <h4>Контакты</h4>
+    <a href="tel:+74951234567">+7 495 123-45-67</a>
+    <a href="mailto:hello@lekalo-atelier.ru">hello@lekalo-atelier.ru</a>
+    <a href="#workshop">Записаться в шоурум</a>
+  </div>
+  <p class="ftr__fine">
+    © 2009–2026 ЛЕКАЛО. Демонстрационный сайт: цены и отзывы приведены
+    для примера, заявки никуда не отправляются.
+  </p>
+</footer>
+
+<!-- ─── Корзина ───────────────────────────────────────────── -->
+<div class="scrim" id="scrim" hidden></div>
+
+<aside class="drawer" id="drawer" aria-label="Корзина" aria-hidden="true">
+  <div class="drawer__head">
+    <h2>Корзина</h2>
+    <button class="x" id="cartClose" aria-label="Закрыть корзину">×</button>
+  </div>
+
+  <div class="drawer__body" id="cartBody"></div>
+
+  <div class="drawer__foot" id="cartFoot" hidden>
+    <div class="sum">
+      <span>Итого</span>
+      <b id="cartTotal">0 ₽</b>
+    </div>
+    <p class="sum__note">Финальную стоимость подтвердим после выбора ткани и размеров.</p>
+
+    <form class="order" id="orderForm" novalidate>
+      <label>
+        <span>Ваше имя</span>
+        <input name="name" type="text" autocomplete="name" required minlength="2" placeholder="Как к вам обращаться">
+      </label>
+      <label>
+        <span>Телефон</span>
+        <input name="phone" type="tel" autocomplete="tel" required placeholder="+7 ___ ___-__-__">
+      </label>
+      <p class="order__err" id="orderErr" role="alert" hidden></p>
+      <button class="btn btn--solid btn--wide" type="submit">Оформить заявку</button>
+      <p class="order__fine">Демо-режим: данные остаются в браузере и никуда не уходят.</p>
+    </form>
+  </div>
+</aside>
+
+<script src="script.js"></script>
+</body>
+</html>

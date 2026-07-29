@@ -1,0 +1,459 @@
+/* ═══════════════════════════════════════════════════════════
+   ЛЕКАЛО — ателье мягкой мебели
+   Графит + латунь. Товары подаются как чертежи мастерской.
+   ═══════════════════════════════════════════════════════════ */
+
+:root{
+  /* Палитра */
+  --ink:      #14120F;   /* основной фон   */
+  --ink-2:    #1B1815;   /* приподнятый слой */
+  --ink-3:    #241F1A;   /* карточка       */
+  --brass:    #C9A227;   /* акцент         */
+  --brass-lt: #E3C463;
+  --cream:    #EFE9DE;   /* основной текст */
+  --mute:     #ABA294;   /* вторичный текст (контраст 6.6:1 на --ink) */
+  --line:     rgba(239,233,222,.13);
+  --line-2:   rgba(239,233,222,.28);
+
+  /* Шкала z-index */
+  --z-grain: 5;
+  --z-hdr:   30;
+  --z-scrim: 40;
+  --z-drawer:50;
+  --z-toast: 60;
+
+  /* Ритм */
+  --pad: clamp(20px, 5vw, 76px);
+  --max: 1240px;
+  --ease: cubic-bezier(.22,.61,.36,1);
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+
+html{ scroll-behavior:smooth; }
+
+body{
+  margin:0;
+  background:var(--ink);
+  color:var(--cream);
+  font:400 17px/1.65 'Jost', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+body.is-locked{ overflow:hidden; }
+
+h1,h2,h3,h4{ font-family:'Bodoni Moda', 'Times New Roman', serif; font-weight:400; margin:0; }
+p{ margin:0; }
+a{ color:inherit; text-decoration:none; }
+img,svg{ display:block; max-width:100%; }
+
+:focus-visible{
+  outline:2px solid var(--brass-lt);
+  outline-offset:3px;
+  border-radius:2px;
+}
+
+/* Зерно поверх всей страницы — даёт «бумажную» плотность фону */
+.grain{
+  position:fixed; inset:0; z-index:var(--z-grain);
+  pointer-events:none; opacity:.05; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ─── Шапка ────────────────────────────────────────────────── */
+.hdr{
+  position:sticky; top:0; z-index:var(--z-hdr);
+  display:flex; align-items:center; gap:32px;
+  padding:16px var(--pad);
+  background:rgba(20,18,15,.82);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+
+.brand{ display:grid; grid-template-columns:auto auto; align-items:center; gap:0 12px; }
+.brand__mark{
+  grid-row:1/3; display:grid; place-items:center;
+  width:38px; height:38px;
+  font-family:'Bodoni Moda',serif; font-size:21px; color:var(--brass);
+  border:1px solid var(--brass); border-radius:50%;
+}
+.brand__name{ font-family:'Bodoni Moda',serif; font-size:20px; letter-spacing:.22em; line-height:1.1; }
+.brand__sub{ font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--mute); }
+
+.nav{ display:flex; gap:30px; margin-left:auto; font-size:15px; }
+.nav a{ position:relative; padding:12px 0; color:var(--mute); transition:color .2s; }
+.nav a::after{
+  content:''; position:absolute; left:0; bottom:8px; height:1px; width:0;
+  background:var(--brass); transition:width .28s var(--ease);
+}
+.nav a:hover{ color:var(--cream); }
+.nav a:hover::after{ width:100%; }
+
+.cart-btn{
+  display:flex; align-items:center; gap:10px;
+  min-height:44px; padding:0 18px;
+  font:500 14px/1 'Jost',sans-serif; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--cream); background:none; cursor:pointer;
+  border:1px solid var(--line-2); border-radius:2px;
+  transition:border-color .2s, color .2s;
+}
+.cart-btn:hover{ border-color:var(--brass); color:var(--brass-lt); }
+.cart-btn__count{
+  display:grid; place-items:center; min-width:22px; height:22px; padding:0 5px;
+  font-size:12px; color:var(--ink); background:var(--brass); border-radius:11px;
+}
+
+/* ─── Обложка ──────────────────────────────────────────────── */
+.hero{
+  position:relative;
+  display:grid; align-items:start;
+  grid-template-columns:minmax(0,1fr) minmax(0,.95fr);
+  gap:0 clamp(24px,4vw,64px);
+  max-width:var(--max); margin:0 auto;
+  padding:clamp(48px,7vw,104px) var(--pad) clamp(40px,6vw,80px);
+}
+
+.hero__eyebrow{
+  grid-column:1/-1;
+  font-size:12px; letter-spacing:.28em; text-transform:uppercase; color:var(--brass);
+  margin-bottom:26px;
+}
+.hero__eyebrow::before{
+  content:''; display:inline-block; width:46px; height:1px;
+  background:var(--brass); vertical-align:middle; margin-right:14px;
+}
+
+.hero__title{
+  font-size:clamp(46px,8.2vw,104px); line-height:.94; letter-spacing:-.02em;
+}
+.hero__title span{ display:block; }
+.hero__title em{ font-style:italic; color:var(--brass); }
+
+.hero__lead{
+  max-width:44ch; margin-top:30px;
+  color:var(--mute); font-weight:300; font-size:17px;
+}
+
+.hero__cta{ display:flex; flex-wrap:wrap; gap:14px; margin-top:34px; }
+
+/* Чертёж дивана — визуальный герой первого экрана */
+.hero__art{
+  grid-column:2; grid-row:2/6;
+  align-self:center;
+  animation:float 9s ease-in-out infinite;
+}
+@keyframes float{ 50%{ transform:translateY(-14px); } }
+
+.hero__vert{
+  position:absolute; right:calc(var(--pad) - 22px); top:46%;
+  transform:rotate(90deg); transform-origin:right center;
+  font-size:11px; letter-spacing:.3em; text-transform:uppercase; color:var(--mute);
+  white-space:nowrap;
+}
+
+.hero__facts{
+  grid-column:1/-1;
+  display:flex; flex-wrap:wrap; gap:0; margin:clamp(40px,6vw,72px) 0 0;
+  border-top:1px solid var(--line);
+}
+.hero__facts>div{
+  flex:1 1 180px; padding:22px 26px 0 0;
+  border-right:1px solid var(--line);
+}
+.hero__facts>div:last-child{ border-right:0; }
+.hero__facts>div:not(:first-child){ padding-left:26px; }
+.hero__facts dt{ font-family:'Bodoni Moda',serif; font-size:30px; color:var(--brass); }
+.hero__facts dd{ margin:4px 0 0; font-size:14px; color:var(--mute); }
+
+/* ─── Кнопки ───────────────────────────────────────────────── */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  min-height:48px; padding:0 30px;
+  font:500 13px/1 'Jost',sans-serif; letter-spacing:.16em; text-transform:uppercase;
+  cursor:pointer; border-radius:2px; border:1px solid transparent;
+  transition:background-color .22s, color .22s, border-color .22s;
+}
+.btn--solid{ background:var(--brass); color:#14120F; }
+.btn--solid:hover{ background:var(--brass-lt); }
+.btn--ghost{ border-color:var(--line-2); color:var(--cream); }
+.btn--ghost:hover{ border-color:var(--brass); color:var(--brass-lt); }
+.btn--wide{ width:100%; }
+
+/* ─── Бегущая строка ───────────────────────────────────────── */
+.marquee{
+  overflow:hidden; padding:16px 0;
+  border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  background:var(--ink-2);
+}
+.marquee__track{
+  display:flex; gap:26px; width:max-content;
+  animation:slide 38s linear infinite;
+  font-size:13px; letter-spacing:.24em; text-transform:uppercase; color:var(--mute);
+}
+.marquee__track i{ color:var(--brass); font-style:normal; }
+@keyframes slide{ to{ transform:translateX(-50%); } }
+
+/* ─── Секции ───────────────────────────────────────────────── */
+.sec{ max-width:var(--max); margin:0 auto; padding:clamp(64px,9vw,128px) var(--pad); }
+.sec--workshop{ max-width:none; background:var(--ink-2); border-block:1px solid var(--line); }
+.sec--workshop>*{ max-width:var(--max); margin-inline:auto; }
+
+.sec__head{ margin-bottom:44px; }
+.sec__num{
+  font-family:'Bodoni Moda',serif; font-size:13px; letter-spacing:.3em; color:var(--brass);
+  margin-bottom:10px;
+}
+.sec__title{ font-size:clamp(34px,5vw,60px); line-height:1.02; }
+.sec__note{ max-width:52ch; margin-top:16px; color:var(--mute); font-weight:300; }
+
+/* ─── Фильтры ──────────────────────────────────────────────── */
+.filters{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:34px; }
+.chip{
+  min-height:44px; padding:0 22px;
+  font:400 14px/1 'Jost',sans-serif; letter-spacing:.06em;
+  color:var(--mute); background:none; cursor:pointer;
+  border:1px solid var(--line); border-radius:2px;
+  transition:color .2s, border-color .2s, background-color .2s;
+}
+.chip:hover{ color:var(--cream); border-color:var(--line-2); }
+.chip.is-on{ color:var(--ink); background:var(--brass); border-color:var(--brass); }
+
+/* ─── Сетка товаров ────────────────────────────────────────── */
+.grid{
+  display:grid; gap:1px;
+  grid-template-columns:repeat(auto-fill, minmax(290px,1fr));
+  background:var(--line);
+  border:1px solid var(--line);
+}
+
+.card{
+  display:flex; flex-direction:column;
+  padding:24px 24px 26px; background:var(--ink);
+  transition:background-color .3s;
+}
+.card:hover{ background:var(--ink-3); }
+
+.card__art{
+  position:relative; margin:-4px -8px 18px;
+  border-radius:2px; overflow:hidden;
+  background:
+    linear-gradient(160deg, color-mix(in srgb, var(--tint) 34%, transparent), transparent 70%),
+    var(--ink-2);
+}
+.card__art svg{ width:100%; height:auto; transition:transform .5s var(--ease); }
+.card:hover .card__art svg{ transform:translateY(-6px); }
+
+.card__tag{
+  position:absolute; top:12px; left:12px;
+  padding:5px 10px; font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--brass); background:rgba(20,18,15,.72);
+  border:1px solid var(--line-2); border-radius:2px;
+}
+
+.card__name{ font-size:26px; line-height:1.15; }
+.card__cat{ margin-top:5px; font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--brass); }
+.card__spec{ margin-top:14px; font-size:14px; font-weight:300; color:var(--mute); }
+.card__spec b{ color:var(--cream); font-weight:400; }
+
+.card__foot{
+  display:flex; align-items:end; justify-content:space-between; gap:16px;
+  margin-top:auto; padding-top:20px;
+}
+.card__price{ font-family:'Bodoni Moda',serif; font-size:27px; white-space:nowrap; }
+.card__price small{ display:block; font-family:'Jost',sans-serif; font-size:12px; color:var(--mute); }
+
+.add{
+  display:inline-flex; align-items:center; gap:8px;
+  min-height:44px; padding:0 18px;
+  font:500 12px/1 'Jost',sans-serif; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--cream); background:none; cursor:pointer;
+  border:1px solid var(--line-2); border-radius:2px;
+  transition:background-color .2s, color .2s, border-color .2s;
+}
+.add:hover{ background:var(--brass); border-color:var(--brass); color:var(--ink); }
+.add svg{ width:15px; height:15px; }
+
+/* ─── Мастерская ───────────────────────────────────────────── */
+.steps{
+  display:grid; gap:1px; margin:0; padding:0; list-style:none;
+  grid-template-columns:repeat(auto-fit, minmax(250px,1fr));
+  background:var(--line);
+}
+.step{ padding:30px 26px; background:var(--ink-2); }
+.step__n{ font-family:'Bodoni Moda',serif; font-size:13px; letter-spacing:.3em; color:var(--brass); }
+.step h3{ margin:14px 0 12px; font-size:24px; }
+.step p{ font-size:15px; font-weight:300; color:var(--mute); }
+
+.trust{
+  display:grid; gap:26px; margin-top:56px;
+  grid-template-columns:repeat(auto-fit, minmax(190px,1fr));
+}
+.trust__num{ padding-left:22px; border-left:1px solid var(--brass); }
+.trust__num b{ display:block; font-family:'Bodoni Moda',serif; font-weight:400; font-size:clamp(34px,4.4vw,50px); }
+.trust__num span{ font-size:14px; color:var(--mute); }
+
+/* ─── Отзывы ───────────────────────────────────────────────── */
+.quotes{ display:grid; gap:26px; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); }
+.quote{ margin:0; padding:30px 28px; background:var(--ink-2); border:1px solid var(--line); border-radius:2px; }
+.quote blockquote{
+  margin:0; font-family:'Bodoni Moda',serif; font-size:20px; line-height:1.42; font-style:italic;
+}
+.quote blockquote::before{ content:'«'; color:var(--brass); }
+.quote blockquote::after{ content:'»'; color:var(--brass); }
+.quote figcaption{ margin-top:20px; padding-top:16px; border-top:1px solid var(--line); font-size:14px; }
+.quote figcaption span{ display:block; color:var(--mute); font-size:13px; margin-top:3px; }
+
+/* ─── Доставка ─────────────────────────────────────────────── */
+.cards{ display:grid; gap:1px; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); background:var(--line); border:1px solid var(--line); }
+.card-i{ padding:28px 26px; background:var(--ink); }
+.card-i h3{ font-size:22px; margin-bottom:12px; }
+.card-i p{ font-size:15px; font-weight:300; color:var(--mute); }
+
+.cta{
+  margin-top:56px; padding:clamp(36px,5vw,64px) var(--pad);
+  text-align:center; border:1px solid var(--brass); border-radius:2px;
+  background:radial-gradient(ellipse at 50% 0%, rgba(201,162,39,.11), transparent 68%);
+}
+.cta__title{ font-size:clamp(28px,4vw,44px); }
+.cta p{ max-width:44ch; margin:14px auto 28px; color:var(--mute); font-weight:300; }
+
+/* ─── Подвал ───────────────────────────────────────────────── */
+.ftr{
+  display:grid; gap:36px;
+  grid-template-columns:2fr 1fr 1fr;
+  max-width:var(--max); margin:0 auto;
+  padding:clamp(48px,6vw,80px) var(--pad) 40px;
+  border-top:1px solid var(--line);
+}
+.ftr__brand p{ margin-top:14px; font-size:14px; font-weight:300; color:var(--mute); }
+.ftr__col{ display:flex; flex-direction:column; gap:12px; font-size:15px; }
+.ftr__col h4{ font-size:12px; letter-spacing:.2em; text-transform:uppercase; color:var(--brass); margin-bottom:4px; }
+.ftr__col a{ color:var(--mute); transition:color .2s; }
+.ftr__col a:hover{ color:var(--cream); }
+.ftr__fine{ grid-column:1/-1; padding-top:28px; border-top:1px solid var(--line); font-size:13px; color:var(--mute); }
+
+/* ─── Корзина ──────────────────────────────────────────────── */
+.scrim{
+  position:fixed; inset:0; z-index:var(--z-scrim);
+  background:rgba(10,9,7,.62); backdrop-filter:blur(3px);
+  opacity:0; transition:opacity .3s;
+}
+.scrim.is-on{ opacity:1; }
+
+.drawer{
+  position:fixed; top:0 ; right:0; z-index:var(--z-drawer);
+  display:flex; flex-direction:column;
+  width:min(430px,100%); height:100%;
+  background:var(--ink-2); border-left:1px solid var(--line-2);
+  transform:translateX(101%);
+  transition:transform .42s var(--ease);
+}
+.drawer.is-on{ transform:none; }
+
+.drawer__head{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:22px 24px; border-bottom:1px solid var(--line);
+}
+.drawer__head h2{ font-size:26px; }
+.x{
+  width:44px; height:44px; font-size:26px; line-height:1;
+  color:var(--mute); background:none; border:1px solid var(--line); border-radius:2px;
+  cursor:pointer; transition:color .2s, border-color .2s;
+}
+.x:hover{ color:var(--cream); border-color:var(--line-2); }
+
+.drawer__body{ flex:1; overflow-y:auto; padding:8px 24px; }
+
+.empty{ padding:56px 0; text-align:center; color:var(--mute); font-weight:300; }
+.empty b{ display:block; font-family:'Bodoni Moda',serif; font-size:22px; color:var(--cream); margin-bottom:8px; font-weight:400; }
+
+.li{ display:grid; grid-template-columns:1fr auto; gap:6px 14px; padding:20px 0; border-bottom:1px solid var(--line); }
+.li__name{ font-family:'Bodoni Moda',serif; font-size:20px; }
+.li__meta{ font-size:13px; color:var(--mute); }
+.li__price{ font-family:'Bodoni Moda',serif; font-size:19px; text-align:right; white-space:nowrap; }
+.li__ctrl{ display:flex; align-items:center; gap:2px; }
+.qty{
+  width:34px; height:34px; font-size:17px; line-height:1;
+  color:var(--cream); background:none; border:1px solid var(--line); cursor:pointer;
+  transition:border-color .2s, color .2s;
+}
+.qty:hover{ border-color:var(--brass); color:var(--brass-lt); }
+.li__n{ min-width:38px; text-align:center; font-size:15px; }
+.li__del{
+  margin-left:10px; padding:6px 2px; font-size:12px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--mute); background:none; border:0; border-bottom:1px solid transparent; cursor:pointer;
+  transition:color .2s, border-color .2s;
+}
+.li__del:hover{ color:var(--brass-lt); border-color:var(--brass-lt); }
+
+.drawer__foot{ padding:20px 24px 24px; border-top:1px solid var(--line-2); background:var(--ink-3); }
+.sum{ display:flex; align-items:baseline; justify-content:space-between; }
+.sum span{ font-size:13px; letter-spacing:.18em; text-transform:uppercase; color:var(--mute); }
+.sum b{ font-family:'Bodoni Moda',serif; font-weight:400; font-size:31px; }
+.sum__note{ margin-top:6px; font-size:12px; color:var(--mute); }
+
+.order{ display:grid; gap:14px; margin-top:20px; }
+.order label{ display:grid; gap:6px; }
+.order label span{ font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--mute); }
+.order input{
+  min-height:46px; padding:0 14px;
+  font:400 16px 'Jost',sans-serif; color:var(--cream);
+  background:var(--ink); border:1px solid var(--line-2); border-radius:2px;
+  transition:border-color .2s;
+}
+.order input::placeholder{ color:#6F6759; }
+.order input:focus{ border-color:var(--brass); }
+.order input[aria-invalid="true"]{ border-color:#D9714B; }
+.order__err{ margin:0; font-size:13px; color:#E58A64; }
+.order__fine{ font-size:12px; color:var(--mute); text-align:center; }
+
+.done{ padding:40px 4px; text-align:center; }
+.done svg{ margin:0 auto 18px; width:46px; height:46px; stroke:var(--brass); }
+.done h3{ font-size:26px; margin-bottom:10px; }
+.done p{ color:var(--mute); font-weight:300; font-size:15px; }
+
+/* ─── Уведомление ──────────────────────────────────────────── */
+.toast{
+  position:fixed; left:50%; bottom:28px; z-index:var(--z-toast);
+  display:flex; align-items:center; gap:12px;
+  padding:14px 22px;
+  font-size:14px; color:var(--cream);
+  background:var(--ink-3); border:1px solid var(--brass); border-radius:2px;
+  box-shadow:0 18px 40px rgba(0,0,0,.5);
+  transform:translate(-50%,20px); opacity:0; pointer-events:none;
+  transition:transform .3s var(--ease), opacity .3s;
+}
+.toast.is-on{ transform:translate(-50%,0); opacity:1; }
+.toast svg{ width:17px; height:17px; stroke:var(--brass); flex:none; }
+
+/* ─── Появление при скролле ────────────────────────────────── */
+.rv{ opacity:0; transform:translateY(20px); }
+.rv.in{
+  opacity:1; transform:none;
+  transition:opacity .7s var(--ease) var(--d,0ms), transform .7s var(--ease) var(--d,0ms);
+}
+
+/* ─── Адаптив ──────────────────────────────────────────────── */
+@media (max-width:1080px){
+  .nav{ display:none; }
+  .hero{ grid-template-columns:1fr; }
+  .hero__art{ grid-column:1; grid-row:auto; margin-top:36px; }
+  .hero__vert{ display:none; }
+}
+@media (max-width:720px){
+  body{ font-size:16px; }
+  .brand__sub{ display:none; }
+  .cart-btn__txt{ display:none; }
+  .cart-btn{ padding:0 14px; }
+  .hero__facts>div{ flex-basis:100%; border-right:0; border-bottom:1px solid var(--line); padding-bottom:18px; }
+  .hero__facts>div:not(:first-child){ padding-left:0; }
+  .ftr{ grid-template-columns:1fr; }
+}
+
+/* ─── Уважение к настройке «меньше движения» ───────────────── */
+@media (prefers-reduced-motion:reduce){
+  html{ scroll-behavior:auto; }
+  *,*::before,*::after{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
+  .rv{ opacity:1; transform:none; }
+}
