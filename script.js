@@ -357,9 +357,43 @@ function toast(text) {
   toastTimer = setTimeout(() => toastEl.classList.remove('is-on'), 2600);
 }
 
-/* ─── Старт ────────────────────────────────────────────────── */
+/* ─── Диван на обложке: 3D-наклон вслед за курсором ─────────── */
 
-document.getElementById('heroArt').innerHTML = art('sofa', '#2E5A4B');
+const heroArt = document.getElementById('heroArt');
+heroArt.setAttribute('tabindex', '0');
+heroArt.setAttribute('aria-label', 'Диван «Барокко»');
+heroArt.innerHTML = art('sofa', '#2E5A4B');
+
+const MAX_TILT_X = 9;   // наклон вперёд/назад, градусы
+const MAX_TILT_Y = 12;  // наклон влево/вправо, градусы
+
+function tiltHeroArt(e) {
+  const svg = heroArt.querySelector('svg');
+  if (!svg) return;
+  const r = heroArt.getBoundingClientRect();
+  const px = (e.clientX - r.left) / r.width;   // 0 слева .. 1 справа
+  const py = (e.clientY - r.top)  / r.height;  // 0 сверху .. 1 снизу
+  const rotX = (0.5 - py) * MAX_TILT_X * 2;
+  const rotY = (px - 0.5) * MAX_TILT_Y * 2;
+  svg.style.transform = `rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) scale(1.04)`;
+}
+
+function resetHeroArtTilt() {
+  const svg = heroArt.querySelector('svg');
+  if (svg) svg.style.transform = '';
+}
+
+/* pointermove покрывает мышь, перо и палец разом */
+heroArt.addEventListener('pointermove', tiltHeroArt);
+heroArt.addEventListener('pointerleave', resetHeroArtTilt);
+
+/* клавиатурный фокус даёт тот же наклон в фиксированное положение —
+   без этого пользователи Tab не увидят эффект вовсе */
+heroArt.addEventListener('focus', () => {
+  const svg = heroArt.querySelector('svg');
+  if (svg) svg.style.transform = `rotateX(4deg) rotateY(10deg) scale(1.04)`;
+});
+heroArt.addEventListener('blur', resetHeroArtTilt);
 renderGrid();
 renderCart();
 document.querySelectorAll('.rv').forEach(el => observer.observe(el));

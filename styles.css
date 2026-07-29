@@ -183,8 +183,23 @@ img,svg{ display:block; max-width:100%; }
   grid-column:2; grid-row:2/6;
   align-self:center;
   animation:float 9s ease-in-out infinite;
+  cursor:pointer;
+  border-radius:8px; /* форма для фокус-кольца при Tab */
+  perspective:900px; /* глубина сцены для 3D-наклона дивана внутри */
 }
 @keyframes float{ 50%{ transform:translateY(-14px); } }
+
+/* Небольшое свечение вокруг линий дивана. Сам наклон в 3D считает JS
+   (script.js, tiltHeroArt) — он читает позицию курсора и крутит svg
+   по осям X/Y, а тут только плавный возврат в исходное положение. */
+.hero__art svg{
+  filter:
+    drop-shadow(0 0 8px rgba(201,162,39,.35))
+    drop-shadow(0 0 18px rgba(46,90,75,.28));
+  transition:transform .4s var(--ease);
+  transform-style:preserve-3d;
+  will-change:transform;
+}
 
 .hero__vert{
   position:absolute; right:calc(var(--pad) - 22px); top:46%;
