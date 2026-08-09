@@ -7,7 +7,7 @@
 
 const CVT = window.CVT;
 if (!CVT || !CVT.cfg) return;
-const { cfg, DEFAULTS, PALETTES, FONTS, EASE, CARD_ANIMS } = CVT;
+const { cfg, DEFAULTS, PALETTES, FONTS, EASE, CARD_ANIMS, SOUNDS } = CVT;
 
 const paletteNames = {};
 Object.keys(PALETTES).forEach(k => paletteNames[k] = PALETTES[k].name);
@@ -69,6 +69,12 @@ const SCHEMA = [
     { k:'glow',     t:'range', label:'Свечение акцента', min:0, max:1, step:.02 },
     { k:'auraOn',   t:'bool',  label:'Живой фон' },
     { k:'aura',     t:'range', label:'Сила живого фона', min:0, max:1.5, step:.05 }
+  ]},
+
+  { title:'Звук', open:true, items:[
+    { k:'soundOn', t:'bool',   label:'Щелчок клавиш' },
+    { k:'sound',   t:'select', label:'Характер', opts:Object.keys(SOUNDS), names:SOUNDS },
+    { k:'volume',  t:'range',  label:'Громкость', min:0, max:1, step:.05 }
   ]},
 
   { title:'Поведение', items:[
@@ -230,6 +236,7 @@ function set(k, v){
   if (k === 'bg' || k === 'ink' || k === 'accent' || k === 'card' || k === 'inkDim') cfg.palette = 'custom';
   CVT.apply();
   if (k === 'decimals' || k === 'rollOn') CVT.recalc(false);
+  if (k === 'sound' || k === 'volume') CVT.click();   /* сразу дать послушать */
   if (bind[k]) bind[k]();
   CVT.save();
 }
@@ -258,14 +265,34 @@ panel.addEventListener('click', e => {
   }
 });
 
+/* ------------------------------------------------- тайный вход
+   Панель не должна попадаться на глаза тем, кто просто пользуется
+   приложением. Три способа позвать её: адрес с ?tweak=1, клавиша «~»
+   и пять быстрых тапов по названию — последнее единственное, что
+   работает в Телеграме, где клавиатуры и адресной строки нет. */
+function enable(andOpen){
+  document.body.classList.add('tw-on');
+  if (andOpen) open(true);
+}
+
 window.addEventListener('keydown', e => {
   if (e.key === '`' || e.key === '~' || e.key === 'ё' || e.key === 'Ё'){
     e.preventDefault();
+    enable(false);
     open(!panel.classList.contains('is-open'));
   }
 });
 
+let taps = 0, tapT = 0;
+const title = document.querySelector('.head__title');
+if (title) title.addEventListener('click', () => {
+  clearTimeout(tapT);
+  taps++;
+  tapT = setTimeout(() => { taps = 0; }, 600);
+  if (taps >= 5){ taps = 0; enable(true); }
+});
+
 rebuildPanel();
-if (new URLSearchParams(location.search).get('tweak') === '1') open(true);
+if (new URLSearchParams(location.search).get('tweak') === '1') enable(true);
 
 })();

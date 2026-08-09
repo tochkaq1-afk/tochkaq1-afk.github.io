@@ -66,6 +66,8 @@ body{
   position:fixed; inset:0; z-index:1; pointer-events:none;
   opacity:var(--grain);
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  /* отдельный слой: без него сдвиг зерна перерисовывал весь экран каждый шаг */
+  will-change:transform;
   animation:grainShift 5s steps(5) infinite;
 }
 @keyframes grainShift{
@@ -192,11 +194,23 @@ body{
 }
 @keyframes innerIn{ from{ opacity:0; transform:translateY(6px); } }
 
-.is-ready.anim-line .card{ animation-name:cardLine; }
-@keyframes cardLine{
-  0%  { transform:scaleY(.02); opacity:0; }
-  28% { transform:scaleY(.02); opacity:1; }
-  100%{ transform:scaleY(1);   opacity:1; }
+/* «Сборка из линии». Раньше тут масштабировалась сама карточка — вместе с ней
+   тянулись рамка, тень и текст, и каждый кадр уходил в перерисовку.
+   Теперь карточка только всплывает, а линию рисует отдельный псевдоэлемент:
+   一 scaleX и opacity, обе считает композитор. */
+.is-ready.anim-line .card{ animation-name:cardSoft; }
+@keyframes cardSoft{ from{ opacity:0; transform:translateY(10px); } }
+
+.is-ready.anim-line .card::before{
+  content:''; position:absolute; left:0; right:0; top:50%;
+  height:1px; background:var(--accent); pointer-events:none;
+  animation:lineSweep calc(var(--dur) * 1.5s) var(--ease)
+            calc(var(--i, 1) * var(--rise-step) * 1s) backwards;
+}
+@keyframes lineSweep{
+  0%  { transform:scaleX(0); opacity:1; }
+  50% { transform:scaleX(1); opacity:1; }
+  100%{ transform:scaleX(1); opacity:0; }
 }
 
 .is-ready.anim-unfold .card{ animation-name:cardUnfold; transform-origin:top center; }
@@ -328,9 +342,10 @@ body{
 .card__pick.is-changed .card__name{
   animation:pickIn calc(var(--dur) * .95s) var(--ease) .06s backwards;
 }
+/* без filter:blur — размытие пересчитывается каждый кадр и роняет плавность */
 @keyframes pickIn{
-  0%  { opacity:0; transform:translateY(-9px); filter:blur(2px); }
-  60% { opacity:1; filter:blur(0); }
+  0%  { opacity:0; transform:translateY(-9px); }
+  60% { opacity:1; }
   100%{ transform:translateY(0); }
 }
 

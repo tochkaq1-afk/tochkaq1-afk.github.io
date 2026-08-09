@@ -20,7 +20,8 @@ const DEFAULTS = {
   grain:.03, vignette:.68, glow:.74, aura:.65,
   decimals:2, rollOn:true, padOn:true, hapticOn:true,
   introOn:true, introDur:2.5, auraOn:true, waveOn:true, flipOn:true,
-  cardAnim:'line'
+  cardAnim:'line',
+  soundOn:true, sound:'tick', volume:.5
 };
 
 const CARD_ANIMS = {
@@ -363,7 +364,7 @@ function openSheet(side){
     btn.addEventListener('click', () => {
       if (isCurrency) state[side].currency = e.key;
       else state[side][state.category] = e.key;
-      haptic('light');
+      haptic('light'); click(.8);
       closeSheet();
       render(); recalc();
     });
@@ -406,6 +407,72 @@ function closeSheet(){
   nodes.sheet.classList.remove('is-open');
   if (tg && tg.BackButton){ tg.BackButton.hide(); }
   setTimeout(() => { nodes.sheet.hidden = true; }, cfg.dur * 1100);
+}
+
+/* ---------------------------------------------------- звук клавиш
+   Щелчок синтезируется на лету: короткий шумовой всплеск через полосовой
+   фильтр плюс низкий «тук». Файлов не нужно — работает офлайн и не весит. */
+const SOUNDS = { tick:'Клавиатура', pop:'Пузырёк', wood:'Дерево', glass:'Стекло' };
+
+const TONES = {
+  tick:  { freq:2300, q:1.1, len:.028, thock:180, thockGain:.5 },
+  pop:   { freq:900,  q:2.4, len:.05,  thock:320, thockGain:.9 },
+  wood:  { freq:1400, q:3.2, len:.06,  thock:220, thockGain:1.2 },
+  glass: { freq:5200, q:.8,  len:.045, thock:0,   thockGain:0 }
+};
+
+let actx = null, noise = null;
+
+function audio(){
+  if (actx) return actx;
+  const Ctx = window.AudioContext || window.webkitAudioContext;
+  if (!Ctx) return null;
+  actx = new Ctx();
+
+  /* полсекунды белого шума — переиспользуем на каждый щелчок */
+  noise = actx.createBuffer(1, actx.sampleRate * .5, actx.sampleRate);
+  const data = noise.getChannelData(0);
+  for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+  return actx;
+}
+
+function click(strength = 1){
+  if (!cfg.soundOn || !cfg.volume) return;
+  const ctx = audio();
+  if (!ctx) return;
+  if (ctx.state === 'suspended') ctx.resume();
+
+  const t = ctx.currentTime;
+  const tone = TONES[cfg.sound] || TONES.tick;
+  const vol = cfg.volume * strength;
+
+  const src = ctx.createBufferSource();
+  src.buffer = noise;
+  src.playbackRate.value = .8 + Math.random() * .4;   /* лёгкий разброс, чтобы не звучало механически */
+
+  const band = ctx.createBiquadFilter();
+  band.type = 'bandpass';
+  band.frequency.value = tone.freq * (.94 + Math.random() * .12);
+  band.Q.value = tone.q;
+
+  const env = ctx.createGain();
+  env.gain.setValueAtTime(vol * .5, t);
+  env.gain.exponentialRampToValueAtTime(.0001, t + tone.len);
+
+  src.connect(band).connect(env).connect(ctx.destination);
+  src.start(t);
+  src.stop(t + tone.len + .02);
+
+  if (!tone.thock) return;
+  const osc = ctx.createOscillator();
+  osc.frequency.setValueAtTime(tone.thock, t);
+  osc.frequency.exponentialRampToValueAtTime(tone.thock * .55, t + .04);
+  const og = ctx.createGain();
+  og.gain.setValueAtTime(vol * .09 * tone.thockGain, t);
+  og.gain.exponentialRampToValueAtTime(.0001, t + .05);
+  osc.connect(og).connect(ctx.destination);
+  osc.start(t);
+  osc.stop(t + .06);
 }
 
 /* ---------------------------------------------------- ввод */
@@ -455,6 +522,7 @@ nodes.pad.addEventListener('pointerdown', e => {
   waveFrom(btn);
   pulseAura();
   haptic('light');
+  click(btn.dataset.key === 'del' ? 1.25 : 1);   /* стирание звучит чуть весомее */
   press(btn.dataset.key);
 });
 
@@ -473,7 +541,7 @@ document.querySelectorAll('.tabs__btn').forEach(btn => {
     state.mode = mode;
     document.querySelectorAll('.tabs__btn').forEach(b => b.classList.toggle('is-active', b === btn));
     nodes.tabInk.classList.toggle('is-right', mode === 'units');
-    haptic('light');
+    haptic('light'); click(1.1);
     render(); recalc();
   });
 });
@@ -491,6 +559,7 @@ nodes.swap.addEventListener('click', () => {
 
   nodes.swap.classList.toggle('is-turned');
   haptic('medium');
+  click(1.4);
   pulseAura();
 
   /* в фоне анимации заморожены — там меняем содержимое сразу,
@@ -579,7 +648,7 @@ function replayIntro(){
 
 /* наружу — для твикера */
 Object.assign(CVT, {
-  cfg, DEFAULTS, PALETTES, FONTS, EASE, CARD_ANIMS,
+  cfg, DEFAULTS, PALETTES, FONTS, EASE, CARD_ANIMS, SOUNDS, click,
   apply, save, reset, usePalette, render, recalc, replayIntro, replayRise
 });
 
