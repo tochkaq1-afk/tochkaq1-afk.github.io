@@ -21,7 +21,16 @@ const DEFAULTS = {
   decimals:2, rollOn:true, padOn:true, hapticOn:true,
   introOn:true, introDur:2.5, auraOn:true, waveOn:true, flipOn:true,
   cardAnim:'line',
-  soundOn:true, sound:'tick', volume:.5
+  soundOn:true, sound:'tick', volume:.5,
+  grainLive:false
+};
+
+/* Готовые связки «красота ↔ плавность». Слабым телефонам тяжело даётся
+   всё разом: движущееся зерно во весь экран, дышащий фон, волна и переворот. */
+const QUALITY = {
+  max:    { name:'Максимум эффектов', cfg:{ grainLive:true,  auraOn:true,  waveOn:true,  flipOn:true,  cardAnim:'line' } },
+  medium: { name:'Сбалансированно',   cfg:{ grainLive:false, auraOn:true,  waveOn:true,  flipOn:true,  cardAnim:'line' } },
+  smooth: { name:'Максимум плавности',cfg:{ grainLive:false, auraOn:false, waveOn:false, flipOn:false, cardAnim:'zoom' } }
 };
 
 const CARD_ANIMS = {
@@ -118,6 +127,7 @@ function apply(){
   r.setProperty('--vignette', cfg.vignette);
   r.setProperty('--glow', cfg.glow);
   r.setProperty('--aura', cfg.auraOn ? cfg.aura : 0);
+  document.body.classList.toggle('grain-live', !!cfg.grainLive);
   r.setProperty('--roll', cfg.roll);
   r.setProperty('--intro-dur', cfg.introDur);
 
@@ -386,7 +396,10 @@ function openCategorySheet(){
     btn.type = 'button';
     btn.className = 'sheet__item' + (key === state.category ? ' is-on' : '');
     btn.innerHTML =
-      `<span class="sheet__flag">${cat.icon}</span>` +
+      `<svg class="sheet__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+         <path d="${CVT.ICONS[key]}"/>
+       </svg>` +
       `<span class="sheet__word" style="flex:1">${cat.title}</span>` +
       `<span class="sheet__tick">●</span>`;
     btn.addEventListener('click', () => {
@@ -648,7 +661,7 @@ function replayIntro(){
 
 /* наружу — для твикера */
 Object.assign(CVT, {
-  cfg, DEFAULTS, PALETTES, FONTS, EASE, CARD_ANIMS, SOUNDS, click,
+  cfg, DEFAULTS, PALETTES, FONTS, EASE, CARD_ANIMS, SOUNDS, QUALITY, click,
   apply, save, reset, usePalette, render, recalc, replayIntro, replayRise
 });
 

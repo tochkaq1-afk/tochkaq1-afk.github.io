@@ -66,7 +66,10 @@ body{
   position:fixed; inset:0; z-index:1; pointer-events:none;
   opacity:var(--grain);
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
-  /* отдельный слой: без него сдвиг зерна перерисовывал весь экран каждый шаг */
+}
+/* Шевеление зерна включается отдельно: это слой во весь экран, который
+   иначе двигается всегда и отъедает кадры даже когда ничего не происходит. */
+.grain-live .grain{
   will-change:transform;
   animation:grainShift 5s steps(5) infinite;
 }
@@ -93,12 +96,14 @@ body{
   transform:translate(-50%,-50%);
   background:radial-gradient(circle, var(--accent) 0%, transparent 62%);
   opacity:calc(var(--aura) * .16);
-  will-change:transform, opacity;
+  /* дышим только прозрачностью: масштабирование гоняло бы огромную
+     текстуру через композитор каждый кадр без заметной разницы на глаз */
+  will-change:opacity;
   animation:breathe 7s ease-in-out infinite;
 }
 @keyframes breathe{
-  0%,100%{ transform:translate(-50%,-50%) scale(.85); opacity:calc(var(--aura) * .1); }
-  50%    { transform:translate(-50%,-50%) scale(1.12); opacity:calc(var(--aura) * .2); }
+  0%,100%{ opacity:calc(var(--aura) * .1); }
+  50%    { opacity:calc(var(--aura) * .21); }
 }
 .aura.is-hit{ animation:breathe 7s ease-in-out infinite, auraHit .7s var(--ease); }
 @keyframes auraHit{ 25%{ opacity:calc(var(--aura) * .42); } }
@@ -180,7 +185,9 @@ body{
   animation-duration:calc(var(--dur) * 1.5s);
   animation-timing-function:var(--ease);
   animation-delay:calc(var(--i, 1) * var(--rise-step) * 1s);
-  animation-fill-mode:backwards;
+  /* both, а не backwards: конечный кадр надо удержать, иначе стиль откатится
+     к базовому opacity:0 и карточка снова исчезнет */
+  animation-fill-mode:both;
   will-change:transform, opacity;
 }
 /* слой нужен только на время появления — дальше отпускаем память
@@ -198,12 +205,22 @@ body{
    тянулись рамка, тень и текст, и каждый кадр уходил в перерисовку.
    Теперь карточка только всплывает, а линию рисует отдельный псевдоэлемент:
    一 scaleX и opacity, обе считает композитор. */
+/* У каждой анимации карточки конечный кадр записан явно. Без него браузер
+   берёт «куда» из обычного стиля элемента, а там opacity:0 — и появление
+   получалось из невидимого в невидимое. */
 .is-ready.anim-line .card{ animation-name:cardSoft; }
-@keyframes cardSoft{ from{ opacity:0; transform:translateY(10px); } }
+@keyframes cardSoft{
+  from{ opacity:0; transform:translateY(10px); }
+  to  { opacity:1; transform:none; }
+}
 
 .is-ready.anim-line .card::before{
   content:''; position:absolute; left:0; right:0; top:50%;
   height:1px; background:var(--accent); pointer-events:none;
+  /* Базовое состояние — невидимое. Анимация не оставляет след после себя
+     (заливка backwards действует только на задержку), и линия не повиснет,
+     даже если анимация не отыграет вовсе. */
+  opacity:0;
   animation:lineSweep calc(var(--dur) * 1.5s) var(--ease)
             calc(var(--i, 1) * var(--rise-step) * 1s) backwards;
 }
@@ -216,19 +233,27 @@ body{
 .is-ready.anim-unfold .card{ animation-name:cardUnfold; transform-origin:top center; }
 @keyframes cardUnfold{
   from{ transform:rotateX(-82deg); opacity:0; }
-  to  { transform:rotateX(0);      opacity:1; }
+  to  { transform:none;            opacity:1; }
 }
 
 .is-ready.anim-split .card{ animation-name:cardSplit; }
 .is-ready.anim-split .card--out{ animation-name:cardSplitDown; }
-@keyframes cardSplit{     from{ transform:translateY(60px); opacity:0; } }
-@keyframes cardSplitDown{ from{ transform:translateY(-60px); opacity:0; } }
+@keyframes cardSplit{
+  from{ transform:translateY(60px); opacity:0; }  to{ transform:none; opacity:1; }
+}
+@keyframes cardSplitDown{
+  from{ transform:translateY(-60px); opacity:0; } to{ transform:none; opacity:1; }
+}
 
 .is-ready.anim-zoom .card{ animation-name:cardZoom; }
-@keyframes cardZoom{ from{ transform:scale(.86); opacity:0; } }
+@keyframes cardZoom{
+  from{ transform:scale(.86); opacity:0; } to{ transform:none; opacity:1; }
+}
 
 .is-ready.anim-blur .card{ animation-name:cardBlur; }
-@keyframes cardBlur{ from{ filter:blur(14px); opacity:0; transform:scale(1.04); } }
+@keyframes cardBlur{
+  from{ opacity:0; transform:scale(1.06); } to{ opacity:1; transform:none; }
+}
 
 /* ---------------------------------------------------- шапка */
 .head{
@@ -298,8 +323,7 @@ body{
   border:calc(var(--border) * 1px) solid var(--line);
   border-radius:calc(var(--radius) * 1px);
   padding:calc(var(--pad) * .85px) calc(var(--pad) * 1px);
-  transition:border-color calc(var(--dur) * 1s) var(--ease),
-             box-shadow calc(var(--dur) * 1s) var(--ease);
+  transition:border-color calc(var(--dur) * 1s) var(--ease);
 }
 .card--out{ border-color:var(--line-accent); }
 
@@ -488,8 +512,10 @@ body{
   animation:waveKey calc(var(--dur) * .9s) var(--ease);
   animation-delay:calc(var(--w, 0) * .055s);
 }
+/* только transform: border-color пришлось бы перерисовывать на каждой
+   из одиннадцати клавиш в каждом кадре — именно это и подтормаживало ввод */
 @keyframes waveKey{
-  35%{ border-color:var(--line-accent); transform:translateY(-3px) scale(1.02); }
+  35%{ transform:translateY(-3px) scale(1.02); }
 }
 
 /* ---------------------------------------------------- лист выбора */
@@ -542,6 +568,8 @@ body{
 .sheet__item:active{ background:rgba(255,255,255,.04); }
 .sheet__item.is-on{ color:var(--accent); }
 .sheet__flag{ font-size:17px; width:22px; }
+.sheet__icon{ width:19px; height:19px; flex:0 0 22px; color:var(--ink-dim); }
+.sheet__item.is-on .sheet__icon{ color:var(--accent); }
 .sheet__code{ font-size:12px; color:var(--ink-dim); letter-spacing:.1em; min-width:38px; }
 .sheet__item.is-on .sheet__code{ color:var(--accent); }
 .sheet__word{ flex:1; font-weight:200; opacity:.75; font-size:12.5px; }

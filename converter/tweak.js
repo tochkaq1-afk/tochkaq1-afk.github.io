@@ -7,7 +7,7 @@
 
 const CVT = window.CVT;
 if (!CVT || !CVT.cfg) return;
-const { cfg, DEFAULTS, PALETTES, FONTS, EASE, CARD_ANIMS, SOUNDS } = CVT;
+const { cfg, DEFAULTS, PALETTES, FONTS, EASE, CARD_ANIMS, SOUNDS, QUALITY } = CVT;
 
 const paletteNames = {};
 Object.keys(PALETTES).forEach(k => paletteNames[k] = PALETTES[k].name);
@@ -20,6 +20,8 @@ const EASE_NAMES = {
 
 /* ------------------------------------------------- схема панели */
 const SCHEMA = [
+  { title:'Плавность', open:true, items:[ { t:'quality' } ]},
+
   { title:'Цвет', open:true, items:[
     { k:'palette', t:'palette', label:'Палитра', opts:Object.keys(PALETTES), names:paletteNames },
     { k:'accent',  t:'color', label:'Акцент' },
@@ -64,7 +66,8 @@ const SCHEMA = [
   ]},
 
   { title:'Атмосфера', items:[
-    { k:'grain',    t:'range', label:'Зерно',    min:0, max:.2, step:.005 },
+    { k:'grain',     t:'range', label:'Зерно',    min:0, max:.2, step:.005 },
+    { k:'grainLive', t:'bool',  label:'Шевелить зерно' },
     { k:'vignette', t:'range', label:'Виньетка', min:0, max:1, step:.02 },
     { k:'glow',     t:'range', label:'Свечение акцента', min:0, max:1, step:.02 },
     { k:'auraOn',   t:'bool',  label:'Живой фон' },
@@ -161,6 +164,23 @@ function buildPresets(){
 function buildRow(it){
   const row = el('div', 'tw__row');
   if (it.t === 'presets'){ row.appendChild(buildPresets()); return row; }
+
+  if (it.t === 'quality'){
+    const wrap = el('div', 'tw__chips');
+    Object.keys(QUALITY).forEach(key => {
+      const b = el('button', 'tw__btn', QUALITY[key].name);
+      b.type = 'button';
+      b.style.flex = '1 1 100%';
+      b.addEventListener('click', () => {
+        Object.assign(cfg, QUALITY[key].cfg);
+        CVT.apply(); CVT.save(); syncAll();
+        CVT.replayRise();
+      });
+      wrap.appendChild(b);
+    });
+    row.appendChild(wrap);
+    return row;
+  }
 
   if (it.t === 'replay' || it.t === 'replayRise'){
     const intro = it.t === 'replay';
