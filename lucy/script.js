@@ -9,6 +9,22 @@ const lerp = (a, b, t) => a + (b - a) * t;
 const clamp = (v, a, b) => Math.min(Math.max(v, a), b);
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+/* ---------- 0. Личный кабинет (Supabase) ---------- */
+const supa = supabase.createClient(
+  'https://dowstjqhxudhtpjrmiuk.supabase.co',
+  'sb_publishable_ai5F1LY-A1EAh8FU-WnzmQ_xp79ye6l'
+);
+let authUser = null;
+supa.auth.getSession().then(({ data }) => { authUser = data.session?.user || null; markUserIcon(); });
+supa.auth.onAuthStateChange((_evt, session) => {
+  authUser = session?.user || null;
+  markUserIcon();
+  if (document.getElementById('drawer').classList.contains('open') && drawerTitle.textContent.includes('кабинет')) drawUser();
+});
+function markUserIcon() {
+  document.getElementById('btnUser').classList.toggle('is-in', !!authUser);
+}
+
 /* ---------- 1. Курсор: шлейф из 8 точек ---------- */
 const cursor = document.getElementById('cursor');
 const DOTS = 14;
@@ -863,12 +879,54 @@ function drawFavs() {
 
 function drawUser() {
   drawerTitle.textContent = 'Личный кабинет';
+  if (authUser) { drawUserLoggedIn(); return; }
+  drawUserForm('login');
+}
+
+function drawUserLoggedIn() {
   drawerBody.innerHTML = `
-    <div class="dfield"><label>Телефон или e-mail</label><input type="text" placeholder="+375 (29) 000-00-00"></div>
-    <div class="dfield"><label>Пароль</label><input type="password" placeholder="••••••••"></div>
-    <p class="dnote">Заказы, адреса доставки и история покупок хранятся в кабинете.
-    Это учебная страница — форма ничего не отправляет.</p>`;
-  drawerFoot.innerHTML = '<button class="btn" style="width:100%"><span>Войти</span></button>';
+    <p class="dnote" style="margin-top:0">Вы вошли как<br><b style="color:var(--ink);font-size:15px">${authUser.email}</b></p>
+    <p class="dnote">Заказы, адреса доставки и история покупок будут храниться здесь.</p>`;
+  drawerFoot.innerHTML = '<button class="btn" id="btnLogout" style="width:100%"><span>Выйти</span></button>';
+  document.getElementById('btnLogout').addEventListener('click', async () => {
+    await supa.auth.signOut();
+    drawUser();
+  });
+}
+
+function drawUserForm(mode) {
+  const isLogin = mode === 'login';
+  drawerBody.innerHTML = `
+    <div class="dtabs">
+      <button type="button" class="dtab${isLogin ? ' on' : ''}" data-mode="login">Вход</button>
+      <button type="button" class="dtab${!isLogin ? ' on' : ''}" data-mode="signup">Регистрация</button>
+    </div>
+    <div class="dfield"><label>E-mail</label><input type="email" id="authEmail" placeholder="you@mail.com" autocomplete="email"></div>
+    <div class="dfield"><label>Пароль</label><input type="password" id="authPass" placeholder="минимум 6 символов" autocomplete="${isLogin ? 'current-password' : 'new-password'}"></div>
+    <p class="dnote dnote--err" id="authErr" hidden></p>
+    <p class="dnote" id="authOk" hidden></p>`;
+  [...drawerBody.querySelectorAll('.dtab')].forEach(b => b.addEventListener('click', () => drawUserForm(b.dataset.mode)));
+  drawerFoot.innerHTML = `<button class="btn" id="authSubmit" style="width:100%"><span>${isLogin ? 'Войти' : 'Создать аккаунт'}</span></button>`;
+  document.getElementById('authSubmit').addEventListener('click', () => submitAuth(isLogin));
+  drawerBody.querySelectorAll('input').forEach(i => i.addEventListener('keydown', e => { if (e.key === 'Enter') submitAuth(isLogin); }));
+}
+
+async function submitAuth(isLogin) {
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPass').value;
+  const errEl = document.getElementById('authErr');
+  const okEl = document.getElementById('authOk');
+  errEl.hidden = true; okEl.hidden = true;
+  if (!email || !password) { errEl.textContent = 'Заполните e-mail и пароль.'; errEl.hidden = false; return; }
+  const btn = document.getElementById('authSubmit');
+  btn.disabled = true;
+  const { error } = isLogin
+    ? await supa.auth.signInWithPassword({ email, password })
+    : await supa.auth.signUp({ email, password });
+  btn.disabled = false;
+  if (error) { errEl.textContent = error.message; errEl.hidden = false; return; }
+  if (isLogin) { drawUser(); }
+  else { okEl.textContent = 'Готово! Проверьте почту и подтвердите e-mail, чтобы войти.'; okEl.hidden = false; }
 }
 
 function syncBag() {

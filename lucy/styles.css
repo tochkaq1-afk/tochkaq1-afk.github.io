@@ -104,7 +104,7 @@ body,a,button{cursor:none}
 }
 .hero__title{
   font-family:'Kaushan Script',cursive;
-  font-size:min(19vw,42svh,290px);
+  font-size:min(12vw,34svh,200px);
   line-height:.9;display:flex;
 }
 .hero__title span{display:inline-block;will-change:transform}
@@ -681,6 +681,14 @@ body,a,button{cursor:none}
 }
 .dfield input:focus{border-color:var(--ink)}
 .dnote{font-size:12px;line-height:1.7;color:var(--muted);margin-top:14px}
+.dnote--err{color:#b3261e}
+.dtabs{display:flex;gap:22px;margin-bottom:22px;border-bottom:1px solid rgba(13,13,13,.12)}
+.dtabs .dtab{
+  background:none;border:0;padding:0 0 10px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);cursor:pointer;border-bottom:1px solid transparent;margin-bottom:-1px;transition:color .2s;
+}
+.dtabs .dtab.on{color:var(--ink);border-color:var(--ink)}
+.bar__ic.is-in svg circle{fill:var(--ink)}
 
 /* ---------- карточка товара ---------- */
 .pdp{
