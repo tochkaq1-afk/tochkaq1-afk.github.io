@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Nuvelle — распродажа женской одежды −60% в Минске</title>
+<meta name="description" content="Худи, джемперы, топы, брюки и куртки со скидкой до 60%. Шоурум в Минске, ТЦ «Метрополь», Немига 5. Примерка, доставка по Беларуси.">
+<link rel="canonical" href="https://nuvelle.by/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Nuvelle">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:title" content="Nuvelle — распродажа женской одежды −60%">
+<meta property="og:description" content="Худи, джемперы, топы и куртки со скидкой до 60%. Шоурум в Минске, доставка по Беларуси.">
+<meta property="og:url" content="https://nuvelle.by/">
+<meta property="og:image" content="https://nuvelle.by/assets/img/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<meta name="theme-color" content="#0d0d0d">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=1786286200">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ClothingStore",
+  "name": "Nuvelle",
+  "description": "Магазин женской одежды: худи, джемперы, топы, брюки, куртки. Распродажа до −60%.",
+  "url": "https://nuvelle.by/",
+  "image": "https://nuvelle.by/assets/img/og-cover.jpg",
+  "telephone": "+375259733980",
+  "priceRange": "$$",
+  "currenciesAccepted": "BYN",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "ул. Немига, 5, ТЦ «Метрополь»",
+    "addressLocality": "Минск",
+    "addressCountry": "BY"
+  },
+  "openingHoursSpecification": [{
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+    "opens": "10:00",
+    "closes": "21:00"
+  }],
+  "sameAs": [
+    "https://t.me/n777he"
+  ]
+}
+</script>
+</head>
+<body>
+
+<div class="cursor" id="cursor" aria-hidden="true"></div>
+
+<div class="loader" id="loader">
+  <svg class="loader__star" viewBox="0 0 24 24" width="64" height="64" aria-hidden="true">
+    <path d="M12,17.27L18.18,21l-1.64-7.03L22,9.24l-7.19-0.61L12,2L9.19,8.63L2,9.24l5.46,4.73L5.82,21L12,17.27z"
+          fill="currentColor" pathLength="1"/>
+  </svg>
+  <span class="loader__word">Nuvelle</span>
+  <span class="loader__num" data-count="100">0</span>
+</div>
+
+<header class="bar" id="bar">
+  <button class="bar__burger" id="barBurger" aria-label="Открыть меню">
+    <i></i><i></i><i></i><span>Меню</span>
+  </button>
+
+  <nav class="bar__nav">
+    <a href="#catalog" data-nav data-cat="все" class="bar__sale">SALE −60%</a>
+    <a href="#catalog" data-nav data-cat="худи и свитшоты">Хиты продаж</a>
+    <a href="#catalog" data-nav data-cat="джемперы">Трикотаж</a>
+    <a href="#catalog" data-nav data-cat="топы">Топы</a>
+    <a href="#catalog" data-nav data-cat="брюки">Спорт</a>
+    <a href="#catalog" data-nav data-cat="куртки">Верхняя одежда</a>
+    <a href="#catalog" data-nav data-cat="все">Последний шанс</a>
+    <a href="#lookbook" data-nav>Лукбук</a>
+    <a href="#contacts" data-nav>Контакты</a>
+  </nav>
+
+  <div class="bar__tools">
+    <span class="bar__cur">
+      <svg viewBox="0 0 18 12" width="18" height="12" aria-hidden="true">
+        <rect width="18" height="8" fill="#c8102e"/><rect y="8" width="18" height="4" fill="#00843d"/>
+        <rect width="4" height="12" fill="#fff"/>
+      </svg>BYN
+    </span>
+    <button class="bar__ic" id="btnUser" aria-label="Личный кабинет">
+      <svg viewBox="0 0 24 24" width="19" height="19"><circle cx="12" cy="8" r="3.4" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M4.6 20c.9-3.9 3.9-6 7.4-6s6.5 2.1 7.4 6" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>
+    </button>
+    <button class="bar__ic" id="btnFav" aria-label="Избранное">
+      <svg viewBox="0 0 24 24" width="19" height="19"><path d="M12 20S3.8 14.6 3.8 9.3A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 8.2 2.3C20.2 14.6 12 20 12 20z" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>
+      <b id="favCount" hidden>0</b>
+    </button>
+    <button class="bar__ic" id="btnSearch" aria-label="Поиск">
+      <svg viewBox="0 0 24 24" width="19" height="19"><circle cx="11" cy="11" r="6.2" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M15.6 15.6 20 20" stroke="currentColor" stroke-width="1.3"/></svg>
+    </button>
+    <button class="bar__ic bar__ic--bag" id="btnBag" aria-label="Корзина">
+      <svg viewBox="0 0 24 24" width="19" height="19"><path d="M6 8h12l-1 12H7L6 8z" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M9.2 8V6.6a2.8 2.8 0 0 1 5.6 0V8" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>
+      <b id="bagCount">0</b>
+    </button>
+  </div>
+</header>
+
+  <div class="menu" id="menu">
+    <button class="menu__tab" id="menuTab" aria-expanded="false"><span class="menu__tabtext">меню</span></button>
+    <nav class="menu__panel">
+      <span class="menu__ghost">Nuvelle</span>
+
+      <ul class="menu__main">
+        <li><a href="#home" data-nav data-img="assets/img/hero-poster.jpg">Главная</a></li>
+        <li><a href="#about" data-nav data-img="assets/img/about.jpg">Распродажа</a></li>
+        <li><a href="#catalog" data-nav data-img="assets/img/71546-0.jpg">Каталог</a></li>
+        <li><a href="#arrivals" data-nav data-img="assets/img/72017-0.jpg">Новинки</a></li>
+        <li><a href="#lookbook" data-nav data-img="assets/img/split-1.jpg">Лукбук</a></li>
+        <li><a href="#contacts" data-nav data-img="assets/img/split-2.jpg">Контакты</a></li>
+      </ul>
+
+      <div class="menu__preview" id="menuPreview"><img alt=""></div>
+
+      <div class="menu__cats">
+        <a href="#catalog" data-nav data-cat="все" class="mcat">
+          <img src="assets/img/71546-0.jpg" alt="Распродажа женской одежды со скидкой 60%" loading="lazy"><span>SALE −60%</span>
+        </a>
+        <a href="#catalog" data-nav data-cat="худи и свитшоты" class="mcat">
+          <img src="assets/img/72017-0.jpg" alt="Женские худи и свитшоты Nuvelle" loading="lazy"><span>Худи и свитшоты</span>
+        </a>
+        <a href="#catalog" data-nav data-cat="джемперы" class="mcat">
+          <img src="assets/img/71542-0.jpg" alt="Женский трикотаж и джемперы" loading="lazy"><span>Трикотаж</span>
+        </a>
+        <a href="#catalog" data-nav data-cat="топы" class="mcat">
+          <img src="assets/img/71638-0.jpg" alt="Женские топы и кружевное бельё" loading="lazy"><span>Топы</span>
+        </a>
+        <a href="#catalog" data-nav data-cat="брюки" class="mcat">
+          <img src="assets/img/71963-0.jpg" alt="Спортивные брюки и костюмы" loading="lazy"><span>Спорт</span>
+        </a>
+        <a href="#catalog" data-nav data-cat="куртки" class="mcat">
+          <img src="assets/img/71681-0.jpg" alt="Женские куртки и верхняя одежда" loading="lazy"><span>Верхняя одежда</span>
+        </a>
+      </div>
+
+      <div class="menu__list">
+        <a href="#catalog" data-nav>Категории <i>→</i></a>
+        <a href="#catalog" data-nav>По цвету <i>→</i></a>
+        <a href="#catalog" data-nav>По особенностям <i>→</i></a>
+        <a href="#contacts" data-nav>Оптовая продажа <i>→</i></a>
+        <a href="#contacts" data-nav>Частые вопросы <i>→</i></a>
+      </div>
+
+      <div class="menu__foot">
+        <span>Минск, ТЦ «Метрополь», ул. Немига, 5</span>
+        <span class="menu__clock" id="menuClock">--:--:--</span>
+        <span>Telegram · Instagram</span>
+        <span class="menu__hot">−60% до конца лета</span>
+      </div>
+    </nav>
+  </div>
+
+<div class="scrim" id="scrim"></div>
+
+<div class="search" id="search" aria-hidden="true">
+  <div class="search__inner">
+    <input id="searchInput" type="text" placeholder="Что ищете? Худи, топ, куртка…" autocomplete="off">
+    <button class="search__close" id="searchClose" aria-label="Закрыть">esc</button>
+  </div>
+  <div class="search__hits" id="searchHits"></div>
+</div>
+
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <header class="drawer__head">
+    <h3 id="drawerTitle">Корзина</h3>
+    <button class="drawer__close" id="drawerClose" aria-label="Закрыть">
+      <svg viewBox="0 0 24 24" width="20" height="20"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="1.2"/></svg>
+    </button>
+  </header>
+  <div class="drawer__body" id="drawerBody"></div>
+  <footer class="drawer__foot" id="drawerFoot"></footer>
+</aside>
+
+<div class="pdp" id="pdp" aria-hidden="true">
+  <button class="pdp__close" id="pdpClose" aria-label="Закрыть">
+    <svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="1.2"/></svg>
+  </button>
+  <div class="pdp__gallery" id="pdpGallery"></div>
+  <div class="pdp__info">
+    <span class="pdp__crumb">Последний шанс</span>
+    <h3 class="pdp__name" id="pdpName"></h3>
+    <p class="pdp__price"><s id="pdpOld"></s><b id="pdpNow"></b></p>
+
+    <div class="pdp__block">
+      <div class="pdp__labelrow"><span class="pdp__label">Цвет</span><span class="pdp__cname" id="pdpColorName"></span></div>
+      <div class="pdp__colors" id="pdpColors"></div>
+    </div>
+
+    <div class="pdp__block">
+      <div class="pdp__labelrow"><span class="pdp__label">Размер</span><span class="pdp__grid">Размерная сетка →</span></div>
+      <div class="pdp__sizes" id="pdpSizes"></div>
+      <span class="pdp__ship" id="pdpShip">Выберите размер, чтобы узнать дату доставки</span>
+    </div>
+
+    <div class="pdp__buy">
+      <button class="btn" id="pdpAdd"><span>Добавить в корзину</span></button>
+      <button class="pdp__fav" aria-label="В избранное">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path d="M12 20S3.8 14.6 3.8 9.3A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 8.2 2.3C20.2 14.6 12 20 12 20z" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>
+      </button>
+    </div>
+
+    <div class="acc">
+      <button class="acc__head"><span>Информация о товаре</span><i></i></button>
+      <div class="acc__body"><p id="pdpDesc"></p></div>
+    </div>
+    <div class="acc">
+      <button class="acc__head"><span>Политика оплаты и возврата</span><i></i></button>
+      <div class="acc__body"><p>Оплата картой онлайн или наличными при получении. Возврат в течение 14 дней с сохранением бирок. Магазин: Минск, ТЦ «Метрополь», ул. Немига, 5.</p></div>
+    </div>
+  </div>
+</div>
+
+<main class="app" id="app">
+
+<section class="hero" id="home">
+  <div class="hero__media">
+    <video class="hero__video" src="assets/video/hero.mp4" poster="assets/img/hero-poster.jpg" muted loop playsinline autoplay></video>
+    <div class="hero__wedge"></div>
+    <div class="hero__scrim"></div>
+  </div>
+
+  <a class="brand" href="#home">
+    <svg viewBox="0 0 24 24" width="34" height="34" aria-hidden="true">
+      <path d="M12,17.27L18.18,21l-1.64-7.03L22,9.24l-7.19-0.61L12,2L9.19,8.63L2,9.24l5.46,4.73L5.82,21L12,17.27z"
+            fill="currentColor"/>
+    </svg>
+    <span>Nuvelle</span>
+  </a>
+
+
+  <div class="hero__center">
+    <h1 class="hero__title" aria-label="Nuvelle">
+      <span data-speed="4" data-delay="0.13">L</span><span data-speed="4" data-delay="0.09">u</span><span data-speed="4" data-delay="0.06">c</span><span data-speed="4" data-delay="0.04">y</span>
+    </h1>
+    <p class="hero__sub" data-speed="2">Выбирай. Носи. Сияй.</p>
+  </div>
+
+  <div class="hero__bottom">
+    <div class="hero__deal">
+      <span class="hero__sale">Summer sale</span>
+      <span class="hero__pct"><i data-roll="60">0</i>%</span>
+    </div>
+    <span class="hero__hint">скролль вниз</span>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="about__grid">
+    <div class="about__img" data-reveal>
+      <img src="assets/img/about.jpg" alt="Кампейн Nuvelle" data-speed="-1.5">
+    </div>
+    <div class="about__text">
+      <h2 class="h-serif" data-split>Summer Sale</h2>
+      <p data-reveal>Минус шестьдесят процентов на верхнюю одежду, трикотаж и спорт. Тридцать четыре вещи из основной коллекции, которые уезжают по цене, которая больше не повторится.</p>
+      <p data-reveal>Каждая позиция — из наших собственных съёмок: тот же крой, та же посадка, тот же цвет, что вы видите на видео. Размеры заканчиваются по одному, поэтому список короче с каждым днём.</p>
+      <div class="stats">
+        <div class="stat" data-reveal><b><i data-roll="34">0</i></b><span>вещи в распродаже</span></div>
+        <div class="stat" data-reveal><b><i data-roll="60">0</i>%</b><span>максимальная скидка</span></div>
+        <div class="stat" data-reveal><b><i data-roll="44">0</i> Br</b><span>цена от</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="strip">
+  <div class="strip__row" data-marquee="1">
+    <span>Худи</span><span>Джемперы</span><span>Топы</span><span>Брюки</span><span>Куртки</span><span>Кардиганы</span><span>Свитшоты</span>
+    <span>Худи</span><span>Джемперы</span><span>Топы</span><span>Брюки</span><span>Куртки</span><span>Кардиганы</span><span>Свитшоты</span>
+  </div>
+  <div class="strip__row strip__row--rev" data-marquee="-1">
+    <span>−60%</span><span>последний размер</span><span>−60%</span><span>только онлайн</span><span>−60%</span><span>доставка по РБ</span>
+    <span>−60%</span><span>последний размер</span><span>−60%</span><span>только онлайн</span><span>−60%</span><span>доставка по РБ</span>
+  </div>
+</section>
+
+<section class="catalog" id="catalog">
+  <header class="catalog__head">
+    <div class="catalog__intro">
+      <span class="catalog__count"><i id="count">0</i> товара</span>
+      <span class="timer" id="timer">
+        <b>Распродажа закончится через</b>
+        <span class="timer__row">
+          <i id="tD">00</i><em>дн</em><i id="tH">00</i><em>ч</em><i id="tM">00</i><em>мин</em><i id="tS">00</i><em>сек</em>
+        </span>
+      </span>
+      <h2 class="h-big" data-split>Последний шанс</h2>
+      <p class="catalog__promo">Последняя возможность купить то, что давно хотелось: −60% на верхнюю одежду, трикотаж и спорт.</p>
+    </div>
+    <div class="catalog__filters" id="filters"></div>
+  </header>
+
+  <div class="fbar">
+    <button class="fbar__toggle" id="fToggle">
+      <svg viewBox="0 0 24 24" width="15" height="15"><path d="M3 6h18M6 12h12M10 18h4" stroke="currentColor" stroke-width="1.3"/></svg>
+      <span>Все фильтры</span>
+    </button>
+    <button class="fbar__toggle" id="fVideo">
+      <svg viewBox="0 0 24 24" width="15" height="15"><path d="M4 6h11v12H4zM15 10l5-3v10l-5-3z" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>
+      <span>Только с видео</span>
+    </button>
+    <div class="fbar__tags" id="fTags"></div>
+    <label class="fbar__sort">
+      <span>Сортировка</span>
+      <select id="fSort">
+        <option value="def">рекомендуемые</option>
+        <option value="cheap">сначала дешёвые</option>
+        <option value="rich">сначала дорогие</option>
+        <option value="save">максимальная выгода</option>
+        <option value="az">по названию</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="fpanel" id="fPanel">
+    <div class="fgroup">
+      <span class="fgroup__t">Размер</span>
+      <div class="fgroup__b" id="fSizes"></div>
+    </div>
+    <div class="fgroup">
+      <span class="fgroup__t">Цвет</span>
+      <div class="fgroup__b" id="fColors"></div>
+    </div>
+    <div class="fgroup">
+      <span class="fgroup__t">Цена, Br — до <i id="fPriceVal">130</i></span>
+      <div class="fgroup__b"><input type="range" id="fPrice" min="44" max="130" value="130" step="1"></div>
+    </div>
+    <div class="fgroup fgroup--end">
+      <button class="fclear" id="fClear"><span>Сбросить</span></button>
+    </div>
+  </div>
+
+  <div class="catalog__body">
+    <div class="catalog__col">
+      <div class="catalog__grid" id="grid"></div>
+      <button class="more" id="more"><span>Развернуть каталог</span><i></i></button>
+    </div>
+
+    <aside class="stage" id="stage">
+      <div class="stage__frame">
+        <video class="stage__video on" id="stageA" muted loop playsinline preload="auto"></video>
+        <video class="stage__video" id="stageB" muted loop playsinline preload="auto"></video>
+        <img class="stage__img" id="stageImg" alt="">
+        <div class="stage__info">
+          <span class="stage__name" id="stageName">—</span>
+          <span class="stage__price"><i id="stagePrice">—</i> Br <s id="stageOld"></s></span>
+          <button class="stage__open" id="stageOpen"><span>Открыть товар</span></button>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section class="quote" id="quote">
+  <p class="quote__line" data-shift="-2.2"><span>мода — это броня,</span></p>
+  <p class="quote__line" data-shift="1.6"><span>чтобы пережить будни</span></p>
+  <p class="quote__line" data-shift="-1.1"><span>нельзя быть слишком нарядной</span></p>
+  <p class="quote__line" data-shift="2.4"><span>или недостаточно</span></p>
+  <p class="quote__line" data-shift="-1.7"><span>с маленьким чёрным платьем</span></p>
+</section>
+
+<section class="arrivals" id="arrivals">
+  <div class="arrivals__stage">
+  <div class="arrivals__side">
+    <h2 class="h-big" data-split>Новинки</h2>
+  </div>
+
+  <div class="arrivals__window">
+    <div class="arrivals__reel" id="reel">
+      <figure class="reel__card"><img src="assets/img/72017-0.jpg" alt="Худи" loading="lazy"><figcaption>Худи</figcaption></figure>
+      <figure class="reel__card"><img src="assets/img/71542-0.jpg" alt="Джемперы" loading="lazy"><figcaption>Джемперы</figcaption></figure>
+      <figure class="reel__card"><img src="assets/img/71546-0.jpg" alt="Топы" loading="lazy"><figcaption>Топы</figcaption></figure>
+      <figure class="reel__card"><img src="assets/img/71681-0.jpg" alt="Куртки" loading="lazy"><figcaption>Куртки</figcaption></figure>
+      <figure class="reel__card"><img src="assets/img/71963-0.jpg" alt="Спорт" loading="lazy"><figcaption>Спорт</figcaption></figure>
+      <figure class="reel__card"><img src="assets/img/71638-0.jpg" alt="Кружево" loading="lazy"><figcaption>Кружево</figcaption></figure>
+    </div>
+  </div>
+
+  <div class="arrivals__note">
+    <p>Новая коллекция доступна во всех размерах — это удобный способ собрать себе новый образ. Внутри разные фасоны на любой вкус и вещи, которые спокойно носятся каждый день.</p>
+    <p>Первое, что вы увидите в подборке, — базовый трикотаж: худи, свитшоты и джемперы, которые мы отшиваем небольшими партиями. Следом идут топы, брюки и верхняя одежда.</p>
+    <p><em>Попробуйте — и посмотрите на себя по-новому.</em></p>
+    <span class="arrivals__pg"><i id="reelNow">1</i> / <i id="reelAll">6</i></span>
+  </div>
+  </div>
+</section>
+
+<section class="lookbook" id="lookbook">
+  <div class="look" data-reveal>
+    <img src="assets/img/split-1.jpg" alt="Лукбук — замшевая куртка" data-speed="-2">
+    <span class="look__cap">Outerwear</span>
+  </div>
+  <div class="look" data-reveal>
+    <img src="assets/img/split-2.jpg" alt="Лукбук — белая рубашка" data-speed="-2">
+    <span class="look__cap">Basics</span>
+  </div>
+</section>
+
+<section class="faq" id="faq">
+  <div class="faq__head">
+    <h2 class="h-big" data-split>Вопрос-ответ</h2>
+    <p>Коротко о том, что спрашивают чаще всего.</p>
+  </div>
+  <div class="faq__list">
+    <div class="acc">
+      <button class="acc__head"><span>Сколько идёт доставка?</span><i></i></button>
+      <div class="acc__body"><p>По Минску — на следующий день, курьером или в пункт выдачи. По Беларуси — 2–3 рабочих дня почтой или службой доставки. Заказы от 150 Br доставляем бесплатно.</p></div>
+    </div>
+    <div class="acc">
+      <button class="acc__head"><span>Можно ли вернуть вещь со скидкой −60%?</span><i></i></button>
+      <div class="acc__body"><p>Да. Распродажные позиции возвращаются на общих условиях: 14 дней с момента получения, вещь без следов носки и с сохранёнными бирками. Деньги возвращаем тем же способом, которым была оплата.</p></div>
+    </div>
+    <div class="acc">
+      <button class="acc__head"><span>Как понять свой размер?</span><i></i></button>
+      <div class="acc__body"><p>В карточке товара есть размерная сетка с обхватами груди, талии и бёдер. Модели на фото — рост 175 см, в размере S. Если между размерами — берите больший: трикотаж садится по фигуре.</p></div>
+    </div>
+    <div class="acc">
+      <button class="acc__head"><span>Можно примерить перед покупкой?</span><i></i></button>
+      <div class="acc__body"><p>Да, в магазине в ТЦ «Метрополь» на Немиге, 5. Наличие конкретного размера лучше уточнить в Telegram — остатки на распродаже меняются каждый день.</p></div>
+    </div>
+    <div class="acc">
+      <button class="acc__head"><span>Товар закончился — вернётся ли он?</span><i></i></button>
+      <div class="acc__body"><p>Распродажа идёт по остаткам, допоставок не будет. Но по кнопке с колокольчиком у размера мы отметим вас в списке — если кто-то оформит возврат, сообщим первым.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot" id="contacts">
+  <div class="foot__big"><span>Nuvelle</span></div>
+  <div class="foot__cols">
+    <div>
+      <h3>Магазин</h3>
+      <a class="fbtn" id="mapBtn" href="https://yandex.by/maps/?ll=27.550%2C53.905&z=17&text=%D0%9C%D0%B8%D0%BD%D1%81%D0%BA%2C%20%D1%83%D0%BB%D0%B8%D1%86%D0%B0%20%D0%9D%D0%B5%D0%BC%D0%B8%D0%B3%D0%B0%2C%205%2C%20%D0%A2%D0%A6%20%D0%9C%D0%B5%D1%82%D1%80%D0%BE%D0%BF%D0%BE%D0%BB%D1%8C" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="17" height="17"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="12" cy="10" r="2.4" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>
+        <span>Минск, ТЦ «Метрополь», Немига 5<em>открыть в Яндекс Картах</em></span>
+      </a>
+      <span class="fnote">Пн–Вс, 10:00 — 21:00 · сейчас <b id="shopState">—</b></span>
+    </div>
+    <div>
+      <h3>Связь</h3>
+      <a class="fbtn" href="tel:+375259733980">
+        <svg viewBox="0 0 24 24" width="17" height="17"><path d="M6 3.5 8.6 4l1.3 3.4-1.8 1.5a11 11 0 0 0 5 5l1.5-1.8L18 13.4l.5 2.6c0 1.4-1.2 2.5-2.6 2.4C9.4 18 6 14.6 5.4 8.1 5.3 6.7 6.4 5.5 6 3.5z" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>
+        <span>+375 (25) 973-39-80<em>позвонить</em></span>
+      </a>
+      <a class="fbtn" href="https://t.me/n777he" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="17" height="17"><path d="M21 4 2.8 11.2l5 1.6L19 6.4l-8.6 8.2.4 5 2.6-3.6 4.4 3.2z" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>
+        <span>Telegram<em>написать</em></span>
+      </a>
+    </div>
+    <div>
+      <h3>Разделы</h3>
+      <a class="fbtn fbtn--min" href="#about" data-nav><span>Распродажа<em>к описанию</em></span></a>
+      <a class="fbtn fbtn--min" href="#catalog" data-nav><span>Каталог<em>34 вещи</em></span></a>
+      <a class="fbtn fbtn--min" href="#faq" data-nav><span>Вопрос-ответ<em>доставка, возврат</em></span></a>
+    </div>
+  </div>
+
+  <div class="foot__bar">
+    <span>© 2026 Nuvelle</span>
+    <span>Учебный проект — вёрстка по мотивам Wibe Studio</span>
+  </div>
+</footer>
+
+</main>
+
+<script src="script.js?v=1786286200"></script>
+</body>
+</html>

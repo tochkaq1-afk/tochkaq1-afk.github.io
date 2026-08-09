@@ -1,0 +1,2232 @@
+[
+ {
+  "id": "71546",
+  "slug": "chernyi-top-v-rubchik-s-dlinnym-rukavom-71546",
+  "name": "Черный топ в рубчик с длинным рукавом",
+  "old": "109,99",
+  "now": "44",
+  "images": [
+   "assets/img/71546-0.jpg",
+   "assets/img/71546-1.jpg",
+   "assets/img/71546-2.jpg"
+  ],
+  "video": "assets/video/71546.mp4",
+  "desc": "Дизайн разработан в Лос-Анджелесе\n- 100% полиэстер\n- Ручная стирка в холодной воде\nМодель демонстрирует изделие в размере S.",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": false
+   },
+   {
+    "s": "XS",
+    "out": false
+   },
+   {
+    "s": "S",
+    "out": false
+   },
+   {
+    "s": "M",
+    "out": true
+   },
+   {
+    "s": "L",
+    "out": true
+   }
+  ],
+  "category": "Лонгсливы",
+  "color": {
+   "name": "Чёрный",
+   "hex": "#373737"
+  },
+  "family": [
+   {
+    "id": "71546",
+    "self": true,
+    "name": "Чёрный",
+    "hex": "#373737",
+    "thumb": "assets/img/sw-71546.jpg",
+    "shot": "assets/img/71546-0.jpg",
+    "slug": "chernyi-top-v-rubchik-s-dlinnym-rukavom-71546",
+    "images": [
+     "assets/img/71546-0.jpg",
+     "assets/img/71546-1.jpg",
+     "assets/img/71546-2.jpg"
+    ]
+   },
+   {
+    "id": "71547",
+    "self": false,
+    "name": "Красный",
+    "hex": "#F2655C",
+    "thumb": "assets/img/sw-71547.jpg",
+    "shot": "assets/img/cv-71547.jpg",
+    "slug": "top-v-rubchik-s-dlinnym-rukavom-71547",
+    "images": [
+     "assets/img/cv-71547-0.jpg",
+     "assets/img/cv-71547-1.jpg",
+     "assets/img/cv-71547-2.jpg"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "72017",
+  "slug": "rozovoe-khudi-na-molnii-iz-flisa-72017",
+  "name": "Розовое худи на молнии из флиса",
+  "old": "169,99",
+  "now": "68",
+  "images": [
+   "assets/img/72017-0.jpg",
+   "assets/img/72017-1.jpg",
+   "assets/img/72017-2.jpg"
+  ],
+  "video": "assets/video/72017.mp4",
+  "desc": "Дизайн из Лос-Анджелеса\n- 57% хлопок, 43% полиэстер\n- Ручная стирка в холодной воде\nНа модели размер S",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": true
+   },
+   {
+    "s": "XS",
+    "out": false
+   },
+   {
+    "s": "S",
+    "out": false
+   },
+   {
+    "s": "M",
+    "out": false
+   },
+   {
+    "s": "L",
+    "out": true
+   }
+  ],
+  "category": "Спорт",
+  "color": {
+   "name": "Розовый",
+   "hex": "#EC85A8"
+  },
+  "family": []
+ },
+ {
+  "id": "71959",
+  "slug": "khudi-nuvelle-v-serom-tsvete-71959",
+  "name": "Худи Nuvelle в сером цвете",
+  "old": "189,99",
+  "now": "76",
+  "images": [
+   "assets/img/71959-0.jpg",
+   "assets/img/71959-1.jpg",
+   "assets/img/71959-2.jpg"
+  ],
+  "video": "assets/video/71959.mp4",
+  "desc": "Дизайн из Лос-Анджелеса\n- 57% хлопок, 43% полиэстер\n- Ручная стирка в холодной воде\nНа модели размер S",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": true
+   },
+   {
+    "s": "XS",
+    "out": true
+   },
+   {
+    "s": "S",
+    "out": true
+   },
+   {
+    "s": "M",
+    "out": false
+   },
+   {
+    "s": "L",
+    "out": false
+   }
+  ],
+  "category": "Спорт",
+  "color": {
+   "name": "Серый/Серебристый",
+   "hex": "#BDBDBD"
+  },
+  "family": [
+   {
+    "id": "71959",
+    "self": true,
+    "name": "Серый/Серебристый",
+    "hex": "#BDBDBD",
+    "thumb": "assets/img/sw-71959.jpg",
+    "shot": "assets/img/71959-0.jpg",
+    "slug": "khudi-nuvelle-v-serom-tsvete-71959",
+    "images": [
+     "assets/img/71959-0.jpg",
+     "assets/img/71959-1.jpg",
+     "assets/img/71959-2.jpg"
+    ]
+   },
+   {
+    "id": "71960",
+    "self": false,
+    "name": "Розовый",
+    "hex": "#EC85A8",
+    "thumb": "assets/img/sw-71960.jpg",
+    "shot": "assets/img/cv-71960.jpg",
+    "slug": "khudi-nuvelle-v-rozovom-tsvete-71960",
+    "images": [
+     "assets/img/cv-71960-0.jpg",
+     "assets/img/cv-71960-1.jpg",
+     "assets/img/cv-71960-2.jpg"
+    ]
+   },
+   {
+    "id": "71961",
+    "self": false,
+    "name": "Коричневый",
+    "hex": "#886F65",
+    "thumb": "assets/img/sw-71961.jpg",
+    "shot": "assets/img/cv-71961.jpg",
+    "slug": "khudi-nuvelle-v-korichnevom-tsvete-71961",
+    "images": [
+     "assets/img/cv-71961-0.jpg",
+     "assets/img/cv-71961-1.jpg",
+     "assets/img/cv-71961-2.jpg"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "71963",
+  "slug": "priamye-flisovye-briuki-serogo-tsveta-71963",
+  "name": "Прямые флисовые брюки серого цвета",
+  "old": "149,99",
+  "now": "60",
+  "images": [
+   "assets/img/71963-0.jpg",
+   "assets/img/71963-1.jpg",
+   "assets/img/71963-2.jpg"
+  ],
+  "video": "assets/video/71963.mp4",
+  "desc": "Дизайн из Лос-Анджелеса\n- 57% хлопок, 43% полиэстер\n- Ручная стирка в холодной воде\nНа модели размер S",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": true
+   },
+   {
+    "s": "XS",
+    "out": true
+   },
+   {
+    "s": "S",
+    "out": false
+   },
+   {
+    "s": "M",
+    "out": false
+   },
+   {
+    "s": "L",
+    "out": true
+   }
+  ],
+  "category": "Спорт",
+  "color": {
+   "name": "Розовый",
+   "hex": "#EC85A8"
+  },
+  "family": [
+   {
+    "id": "71962",
+    "self": false,
+    "name": "Розовый",
+    "hex": "#EC85A8",
+    "thumb": "assets/img/sw-71962.jpg",
+    "shot": "assets/img/cv-71962.jpg",
+    "slug": "priamye-flisovye-briuki-rozovogo-tsveta-71962",
+    "images": [
+     "assets/img/cv-71962-0.jpg",
+     "assets/img/cv-71962-1.jpg",
+     "assets/img/cv-71962-2.jpg"
+    ]
+   },
+   {
+    "id": "71963",
+    "self": true,
+    "name": "Серый/Серебристый",
+    "hex": "#BDBDBD",
+    "thumb": "assets/img/sw-71963.jpg",
+    "shot": "assets/img/71963-0.jpg",
+    "slug": "priamye-flisovye-briuki-serogo-tsveta-71963",
+    "images": [
+     "assets/img/71963-0.jpg",
+     "assets/img/71963-1.jpg",
+     "assets/img/71963-2.jpg"
+    ]
+   },
+   {
+    "id": "71964",
+    "self": false,
+    "name": "Коричневый",
+    "hex": "#886F65",
+    "thumb": "assets/img/sw-71964.jpg",
+    "shot": "assets/img/cv-71964.jpg",
+    "slug": "priamye-flisovye-briuki-korichnevogo-tsveta-71964",
+    "images": [
+     "assets/img/cv-71964-0.jpg",
+     "assets/img/cv-71964-1.jpg",
+     "assets/img/cv-71964-2.jpg"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "71966",
+  "slug": "rozovye-dzhoggery-71966",
+  "name": "Розовые джоггеры",
+  "old": "149,99",
+  "now": "60",
+  "images": [
+   "assets/img/71966-0.jpg",
+   "assets/img/71966-1.jpg",
+   "assets/img/71966-2.jpg"
+  ],
+  "video": "",
+  "desc": "Дизайн из Лос-Анджелеса\n- 57% хлопок, 43% полиэстер\n- Ручная стирка в холодной воде\nНа модели размер S",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": false
+   },
+   {
+    "s": "XS",
+    "out": false
+   },
+   {
+    "s": "S",
+    "out": true
+   },
+   {
+    "s": "M",
+    "out": true
+   },
+   {
+    "s": "L",
+    "out": true
+   }
+  ],
+  "category": "Спорт",
+  "color": {
+   "name": "Серый/Серебристый",
+   "hex": "#BDBDBD"
+  },
+  "family": [
+   {
+    "id": "71965",
+    "self": false,
+    "name": "Серый/Серебристый",
+    "hex": "#BDBDBD",
+    "thumb": "assets/img/sw-71965.jpg",
+    "shot": "assets/img/cv-71965.jpg",
+    "slug": "sportivnye-briuki-v-serom-tsvete-71965",
+    "images": [
+     "assets/img/cv-71965-0.jpg",
+     "assets/img/cv-71965-1.jpg",
+     "assets/img/cv-71965-2.jpg"
+    ]
+   },
+   {
+    "id": "71966",
+    "self": true,
+    "name": "Розовый",
+    "hex": "#EC85A8",
+    "thumb": "assets/img/sw-71966.jpg",
+    "shot": "assets/img/71966-0.jpg",
+    "slug": "rozovye-dzhoggery-71966",
+    "images": [
+     "assets/img/71966-0.jpg",
+     "assets/img/71966-1.jpg",
+     "assets/img/71966-2.jpg"
+    ]
+   },
+   {
+    "id": "71967",
+    "self": false,
+    "name": "Коричневый",
+    "hex": "#886F65",
+    "thumb": "assets/img/sw-71967.jpg",
+    "shot": "assets/img/cv-71967.jpg",
+    "slug": "flisovye-sportivnye-briuki-v-korichnevom-tsyete-71967",
+    "images": [
+     "assets/img/cv-71967-0.jpg",
+     "assets/img/cv-71967-1.jpg",
+     "assets/img/cv-71967-2.jpg"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "71998",
+  "slug": "sportivnye-briuki-s-reguliruemymi-manzhetami-chernye-71998",
+  "name": "Спортивные брюки с регулируемыми манжетами черные",
+  "old": "149,99",
+  "now": "60",
+  "images": [
+   "assets/img/71998-0.jpg",
+   "assets/img/71998-1.jpg",
+   "assets/img/71998-2.jpg"
+  ],
+  "video": "",
+  "desc": "Дизайн из Лос-Анджелеса\n- 57% хлопок, 43% полиэстер\n- Ручная стирка в холодной воде\nНа модели размер S",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": false
+   },
+   {
+    "s": "XS",
+    "out": true
+   },
+   {
+    "s": "S",
+    "out": true
+   },
+   {
+    "s": "M",
+    "out": false
+   },
+   {
+    "s": "L",
+    "out": true
+   }
+  ],
+  "category": "Спорт",
+  "color": {
+   "name": "Голубой",
+   "hex": "#5AB3F0"
+  },
+  "family": [
+   {
+    "id": "71997",
+    "self": false,
+    "name": "Голубой",
+    "hex": "#5AB3F0",
+    "thumb": "assets/img/sw-71997.jpg",
+    "shot": "assets/img/cv-71997.jpg",
+    "slug": "sinie-sportivnye-briuki-s-reguliruemymi-manzhetami-71997",
+    "images": [
+     "assets/img/cv-71997-0.jpg",
+     "assets/img/cv-71997-1.jpg",
+     "assets/img/cv-71997-2.jpg"
+    ]
+   },
+   {
+    "id": "71998",
+    "self": true,
+    "name": "Чёрный",
+    "hex": "#373737",
+    "thumb": "assets/img/sw-71998.jpg",
+    "shot": "assets/img/71998-0.jpg",
+    "slug": "sportivnye-briuki-s-reguliruemymi-manzhetami-chernye-71998",
+    "images": [
+     "assets/img/71998-0.jpg",
+     "assets/img/71998-1.jpg",
+     "assets/img/71998-2.jpg"
+    ]
+   },
+   {
+    "id": "71999",
+    "self": false,
+    "name": "Красный",
+    "hex": "#F2655C",
+    "thumb": "assets/img/sw-71999.jpg",
+    "shot": "assets/img/cv-71999.jpg",
+    "slug": "bordovye-dzhoggery-s-reguliruemymi-manzhetami-71999",
+    "images": [
+     "assets/img/cv-71999-0.jpg",
+     "assets/img/cv-71999-1.jpg",
+     "assets/img/cv-71999-2.jpg"
+    ]
+   },
+   {
+    "id": "72000",
+    "self": false,
+    "name": "Розовый",
+    "hex": "#EC85A8",
+    "thumb": "assets/img/sw-72000.jpg",
+    "shot": "assets/img/cv-72000.jpg",
+    "slug": "sportivnye-briuki-s-reguliruemymi-manzhetami-rozovye-72000",
+    "images": [
+     "assets/img/cv-72000-0.jpg",
+     "assets/img/cv-72000-1.jpg",
+     "assets/img/cv-72000-2.jpg"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "72002",
+  "slug": "briuki-iz-futera-bordovye-72002",
+  "name": "Брюки из футера бордовые",
+  "old": "149,99",
+  "now": "60",
+  "images": [
+   "assets/img/72002-0.jpg",
+   "assets/img/72002-1.jpg",
+   "assets/img/72002-2.jpg"
+  ],
+  "video": "",
+  "desc": "Дизайн из Лос-Анджелеса\n- 57% хлопок, 43% полиэстер\n- Ручная стирка в холодной воде\nНа модели размер S",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": false
+   },
+   {
+    "s": "XS",
+    "out": true
+   },
+   {
+    "s": "S",
+    "out": false
+   },
+   {
+    "s": "M",
+    "out": false
+   },
+   {
+    "s": "L",
+    "out": false
+   }
+  ],
+  "category": "Спорт",
+  "color": {
+   "name": "Голубой",
+   "hex": "#5AB3F0"
+  },
+  "family": [
+   {
+    "id": "72001",
+    "self": false,
+    "name": "Голубой",
+    "hex": "#5AB3F0",
+    "thumb": "assets/img/sw-72001.jpg",
+    "shot": "assets/img/cv-72001.jpg",
+    "slug": "briuki-iz-futera-v-sinem-tsvete-72001",
+    "images": [
+     "assets/img/cv-72001-0.jpg",
+     "assets/img/cv-72001-1.jpg",
+     "assets/img/cv-72001-2.jpg"
+    ]
+   },
+   {
+    "id": "72002",
+    "self": true,
+    "name": "Красный",
+    "hex": "#F2655C",
+    "thumb": "assets/img/sw-72002.jpg",
+    "shot": "assets/img/72002-0.jpg",
+    "slug": "briuki-iz-futera-bordovye-72002",
+    "images": [
+     "assets/img/72002-0.jpg",
+     "assets/img/72002-1.jpg",
+     "assets/img/72002-2.jpg"
+    ]
+   },
+   {
+    "id": "72003",
+    "self": false,
+    "name": "Розовый",
+    "hex": "#EC85A8",
+    "thumb": "assets/img/sw-72003.jpg",
+    "shot": "assets/img/cv-72003.jpg",
+    "slug": "briuki-iz-futera-rozovogo-tsveta-72003",
+    "images": [
+     "assets/img/cv-72003-0.jpg",
+     "assets/img/cv-72003-1.jpg",
+     "assets/img/cv-72003-2.jpg"
+    ]
+   },
+   {
+    "id": "72004",
+    "self": false,
+    "name": "Чёрный",
+    "hex": "#373737",
+    "thumb": "assets/img/sw-72004.jpg",
+    "shot": "assets/img/cv-72004.jpg",
+    "slug": "sportivnye-briuki-chernye-72004",
+    "images": [
+     "assets/img/cv-72004-0.jpg",
+     "assets/img/cv-72004-1.jpg",
+     "assets/img/cv-72004-2.jpg"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "72010",
+  "slug": "svitshot-nuvelle-v-bordovom-tsvete-72010",
+  "name": "Свитшот Nuvelle в бордовом цвете",
+  "old": "199,99",
+  "now": "80",
+  "images": [
+   "assets/img/72010-0.jpg",
+   "assets/img/72010-1.jpg",
+   "assets/img/72010-2.jpg"
+  ],
+  "video": "",
+  "desc": "Дизайн из Лос-Анджелеса\n- 57% хлопок, 43% полиэстер\n- Ручная стирка в холодной воде\nНа модели размер S",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": false
+   },
+   {
+    "s": "XS",
+    "out": true
+   },
+   {
+    "s": "S",
+    "out": false
+   },
+   {
+    "s": "M",
+    "out": true
+   },
+   {
+    "s": "L",
+    "out": false
+   }
+  ],
+  "category": "Спорт",
+  "color": {
+   "name": "Голубой",
+   "hex": "#5AB3F0"
+  },
+  "family": [
+   {
+    "id": "72009",
+    "self": false,
+    "name": "Голубой",
+    "hex": "#5AB3F0",
+    "thumb": "assets/img/sw-72009.jpg",
+    "shot": "assets/img/cv-72009.jpg",
+    "slug": "svitshot-nuvelle-v-sinem-tsvete-72009",
+    "images": [
+     "assets/img/cv-72009-0.jpg",
+     "assets/img/cv-72009-1.jpg",
+     "assets/img/cv-72009-2.jpg"
+    ]
+   },
+   {
+    "id": "72010",
+    "self": true,
+    "name": "Красный",
+    "hex": "#F2655C",
+    "thumb": "assets/img/sw-72010.jpg",
+    "shot": "assets/img/72010-0.jpg",
+    "slug": "svitshot-nuvelle-v-bordovom-tsvete-72010",
+    "images": [
+     "assets/img/72010-0.jpg",
+     "assets/img/72010-1.jpg",
+     "assets/img/72010-2.jpg"
+    ]
+   },
+   {
+    "id": "72011",
+    "self": false,
+    "name": "Чёрный",
+    "hex": "#373737",
+    "thumb": "assets/img/sw-72011.jpg",
+    "shot": "assets/img/cv-72011.jpg",
+    "slug": "svitshot-nuvelle-v-chernom-tsvete-72011",
+    "images": [
+     "assets/img/cv-72011-0.jpg",
+     "assets/img/cv-72011-1.jpg",
+     "assets/img/cv-72011-2.jpg"
+    ]
+   },
+   {
+    "id": "72012",
+    "self": false,
+    "name": "Розовый",
+    "hex": "#EC85A8",
+    "thumb": "assets/img/sw-72012.jpg",
+    "shot": "assets/img/cv-72012.jpg",
+    "slug": "svitshot-nuvelle-v-rozovom-tsvete-72012",
+    "images": [
+     "assets/img/cv-72012-0.jpg",
+     "assets/img/cv-72012-1.jpg",
+     "assets/img/cv-72012-2.jpg"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "72016",
+  "slug": "khudi-nuvelle-tsveta-burgundi-72016",
+  "name": "Худи Nuvelle цвета бургунди",
+  "old": "189,99",
+  "now": "76",
+  "images": [
+   "assets/img/72016-0.jpg",
+   "assets/img/72016-1.jpg",
+   "assets/img/72016-2.jpg"
+  ],
+  "video": "assets/video/72016.mp4",
+  "desc": "Дизайн из Лос-Анджелеса\n- 57% хлопок, 43% полиэстер\n- Ручная стирка в холодной воде\nНа модели размер S",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": false
+   },
+   {
+    "s": "XS",
+    "out": false
+   },
+   {
+    "s": "S",
+    "out": false
+   },
+   {
+    "s": "M",
+    "out": false
+   },
+   {
+    "s": "L",
+    "out": true
+   }
+  ],
+  "category": "Спорт",
+  "color": {
+   "name": "Голубой",
+   "hex": "#5AB3F0"
+  },
+  "family": [
+   {
+    "id": "72013",
+    "self": false,
+    "name": "Голубой",
+    "hex": "#5AB3F0",
+    "thumb": "assets/img/sw-72013.jpg",
+    "shot": "assets/img/cv-72013.jpg",
+    "slug": "khudi-nuvelle-v-sinem-tsvete-72013",
+    "images": [
+     "assets/img/cv-72013-0.jpg",
+     "assets/img/cv-72013-1.jpg",
+     "assets/img/cv-72013-2.jpg"
+    ]
+   },
+   {
+    "id": "72014",
+    "self": false,
+    "name": "Розовый",
+    "hex": "#EC85A8",
+    "thumb": "assets/img/sw-72014.jpg",
+    "shot": "assets/img/cv-72014.jpg",
+    "slug": "khudi-nuvelle-v-rozovom-tsvete-72014",
+    "images": [
+     "assets/img/cv-72014-0.jpg",
+     "assets/img/cv-72014-1.jpg",
+     "assets/img/cv-72014-2.jpg"
+    ]
+   },
+   {
+    "id": "72015",
+    "self": false,
+    "name": "Чёрный",
+    "hex": "#373737",
+    "thumb": "assets/img/sw-72015.jpg",
+    "shot": "assets/img/cv-72015.jpg",
+    "slug": "khudi-nuvelle-v-chernom-tsvete-72015",
+    "images": [
+     "assets/img/cv-72015-0.jpg",
+     "assets/img/cv-72015-1.jpg",
+     "assets/img/cv-72015-2.jpg"
+    ]
+   },
+   {
+    "id": "72016",
+    "self": true,
+    "name": "Красный",
+    "hex": "#F2655C",
+    "thumb": "assets/img/sw-72016.jpg",
+    "shot": "assets/img/72016-0.jpg",
+    "slug": "khudi-nuvelle-tsveta-burgundi-72016",
+    "images": [
+     "assets/img/72016-0.jpg",
+     "assets/img/72016-1.jpg",
+     "assets/img/72016-2.jpg"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "72006",
+  "slug": "chernoe-khudi-na-molnii-72006",
+  "name": "Чёрное худи на молнии",
+  "old": "199,99",
+  "now": "80",
+  "images": [
+   "assets/img/72006-0.jpg",
+   "assets/img/72006-1.jpg",
+   "assets/img/72006-2.jpg"
+  ],
+  "video": "",
+  "desc": "Разработано в Лос-Анджелесе\n- 100% полиэстер\n- Ручная стирка в холодной воде\nНа модели размер S.",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": false
+   },
+   {
+    "s": "XS",
+    "out": false
+   },
+   {
+    "s": "S",
+    "out": true
+   },
+   {
+    "s": "M",
+    "out": false
+   },
+   {
+    "s": "L",
+    "out": false
+   }
+  ],
+  "category": "Спорт",
+  "color": {
+   "name": "Голубой",
+   "hex": "#5AB3F0"
+  },
+  "family": [
+   {
+    "id": "72005",
+    "self": false,
+    "name": "Голубой",
+    "hex": "#5AB3F0",
+    "thumb": "assets/img/sw-72005.jpg",
+    "shot": "assets/img/cv-72005.jpg",
+    "slug": "sinee-khudi-oversaiz-na-molnii-72005",
+    "images": [
+     "assets/img/cv-72005-0.jpg",
+     "assets/img/cv-72005-1.jpg",
+     "assets/img/cv-72005-2.jpg"
+    ]
+   },
+   {
+    "id": "72006",
+    "self": true,
+    "name": "Чёрный",
+    "hex": "#373737",
+    "thumb": "assets/img/sw-72006.jpg",
+    "shot": "assets/img/72006-0.jpg",
+    "slug": "chernoe-khudi-na-molnii-72006",
+    "images": [
+     "assets/img/72006-0.jpg",
+     "assets/img/72006-1.jpg",
+     "assets/img/72006-2.jpg"
+    ]
+   },
+   {
+    "id": "72007",
+    "self": false,
+    "name": "Красный",
+    "hex": "#F2655C",
+    "thumb": "assets/img/sw-72007.jpg",
+    "shot": "assets/img/cv-72007.jpg",
+    "slug": "svobodnoe-khudi-na-molnii-tsveta-burgundi-72007",
+    "images": [
+     "assets/img/cv-72007-0.jpg",
+     "assets/img/cv-72007-1.jpg",
+     "assets/img/cv-72007-2.jpg"
+    ]
+   },
+   {
+    "id": "72008",
+    "self": false,
+    "name": "Розовый",
+    "hex": "#EC85A8",
+    "thumb": "assets/img/sw-72008.jpg",
+    "shot": "assets/img/cv-72008.jpg",
+    "slug": "rozovoe-khudi-oversaiz-na-molnii-72008",
+    "images": [
+     "assets/img/cv-72008-0.jpg",
+     "assets/img/cv-72008-1.jpg",
+     "assets/img/cv-72008-2.jpg"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "72081",
+  "slug": "kremovyi-top-v-rubchik-s-pugovitsami-72081",
+  "name": "Кремовый топ в рубчик с пуговицами",
+  "old": "139,99",
+  "now": "56",
+  "images": [
+   "assets/img/72081-0.jpg",
+   "assets/img/72081-1.jpg",
+   "assets/img/72081-2.jpg"
+  ],
+  "video": "assets/video/72081.mp4",
+  "desc": "Дизайн разработан в Лос-Анджелесе\n- 97% хлопок, 3% эластан\n- Ручная стирка в холодной воде\nНа модели размер S.\nОбратите внимание, что мерки снимаются с изделия в разложенном виде.",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": true
+   },
+   {
+    "s": "XS",
+    "out": false
+   },
+   {
+    "s": "S",
+    "out": false
+   },
+   {
+    "s": "M",
+    "out": false
+   },
+   {
+    "s": "L",
+    "out": true
+   }
+  ],
+  "category": "Лонгсливы",
+  "color": {
+   "name": "Бежевый/Золотой",
+   "hex": "#FFF1D3"
+  },
+  "family": [
+   {
+    "id": "72081",
+    "self": true,
+    "name": "Бежевый/Золотой",
+    "hex": "#FFF1D3",
+    "thumb": "assets/img/sw-72081.jpg",
+    "shot": "assets/img/72081-0.jpg",
+    "slug": "kremovyi-top-v-rubchik-s-pugovitsami-72081",
+    "images": [
+     "assets/img/72081-0.jpg",
+     "assets/img/72081-1.jpg",
+     "assets/img/72081-2.jpg"
+    ]
+   },
+   {
+    "id": "72082",
+    "self": false,
+    "name": "Бежевый/Золотой",
+    "hex": "#FFF1D3",
+    "thumb": "assets/img/sw-72082.jpg",
+    "shot": "assets/img/cv-72082.jpg",
+    "slug": "maksi-iubka-kremovogo-tsveta-72082",
+    "images": [
+     "assets/img/cv-72082-0.jpg",
+     "assets/img/cv-72082-1.jpg",
+     "assets/img/cv-72082-2.jpg"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "69601",
+  "slug": "top-v-rubchik-s-otkrytymi-plechami-69601",
+  "name": "Топ в рубчик с открытыми плечами",
+  "old": "119,99",
+  "now": "48",
+  "images": [],
+  "video": "assets/video/69601.mp4",
+  "desc": "Дизайн разработан в Лос-Анджелесе\n- Изготовлено из ребристого хлопкового трикотажа\n- Рекомендуется ручная стирка в холодной воде\nНа модели размер S",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": true
+   },
+   {
+    "s": "XS",
+    "out": false
+   },
+   {
+    "s": "S",
+    "out": false
+   },
+   {
+    "s": "M",
+    "out": false
+   },
+   {
+    "s": "L",
+    "out": false
+   }
+  ],
+  "category": "Лонгсливы",
+  "color": {
+   "name": "Коричневый",
+   "hex": "#886F65"
+  },
+  "family": [
+   {
+    "id": "69600",
+    "self": false,
+    "name": "Коричневый",
+    "hex": "#886F65",
+    "thumb": "assets/img/sw-69600.jpg",
+    "shot": "",
+    "slug": "briuki-klesh-s-zanizhennoi-taliei-69600",
+    "images": []
+   },
+   {
+    "id": "69601",
+    "self": true,
+    "name": "Коричневый",
+    "hex": "#886F65",
+    "thumb": "assets/img/sw-69601.jpg",
+    "slug": "top-v-rubchik-s-otkrytymi-plechami-69601",
+    "images": []
+   }
+  ]
+ },
+ {
+  "id": "71530",
+  "slug": "trikotazhnyi-asimmetrichnyi-kardigan-v-chernom-tsvete-71530",
+  "name": "Трикотажный асимметричный кардиган в чёрном цвете",
+  "old": "129,99",
+  "now": "52",
+  "images": [
+   "assets/img/71530-0.jpg",
+   "assets/img/71530-1.jpg",
+   "assets/img/71530-2.jpg"
+  ],
+  "video": "assets/video/71530.mp4",
+  "desc": "Дизайн из Лос-Анджелеса\n- 100% полиэстер\n- Ручная стирка в холодной воде\nНа модели размер S",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": false
+   },
+   {
+    "s": "XS",
+    "out": true
+   },
+   {
+    "s": "S",
+    "out": false
+   },
+   {
+    "s": "M",
+    "out": true
+   },
+   {
+    "s": "L",
+    "out": false
+   }
+  ],
+  "category": "Свитеры и кардиганы",
+  "color": {
+   "name": "Чёрный",
+   "hex": "#373737"
+  },
+  "family": [
+   {
+    "id": "71530",
+    "self": true,
+    "name": "Чёрный",
+    "hex": "#373737",
+    "thumb": "assets/img/sw-71530.jpg",
+    "shot": "assets/img/71530-0.jpg",
+    "slug": "trikotazhnyi-asimmetrichnyi-kardigan-v-chernom-tsvete-71530",
+    "images": [
+     "assets/img/71530-0.jpg",
+     "assets/img/71530-1.jpg",
+     "assets/img/71530-2.jpg"
+    ]
+   },
+   {
+    "id": "71531",
+    "self": false,
+    "name": "Бежевый/Золотой",
+    "hex": "#FFF1D3",
+    "thumb": "assets/img/sw-71531.jpg",
+    "shot": "assets/img/cv-71531.jpg",
+    "slug": "trikotazhnyi-asimmetrichnyi-kardigan-v-ottenke-aivori-71531",
+    "images": [
+     "assets/img/cv-71531-0.jpg",
+     "assets/img/cv-71531-1.jpg",
+     "assets/img/cv-71531-2.jpg"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "71532",
+  "slug": "trikotazhnyi-dzhemper-s-obieemnymi-rukavami-slivovyi-71532",
+  "name": "Трикотажный джемпер с объемными рукавами сливовый",
+  "old": "149,99",
+  "now": "60",
+  "images": [
+   "assets/img/71532-0.jpg",
+   "assets/img/71532-1.jpg",
+   "assets/img/71532-2.jpg"
+  ],
+  "video": "assets/video/71532.mp4",
+  "desc": "Дизайн разработан в Лос-Анджелесе\n- 60% хлопок, 40% акрил\n- Ручная стирка в холодной воде\nМодель на фото одета в размер XS/S.",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": false
+   },
+   {
+    "s": "XS",
+    "out": false
+   },
+   {
+    "s": "S",
+    "out": false
+   },
+   {
+    "s": "M",
+    "out": true
+   },
+   {
+    "s": "L",
+    "out": false
+   }
+  ],
+  "category": "Свитеры и кардиганы",
+  "color": {
+   "name": "Красный",
+   "hex": "#F2655C"
+  },
+  "family": [
+   {
+    "id": "71532",
+    "self": true,
+    "name": "Красный",
+    "hex": "#F2655C",
+    "thumb": "assets/img/sw-71532.jpg",
+    "shot": "assets/img/71532-0.jpg",
+    "slug": "trikotazhnyi-dzhemper-s-obieemnymi-rukavami-slivovyi-71532",
+    "images": [
+     "assets/img/71532-0.jpg",
+     "assets/img/71532-1.jpg",
+     "assets/img/71532-2.jpg"
+    ]
+   },
+   {
+    "id": "71563",
+    "self": false,
+    "name": "Белый",
+    "hex": "#FFFFFF",
+    "thumb": "assets/img/sw-71563.jpg",
+    "shot": "assets/img/cv-71563.jpg",
+    "slug": "dzhemper-iz-trikotazha-s-obieemnymi-rukavami-71563",
+    "images": [
+     "assets/img/cv-71563-0.jpg",
+     "assets/img/cv-71563-1.jpg",
+     "assets/img/cv-71563-2.jpg"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "71542",
+  "slug": "chernyi-oversaiz-sviter-s-otkrytymi-plechami-71542",
+  "name": "Черный оверсайз свитер с открытыми плечами",
+  "old": "169,99",
+  "now": "68",
+  "images": [
+   "assets/img/71542-0.jpg",
+   "assets/img/71542-1.jpg",
+   "assets/img/71542-2.jpg"
+  ],
+  "video": "assets/video/71542.mp4",
+  "desc": "Дизайн из Лос-Анджелеса\n- 42% акрил, 28% нейлон, 30% полиэстер\n- Ручная стирка в холодной воде\nМодель на фото одета в размер S.",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": false
+   },
+   {
+    "s": "XS",
+    "out": true
+   },
+   {
+    "s": "S",
+    "out": false
+   },
+   {
+    "s": "M",
+    "out": false
+   },
+   {
+    "s": "L",
+    "out": true
+   }
+  ],
+  "category": "Свитеры и кардиганы",
+  "color": {
+   "name": "Бежевый/Золотой",
+   "hex": "#FFF1D3"
+  },
+  "family": [
+   {
+    "id": "71541",
+    "self": false,
+    "name": "Бежевый/Золотой",
+    "hex": "#FFF1D3",
+    "thumb": "assets/img/sw-71541.jpg",
+    "shot": "assets/img/cv-71541.jpg",
+    "slug": "svobodnyi-viazanyi-dzhemper-s-otkrytymi-plechami-71541",
+    "images": [
+     "assets/img/cv-71541-0.jpg",
+     "assets/img/cv-71541-1.jpg",
+     "assets/img/cv-71541-2.jpg"
+    ]
+   },
+   {
+    "id": "71542",
+    "self": true,
+    "name": "Чёрный",
+    "hex": "#373737",
+    "thumb": "assets/img/sw-71542.jpg",
+    "shot": "assets/img/71542-0.jpg",
+    "slug": "chernyi-oversaiz-sviter-s-otkrytymi-plechami-71542",
+    "images": [
+     "assets/img/71542-0.jpg",
+     "assets/img/71542-1.jpg",
+     "assets/img/71542-2.jpg"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "71577",
+  "slug": "top-s-otkrytymi-plechami-i-fakturnoi-viazkoi-71577",
+  "name": "Топ с открытыми плечами и фактурной вязкой",
+  "old": "149,90",
+  "now": "59,96",
+  "images": [
+   "assets/img/71577-0.jpg",
+   "assets/img/71577-1.jpg",
+   "assets/img/71577-2.jpg"
+  ],
+  "video": "assets/video/71577.mp4",
+  "desc": "Дизайн разработан в Лос-Анджелесе\n- 100% полиэстер\n- Ручная стирка в холодной воде\nНа модели размер S.\nОбратите внимание, что мерки снимаются с изделия в разложенном виде.",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": true
+   },
+   {
+    "s": "XS",
+    "out": false
+   },
+   {
+    "s": "S",
+    "out": false
+   },
+   {
+    "s": "M",
+    "out": true
+   },
+   {
+    "s": "L",
+    "out": true
+   }
+  ],
+  "category": "Лонгсливы",
+  "color": {
+   "name": "Чёрный",
+   "hex": "#373737"
+  },
+  "family": []
+ },
+ {
+  "id": "71638",
+  "slug": "top-s-kruzhevnoi-otdelkoi-chernyi-71638",
+  "name": "Топ с кружевной отделкой черный",
+  "old": "109,99",
+  "now": "44",
+  "images": [
+   "assets/img/71638-0.jpg",
+   "assets/img/71638-1.jpg",
+   "assets/img/71638-2.jpg"
+  ],
+  "video": "assets/video/71638.mp4",
+  "desc": "Дизайн разработан в Лос-Анджелесе\n- 95% полиэстер, 5% эластан\n- Ручная стирка в холодной воде\nНа модели размер S. Обратите внимание, что мерки снимаются с изделия в разложенном виде.",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": false
+   },
+   {
+    "s": "XS",
+    "out": true
+   },
+   {
+    "s": "S",
+    "out": true
+   },
+   {
+    "s": "M",
+    "out": false
+   },
+   {
+    "s": "L",
+    "out": true
+   }
+  ],
+  "category": "Лонгсливы",
+  "color": {
+   "name": "Чёрный",
+   "hex": "#373737"
+  },
+  "family": [
+   {
+    "id": "71638",
+    "self": true,
+    "name": "Чёрный",
+    "hex": "#373737",
+    "thumb": "assets/img/sw-71638.jpg",
+    "shot": "assets/img/71638-0.jpg",
+    "slug": "top-s-kruzhevnoi-otdelkoi-chernyi-71638",
+    "images": [
+     "assets/img/71638-0.jpg",
+     "assets/img/71638-1.jpg",
+     "assets/img/71638-2.jpg"
+    ]
+   },
+   {
+    "id": "71639",
+    "self": false,
+    "name": "Красный",
+    "hex": "#F2655C",
+    "thumb": "assets/img/sw-71639.jpg",
+    "shot": "assets/img/cv-71639.jpg",
+    "slug": "dekorirovannyi-top-tsveta-burgundi-71639",
+    "images": [
+     "assets/img/cv-71639-0.jpg",
+     "assets/img/cv-71639-1.jpg",
+     "assets/img/cv-71639-2.jpg"
+    ]
+   },
+   {
+    "id": "71884",
+    "self": false,
+    "name": "Бежевый/Золотой",
+    "hex": "#FFF1D3",
+    "thumb": "assets/img/sw-71884.jpg",
+    "shot": "assets/img/cv-71884.jpg",
+    "slug": "top-s-kruzhevnoi-otdelkoi-71884",
+    "images": [
+     "assets/img/cv-71884-0.jpg",
+     "assets/img/cv-71884-1.jpg",
+     "assets/img/cv-71884-2.jpg"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "71681",
+  "slug": "ukorochennaia-kurtka-iz-iskusstvennogo-mekha-71681",
+  "name": "Укорочённая куртка из искусственного меха",
+  "old": "324,99",
+  "now": "130",
+  "images": [
+   "assets/img/71681-0.jpg",
+   "assets/img/71681-1.jpg",
+   "assets/img/71681-2.jpg"
+  ],
+  "video": "assets/video/71681.mp4",
+  "desc": "Разработано в Лос-Анджелесе\n- 100% полиэстер\n- Ручная стирка в холодной воде\nНа модели размер S",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": true
+   },
+   {
+    "s": "XS",
+    "out": false
+   },
+   {
+    "s": "S",
+    "out": false
+   },
+   {
+    "s": "M",
+    "out": false
+   },
+   {
+    "s": "L",
+    "out": false
+   }
+  ],
+  "category": "Верхняя Одежда",
+  "color": {
+   "name": "Чёрный",
+   "hex": "#373737"
+  },
+  "family": []
+ },
+ {
+  "id": "71742",
+  "slug": "kardigan-s-molniei-i-vorotnikom-stoikoi-bordovyi-71742",
+  "name": "Кардиган с молнией и воротником-стойкой бордовый",
+  "old": "139,99",
+  "now": "56",
+  "images": [
+   "assets/img/71742-0.jpg",
+   "assets/img/71742-1.jpg",
+   "assets/img/71742-2.jpg"
+  ],
+  "video": "assets/video/71742.mp4",
+  "desc": "Разработано в Лос-Анджелесе\n- 57% полиэстер, 39% лиоцелл, 4% спандекс\n- Ручная стирка в холодной воде\nНа модели размер S.",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": false
+   },
+   {
+    "s": "XS",
+    "out": true
+   },
+   {
+    "s": "S",
+    "out": false
+   },
+   {
+    "s": "M",
+    "out": true
+   },
+   {
+    "s": "L",
+    "out": true
+   }
+  ],
+  "category": "Свитеры и кардиганы",
+  "color": {
+   "name": "Красный",
+   "hex": "#F2655C"
+  },
+  "family": []
+ },
+ {
+  "id": "71757",
+  "slug": "polosatyi-dzhemper-v-stile-regbi-71757",
+  "name": "Полосатый джемпер в стиле регби",
+  "old": "179,99",
+  "now": "72",
+  "images": [
+   "assets/img/71757-0.jpg",
+   "assets/img/71757-1.jpg",
+   "assets/img/71757-2.jpg"
+  ],
+  "video": "assets/video/71757.mp4",
+  "desc": "Разработано в Лос-Анджелесе\n- 6% ШЕРСТЬ, 68% АКРИЛ, 12% ПОЛИЭСТЕР, 11% НЕЙЛОН, 3% СПАНДЕКС\n- Ручная стирка в холодной воде\nНа модели размер XS/S.",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": true
+   },
+   {
+    "s": "XS",
+    "out": false
+   },
+   {
+    "s": "S",
+    "out": false
+   },
+   {
+    "s": "M",
+    "out": true
+   },
+   {
+    "s": "L",
+    "out": false
+   }
+  ],
+  "category": "Свитеры и кардиганы",
+  "color": {
+   "name": "Чёрный",
+   "hex": "#373737"
+  },
+  "family": [
+   {
+    "id": "71757",
+    "self": true,
+    "name": "Чёрный",
+    "hex": "#373737",
+    "thumb": "assets/img/sw-71757.jpg",
+    "shot": "assets/img/71757-0.jpg",
+    "slug": "polosatyi-dzhemper-v-stile-regbi-71757",
+    "images": [
+     "assets/img/71757-0.jpg",
+     "assets/img/71757-1.jpg",
+     "assets/img/71757-2.jpg"
+    ]
+   },
+   {
+    "id": "71929",
+    "self": false,
+    "name": "Красный",
+    "hex": "#F2655C",
+    "thumb": "assets/img/sw-71929.jpg",
+    "shot": "assets/img/cv-71929.jpg",
+    "slug": "dzhemper-v-stile-regbi-bordovogo-tsveta-71929",
+    "images": [
+     "assets/img/cv-71929-0.jpg",
+     "assets/img/cv-71929-1.jpg",
+     "assets/img/cv-71929-2.jpg"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "71763",
+  "slug": "viazanyi-dzhemper-s-otkrytymi-plechami-71763",
+  "name": "Вязаный джемпер с открытыми плечами",
+  "old": "169,99",
+  "now": "68",
+  "images": [
+   "assets/img/71763-0.jpg",
+   "assets/img/71763-1.jpg",
+   "assets/img/71763-2.jpg"
+  ],
+  "video": "assets/video/71763.mp4",
+  "desc": "Разработано в Лос-Анджелесе\n- 42% акрил, 28% нейлон, 30% полиэстер\n- Ручная стирка в холодной воде\nНа модели размер S.",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": true
+   },
+   {
+    "s": "XS",
+    "out": true
+   },
+   {
+    "s": "S",
+    "out": false
+   },
+   {
+    "s": "M",
+    "out": false
+   },
+   {
+    "s": "L",
+    "out": true
+   }
+  ],
+  "category": "Свитеры и кардиганы",
+  "color": {
+   "name": "Чёрный",
+   "hex": "#373737"
+  },
+  "family": [
+   {
+    "id": "71763",
+    "self": true,
+    "name": "Чёрный",
+    "hex": "#373737",
+    "thumb": "assets/img/sw-71763.jpg",
+    "shot": "assets/img/71763-0.jpg",
+    "slug": "viazanyi-dzhemper-s-otkrytymi-plechami-71763",
+    "images": [
+     "assets/img/71763-0.jpg",
+     "assets/img/71763-1.jpg",
+     "assets/img/71763-2.jpg"
+    ]
+   },
+   {
+    "id": "71764",
+    "self": false,
+    "name": "Серый/Серебристый",
+    "hex": "#BDBDBD",
+    "thumb": "assets/img/sw-71764.jpg",
+    "shot": "assets/img/cv-71764.jpg",
+    "slug": "dzhemper-s-otkrytymi-plechami-svetlo-golubogo-ottenka-71764",
+    "images": [
+     "assets/img/cv-71764-0.jpg",
+     "assets/img/cv-71764-1.jpg",
+     "assets/img/cv-71764-2.jpg"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "71899",
+  "slug": "dzhemper-s-asimmetrichnym-vyrezom-v-chernom-tsvete-71899",
+  "name": "Джемпер с асимметричным вырезом в черном цвете",
+  "old": "149,99",
+  "now": "60",
+  "images": [
+   "assets/img/71899-0.jpg",
+   "assets/img/71899-1.jpg",
+   "assets/img/71899-2.jpg"
+  ],
+  "video": "assets/video/71899.mp4",
+  "desc": "Дизайн из Лос-Анджелеса\n- 40% акрил, 60% полиэстер\n- Ручная стирка в холодной воде\nМодель на фото одета в размер S.",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": true
+   },
+   {
+    "s": "XS",
+    "out": true
+   },
+   {
+    "s": "S",
+    "out": false
+   },
+   {
+    "s": "M",
+    "out": true
+   },
+   {
+    "s": "L",
+    "out": false
+   }
+  ],
+  "category": "Свитеры и кардиганы",
+  "color": {
+   "name": "Голубой",
+   "hex": "#5AB3F0"
+  },
+  "family": []
+ },
+ {
+  "id": "71968",
+  "slug": "dzhemper-na-molnii-v-korichnevom-tsvete-71968",
+  "name": "Джемпер на молнии в коричневом цвете",
+  "old": "189,99",
+  "now": "76",
+  "images": [
+   "assets/img/71968-0.jpg",
+   "assets/img/71968-1.jpg",
+   "assets/img/71968-2.jpg"
+  ],
+  "video": "assets/video/71968.mp4",
+  "desc": "Разработано в Лос-Анджелесе\n- 100% полиэстер\n- Ручная стирка в холодной воде\nНа модели размер S.",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": false
+   },
+   {
+    "s": "XS",
+    "out": false
+   },
+   {
+    "s": "S",
+    "out": false
+   },
+   {
+    "s": "M",
+    "out": false
+   },
+   {
+    "s": "L",
+    "out": false
+   }
+  ],
+  "category": "Спорт",
+  "color": {
+   "name": "Коричневый",
+   "hex": "#886F65"
+  },
+  "family": [
+   {
+    "id": "71968",
+    "self": true,
+    "name": "Коричневый",
+    "hex": "#886F65",
+    "thumb": "assets/img/sw-71968.jpg",
+    "shot": "assets/img/71968-0.jpg",
+    "slug": "dzhemper-na-molnii-v-korichnevom-tsvete-71968",
+    "images": [
+     "assets/img/71968-0.jpg",
+     "assets/img/71968-1.jpg",
+     "assets/img/71968-2.jpg"
+    ]
+   },
+   {
+    "id": "71969",
+    "self": false,
+    "name": "Розовый",
+    "hex": "#EC85A8",
+    "thumb": "assets/img/sw-71969.jpg",
+    "shot": "assets/img/cv-71969.jpg",
+    "slug": "rozovyi-dzhemper-s-molniei-71969",
+    "images": [
+     "assets/img/cv-71969-0.jpg",
+     "assets/img/cv-71969-1.jpg",
+     "assets/img/cv-71969-2.jpg"
+    ]
+   },
+   {
+    "id": "71970",
+    "self": false,
+    "name": "Серый/Серебристый",
+    "hex": "#BDBDBD",
+    "thumb": "assets/img/sw-71970.jpg",
+    "shot": "assets/img/cv-71970.jpg",
+    "slug": "dzhemper-s-molniei-v-serom-tsvete-71970",
+    "images": [
+     "assets/img/cv-71970-0.jpg",
+     "assets/img/cv-71970-1.jpg",
+     "assets/img/cv-71970-2.jpg"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "72047",
+  "slug": "svitshot-nuvelle-v-sinem-tsvete-72047",
+  "name": "Свитшот Nuvelle в синем цвете",
+  "old": "199,99",
+  "now": "80",
+  "images": [
+   "assets/img/72047-0.jpg",
+   "assets/img/72047-1.jpg",
+   "assets/img/72047-2.jpg"
+  ],
+  "video": "",
+  "desc": "Дизайн из Лос-Анджелеса\n- 57% хлопок, 43% полиэстер\n- Ручная стирка в холодной воде\nНа модели размер S",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": true
+   },
+   {
+    "s": "XS",
+    "out": true
+   },
+   {
+    "s": "S",
+    "out": false
+   },
+   {
+    "s": "M",
+    "out": true
+   },
+   {
+    "s": "L",
+    "out": false
+   }
+  ],
+  "category": "Спорт",
+  "color": {
+   "name": "Голубой",
+   "hex": "#5AB3F0"
+  },
+  "family": [
+   {
+    "id": "72047",
+    "self": true,
+    "name": "Голубой",
+    "hex": "#5AB3F0",
+    "thumb": "assets/img/sw-72047.jpg",
+    "shot": "assets/img/72047-0.jpg",
+    "slug": "svitshot-nuvelle-v-sinem-tsvete-72047",
+    "images": [
+     "assets/img/72047-0.jpg",
+     "assets/img/72047-1.jpg",
+     "assets/img/72047-2.jpg"
+    ]
+   },
+   {
+    "id": "72048",
+    "self": false,
+    "name": "Розовый",
+    "hex": "#EC85A8",
+    "thumb": "assets/img/sw-72048.jpg",
+    "shot": "assets/img/cv-72048.jpg",
+    "slug": "svitshot-v-rozovom-ottenke-72048",
+    "images": [
+     "assets/img/cv-72048-0.jpg",
+     "assets/img/cv-72048-1.jpg",
+     "assets/img/cv-72048-2.jpg"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "72107",
+  "slug": "top-s-zapakhom-i-v-obraznym-vyrezom-72107",
+  "name": "Топ с запахом и V-образным вырезом",
+  "old": "109,99",
+  "now": "44",
+  "images": [
+   "assets/img/72107-0.jpg",
+   "assets/img/72107-1.jpg",
+   "assets/img/72107-2.jpg"
+  ],
+  "video": "assets/video/72107.mp4",
+  "desc": "Дизайн разработан в Лос-Анджелесе\n- 95% полиэстер, 5% эластан\n- Ручная стирка в холодной воде\nНа модели размер S. Обратите внимание, что мерки снимаются с изделия в разложенном виде.",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": true
+   },
+   {
+    "s": "XS",
+    "out": true
+   },
+   {
+    "s": "S",
+    "out": false
+   },
+   {
+    "s": "M",
+    "out": true
+   },
+   {
+    "s": "L",
+    "out": false
+   }
+  ],
+  "category": "Лонгсливы",
+  "color": {
+   "name": "Коричневый",
+   "hex": "#886F65"
+  },
+  "family": [
+   {
+    "id": "72107",
+    "self": true,
+    "name": "Коричневый",
+    "hex": "#886F65",
+    "thumb": "assets/img/sw-72107.jpg",
+    "shot": "assets/img/72107-0.jpg",
+    "slug": "top-s-zapakhom-i-v-obraznym-vyrezom-72107",
+    "images": [
+     "assets/img/72107-0.jpg",
+     "assets/img/72107-1.jpg",
+     "assets/img/72107-2.jpg"
+    ]
+   },
+   {
+    "id": "72108",
+    "self": false,
+    "name": "Голубой",
+    "hex": "#5AB3F0",
+    "thumb": "assets/img/sw-72108.jpg",
+    "shot": "assets/img/cv-72108.jpg",
+    "slug": "top-s-perekrestnym-v-obraznym-vyrezom-72108",
+    "images": [
+     "assets/img/cv-72108-0.jpg",
+     "assets/img/cv-72108-1.jpg",
+     "assets/img/cv-72108-2.jpg"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "72113",
+  "slug": "trikotazhnyi-top-s-aktsentom-na-talii-v-serom-tsvete-72113",
+  "name": "Трикотажный топ с акцентом на талии в сером цвете",
+  "old": "119,99",
+  "now": "48",
+  "images": [
+   "assets/img/72113-0.jpg",
+   "assets/img/72113-1.jpg",
+   "assets/img/72113-2.jpg"
+  ],
+  "video": "assets/video/72113.mp4",
+  "desc": "Дизайн разработан в Лос-Анджелесе\n- 95% полиэстер, 5% эластан\n- Ручная стирка в холодной воде\nНа модели размер S. Обратите внимание, что мерки снимаются с изделия в разложенном виде.",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": true
+   },
+   {
+    "s": "XS",
+    "out": false
+   },
+   {
+    "s": "S",
+    "out": false
+   },
+   {
+    "s": "M",
+    "out": false
+   },
+   {
+    "s": "L",
+    "out": true
+   }
+  ],
+  "category": "Свитеры и кардиганы",
+  "color": {
+   "name": "Серый/Серебристый",
+   "hex": "#BDBDBD"
+  },
+  "family": []
+ },
+ {
+  "id": "71954",
+  "slug": "top-na-pugovitsakh-serogo-tsveta-71954",
+  "name": "Топ на пуговицах серого цвета",
+  "old": "129,99",
+  "now": "52",
+  "images": [
+   "assets/img/71954-0.jpg",
+   "assets/img/71954-1.jpg",
+   "assets/img/71954-2.jpg"
+  ],
+  "video": "assets/video/71954.mp4",
+  "desc": "Дизайн разработан в Лос-Анджелесе\n- 95% полиэстер, 5% эластан\n- Ручная стирка в холодной воде\nНа модели размер S. Обратите внимание, что мерки снимаются с изделия в разложенном виде.\n.",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": false
+   },
+   {
+    "s": "XS",
+    "out": true
+   },
+   {
+    "s": "S",
+    "out": false
+   },
+   {
+    "s": "M",
+    "out": false
+   },
+   {
+    "s": "L",
+    "out": false
+   }
+  ],
+  "category": "Лонгсливы",
+  "color": {
+   "name": "Серый/Серебристый",
+   "hex": "#BDBDBD"
+  },
+  "family": [
+   {
+    "id": "71954",
+    "self": true,
+    "name": "Серый/Серебристый",
+    "hex": "#BDBDBD",
+    "thumb": "assets/img/sw-71954.jpg",
+    "shot": "assets/img/71954-0.jpg",
+    "slug": "top-na-pugovitsakh-serogo-tsveta-71954",
+    "images": [
+     "assets/img/71954-0.jpg",
+     "assets/img/71954-1.jpg",
+     "assets/img/71954-2.jpg"
+    ]
+   },
+   {
+    "id": "71955",
+    "self": false,
+    "name": "Серый/Серебристый",
+    "hex": "#BDBDBD",
+    "thumb": "assets/img/sw-71955.jpg",
+    "shot": "assets/img/cv-71955.jpg",
+    "slug": "seraia-maksi-iubka-v-rubchik-71955",
+    "images": [
+     "assets/img/cv-71955-0.jpg",
+     "assets/img/cv-71955-1.jpg",
+     "assets/img/cv-71955-2.jpg"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "71745",
+  "slug": "kardigan-v-rubchik-serogo-ottenka-71745",
+  "name": "Кардиган в рубчик серого оттенка",
+  "old": "139,99",
+  "now": "56",
+  "images": [
+   "assets/img/71745-0.jpg",
+   "assets/img/71745-1.jpg",
+   "assets/img/71745-2.jpg"
+  ],
+  "video": "assets/video/71745.mp4",
+  "desc": "Дизайн из Лос-Анджелеса\n- 100% полиэстер\n- Ручная стирка в холодной воде\nНа модели размер S.",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": false
+   },
+   {
+    "s": "XS",
+    "out": false
+   },
+   {
+    "s": "S",
+    "out": false
+   },
+   {
+    "s": "M",
+    "out": false
+   },
+   {
+    "s": "L",
+    "out": false
+   }
+  ],
+  "category": "Лонгсливы",
+  "color": {
+   "name": "Серый/Серебристый",
+   "hex": "#BDBDBD"
+  },
+  "family": []
+ },
+ {
+  "id": "69714",
+  "slug": "dzhemper-s-otkrytymi-plechami-kremovogo-ottenka-69714",
+  "name": "Джемпер с открытыми плечами кремового оттенка",
+  "old": "169,99",
+  "now": "68",
+  "images": [],
+  "video": "assets/video/69714.mp4",
+  "desc": "Дизайн разработан в Лос-Анджелесе\n- Изготовлено из полиэстеровой ткани\n- Рекомендована ручная стирка в холодной воде\nМодель на фото &mdash; размер S",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": false
+   },
+   {
+    "s": "XS",
+    "out": true
+   },
+   {
+    "s": "S",
+    "out": false
+   },
+   {
+    "s": "M",
+    "out": false
+   },
+   {
+    "s": "L",
+    "out": false
+   }
+  ],
+  "category": "Свитеры и кардиганы",
+  "color": {
+   "name": "Бежевый/Золотой",
+   "hex": "#FFF1D3"
+  },
+  "family": []
+ },
+ {
+  "id": "71535",
+  "slug": "chernyi-viazanyi-dzhemper-s-otkrytymi-plechami-71535",
+  "name": "Черный вязаный джемпер с открытыми плечами",
+  "old": "149,99",
+  "now": "60",
+  "images": [
+   "assets/img/71535-0.jpg",
+   "assets/img/71535-1.jpg",
+   "assets/img/71535-2.jpg"
+  ],
+  "video": "assets/video/71535.mp4",
+  "desc": "Дизайн разработан в Лос-Анджелесе\n- 100% полиэстер\n- Ручная стирка в холодной воде\nНа модели размер S",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": false
+   },
+   {
+    "s": "XS",
+    "out": true
+   },
+   {
+    "s": "S",
+    "out": true
+   },
+   {
+    "s": "M",
+    "out": true
+   },
+   {
+    "s": "L",
+    "out": false
+   }
+  ],
+  "category": "Свитеры и кардиганы",
+  "color": {
+   "name": "Чёрный",
+   "hex": "#373737"
+  },
+  "family": []
+ },
+ {
+  "id": "71537",
+  "slug": "dzhemper-s-rozoi-i-otkrytymi-plechami-71537",
+  "name": "Джемпер с розой и открытыми плечами",
+  "old": "119,99",
+  "now": "48",
+  "images": [
+   "assets/img/71537-0.jpg",
+   "assets/img/71537-1.jpg",
+   "assets/img/71537-2.jpg"
+  ],
+  "video": "assets/video/71537.mp4",
+  "desc": "Разработано в Лос-Анджелесе\n- 55% полиэстер, 18% акрил, 17% нейлон, 10% шерсть\n- Ручная стирка в холодной воде\nНа модели размер XS/S.",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": true
+   },
+   {
+    "s": "XS",
+    "out": false
+   },
+   {
+    "s": "S",
+    "out": false
+   },
+   {
+    "s": "M",
+    "out": false
+   },
+   {
+    "s": "L",
+    "out": true
+   }
+  ],
+  "category": "Свитеры и кардиганы",
+  "color": {
+   "name": "Серый/Серебристый",
+   "hex": "#BDBDBD"
+  },
+  "family": []
+ },
+ {
+  "id": "71544",
+  "slug": "pritalennyi-kardigan-bordovogo-tsveta-71544",
+  "name": "Приталенный кардиган бордового цвета",
+  "old": "139,99",
+  "now": "56",
+  "images": [
+   "assets/img/71544-0.jpg",
+   "assets/img/71544-1.jpg",
+   "assets/img/71544-2.jpg"
+  ],
+  "video": "assets/video/71544.mp4",
+  "desc": "Разработано в Лос-Анджелесе\n- 28% полиэстер, 22% нейлон, 50% вискоза\n- Ручная стирка в холодной воде\nНа модели размер S",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": false
+   },
+   {
+    "s": "XS",
+    "out": false
+   },
+   {
+    "s": "S",
+    "out": false
+   },
+   {
+    "s": "M",
+    "out": true
+   },
+   {
+    "s": "L",
+    "out": false
+   }
+  ],
+  "category": "Свитеры и кардиганы",
+  "color": {
+   "name": "Красный",
+   "hex": "#F2655C"
+  },
+  "family": []
+ },
+ {
+  "id": "71957",
+  "slug": "steganaia-kurtka-s-vysokim-vorotnikom-v-chernom-tsvete-71957",
+  "name": "Стёганая куртка с высоким воротником в чёрном цвете",
+  "old": "289,99",
+  "now": "116",
+  "images": [
+   "assets/img/71957-0.jpg",
+   "assets/img/71957-1.jpg",
+   "assets/img/71957-2.jpg"
+  ],
+  "video": "",
+  "desc": "Разработано в Лос-Анджелесе\n- 100% полиэстер\n- Ручная стирка в холодной воде\nНа модели размер S.",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": true
+   },
+   {
+    "s": "XS",
+    "out": false
+   },
+   {
+    "s": "S",
+    "out": false
+   },
+   {
+    "s": "M",
+    "out": false
+   },
+   {
+    "s": "L",
+    "out": true
+   }
+  ],
+  "category": "Верхняя Одежда",
+  "color": {
+   "name": "Чёрный",
+   "hex": "#373737"
+  },
+  "family": []
+ },
+ {
+  "id": "71971",
+  "slug": "bordovaia-bomber-kurtka-s-vorotnikom-71971",
+  "name": "Бордовая бомбер-куртка с воротником",
+  "old": "279",
+  "now": "111,60",
+  "images": [
+   "assets/img/71971-0.jpg",
+   "assets/img/71971-1.jpg",
+   "assets/img/71971-2.jpg"
+  ],
+  "video": "",
+  "desc": "Разработано в Лос-Анджелесе\n- 100% полиэстер\n- Ручная стирка в холодной воде\nНа модели размер S.",
+  "sizes": [
+   {
+    "s": "XXS",
+    "out": true
+   },
+   {
+    "s": "XS",
+    "out": false
+   },
+   {
+    "s": "S",
+    "out": false
+   },
+   {
+    "s": "M",
+    "out": false
+   },
+   {
+    "s": "L",
+    "out": false
+   }
+  ],
+  "category": "Верхняя Одежда",
+  "color": {
+   "name": "Красный",
+   "hex": "#F2655C"
+  },
+  "family": []
+ }
+]
