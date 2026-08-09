@@ -1,0 +1,77 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "cinemanight",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8123", "--directory", "cinemanight"],
+      "port": 8123
+    },
+    {
+      "name": "flowerhome",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8124", "--directory", "C:/Users/tochk/OneDrive/Desktop/сайт 3"],
+      "port": 8124
+    },
+    {
+      "name": "cafe",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8125", "--directory", "cafe"],
+      "port": 8125
+    },
+    {
+      "name": "motoarena",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8126", "--directory", "motoarena"],
+      "port": 8126
+    },
+    {
+      "name": "mchs",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8127", "--directory", "C:/Users/tochk/OneDrive/Desktop/Сайт 6"],
+      "port": 8127
+    },
+    {
+      "name": "litenergy",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8128", "--directory", "C:/Users/tochk/OneDrive/Desktop/Сайт 7"],
+      "port": 8128
+    },
+    {
+      "name": "gran",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8129", "--directory", "C:/Users/tochk/OneDrive/Desktop/nnn"],
+      "port": 8129
+    },
+    {
+      "name": "ademar",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8130", "--directory", "C:/Users/tochk/OneDrive/Desktop/ademar"],
+      "port": 8130
+    },
+    {
+      "name": "rayban",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8131", "--directory", "C:/Users/tochk/OneDrive/Desktop/ai"],
+      "port": 8131
+    },
+    {
+      "name": "lucy",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8132", "--directory", "lucy"],
+      "port": 8132
+    },
+    {
+      "name": "metrium",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["devserver.py", "8133", "metrium"],
+      "port": 8133
+    },
+    {
+      "name": "converter",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["devserver.py", "8134", "converter"],
+      "port": 8134
+    }
+  ]
+}

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<title>Конвертер</title>
+<meta name="description" content="Конвертер валют и единиц измерения — Telegram Mini App">
+<meta name="theme-color" content="#08080a">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600&family=Unbounded:wght@200;300;400;500&family=Cormorant+Garamond:wght@300;400;500&family=JetBrains+Mono:wght@200;300;400&family=Onest:wght@200;300;400;500&display=swap" rel="stylesheet">
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="tweak.css">
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="aura" id="aura" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
+
+<div class="intro" id="intro" aria-hidden="true">
+  <div class="intro__stage">
+    <svg class="intro__frame" viewBox="0 0 200 200" fill="none" aria-hidden="true">
+      <rect class="intro__rect" x="8" y="8" width="184" height="184" rx="26"
+            stroke="currentColor" stroke-width="1.2" pathLength="100"/>
+    </svg>
+    <div class="intro__words">
+      <span class="intro__word">КОНВЕРТЕР</span>
+      <span class="intro__word intro__word--sub">ВАЛЮТ</span>
+    </div>
+  </div>
+</div>
+
+<main class="app">
+
+  <header class="head" data-rise="1">
+    <div class="head__mark">
+      <span class="head__dot"></span>
+      <span class="head__title">Конвертер</span>
+    </div>
+    <button class="head__cat" id="catBtn" type="button" hidden>
+      <span id="catLabel">Длина</span>
+      <span class="head__chev">▾</span>
+    </button>
+  </header>
+
+  <nav class="tabs" data-rise="2">
+    <button class="tabs__btn is-active" data-mode="currency" type="button">Валюты</button>
+    <button class="tabs__btn" data-mode="units" type="button">Единицы</button>
+    <span class="tabs__ink" id="tabInk"></span>
+  </nav>
+
+  <section class="stack">
+
+    <article class="card" id="cardFrom" data-rise="3">
+      <button class="card__pick" id="pickFrom" type="button">
+        <span class="card__code" id="codeFrom">USD</span>
+        <span class="card__name" id="nameFrom">Доллар США</span>
+        <span class="card__chev">▾</span>
+      </button>
+      <div class="card__value" id="valueFrom">100</div>
+    </article>
+
+    <button class="swap" id="swapBtn" type="button" aria-label="Поменять местами">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M7 4v14M7 18l-3-3M7 18l3-3"/>
+        <path d="M17 20V6M17 6l3 3M17 6l-3 3"/>
+      </svg>
+    </button>
+
+    <article class="card card--out" id="cardTo" data-rise="4">
+      <button class="card__pick" id="pickTo" type="button">
+        <span class="card__code" id="codeTo">BYN</span>
+        <span class="card__name" id="nameTo">Белорусский рубль</span>
+        <span class="card__chev">▾</span>
+      </button>
+      <div class="card__value card__value--out" id="valueTo">—</div>
+    </article>
+
+  </section>
+
+  <p class="rate" id="rateLine" data-rise="5">Загружаю курс…</p>
+
+  <div class="pad" id="pad" data-rise="6">
+    <button class="pad__key" data-key="1" type="button">1</button>
+    <button class="pad__key" data-key="2" type="button">2</button>
+    <button class="pad__key" data-key="3" type="button">3</button>
+    <button class="pad__key" data-key="4" type="button">4</button>
+    <button class="pad__key" data-key="5" type="button">5</button>
+    <button class="pad__key" data-key="6" type="button">6</button>
+    <button class="pad__key" data-key="7" type="button">7</button>
+    <button class="pad__key" data-key="8" type="button">8</button>
+    <button class="pad__key" data-key="9" type="button">9</button>
+    <button class="pad__key pad__key--soft" data-key="." type="button">,</button>
+    <button class="pad__key" data-key="0" type="button">0</button>
+    <button class="pad__key pad__key--soft" data-key="del" type="button">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 6H9l-5 6 5 6h11a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1z"/>
+        <path d="M15 10l-4 4M11 10l4 4"/>
+      </svg>
+    </button>
+  </div>
+
+</main>
+
+<div class="sheet" id="sheet" hidden>
+  <div class="sheet__scrim" data-close="1"></div>
+  <div class="sheet__panel">
+    <div class="sheet__grip"></div>
+    <div class="sheet__title" id="sheetTitle">Выбери валюту</div>
+    <div class="sheet__list" id="sheetList"></div>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script src="tweak.js"></script>
+</body>
+</html>
