@@ -69,6 +69,13 @@ function initScroll() {
 addEventListener('scroll', () => { target = scrollY; }, { passive: true });
 addEventListener('resize', () => { document.body.style.height = app.getBoundingClientRect().height + 'px'; });
 
+/* высота app меняется асинхронно (каталог грузится отдельным fetch, фильтры
+   перерисовывают сетку, картинки лениво догружаются) — ResizeObserver держит
+   высоту body в синхроне со всем этим сам, без ручных пересчётов в каждом месте */
+new ResizeObserver(() => {
+  document.body.style.height = app.getBoundingClientRect().height + 'px';
+}).observe(app);
+
 /* ---------- 3. Параллакс ---------- */
 const speedEls = [...document.querySelectorAll('[data-speed]')];
 function parallax() {
