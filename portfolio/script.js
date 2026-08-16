@@ -1022,9 +1022,20 @@ function plural(n){
   return 'форматов';
 }
 
-/* какие группы человек раскрыл руками: набор переживает пересборку
-   левой колонки, иначе выбор формата схлопывал бы всё обратно */
+/* Переключатель «свернуть/развернуть». Одна разметка на шапку группы и на
+   разбор разницы: состояние читается с aria-expanded ближайшей кнопки,
+   поэтому CSS у обоих общий. */
+const TGL = `<span class="tgl">
+  <span class="tgl__lbl"><i>свернуть</i><i>развернуть</i></span>
+  <i class="tgl__pm" aria-hidden="true"></i>
+</span>`;
+
+/* Какие группы раскрыты. Набор переживает пересборку левой колонки, иначе
+   выбор формата схлопывал бы всё обратно. Заполняется один раз группой
+   выбранного формата, дальше им распоряжается только человек — свернуть
+   можно любую, включая активную. */
 const svcOpenG = new Set();
+let svcSeeded = false;
 
 /* прайс из твикера: «имя :: цена :: дни :: метка». Позиция без цены
    просто не показывается — это дешевле, чем показать её без числа */
@@ -1073,6 +1084,11 @@ function svcDrawLeft(){
   if (!svcFmts) return;
   const rows = fmtRows();
 
+  /* при первой сборке раскрываем группу выбранного формата: заходя на
+     услуги, человек должен сразу видеть хоть один ряд цен, а не три
+     свёрнутые строки. Дальше состоянием распоряжается только он */
+  if (!svcSeeded){ svcSeeded = true; svcOpenG.add(svcGroup()); }
+
   /* карточки раскладываем по рядам: пустой ряд не рисуем — иначе стоило
      убрать формат из прайса, и на экране оставался бы голый заголовок */
   svcFmts.innerHTML = FMT_GROUPS.map((g, gi) => {
@@ -1090,9 +1106,7 @@ function svcDrawLeft(){
     /* островок подсвечивается целиком, когда выбран формат из него:
        иначе на экране горели бы все три группы разом */
     const live = FMT[svcF] && FMT[svcF].g === gi;
-    /* группа, где стоит выбранный формат, открыта всегда: свернуть её
-       значило бы спрятать от человека его собственный выбор */
-    const open = live || svcOpenG.has(gi);
+    const open = svcOpenG.has(gi);
     /* в свёрнутом виде заголовок обязан сам что-то сообщать, иначе это
        просто строка, на которую непонятно зачем нажимать */
     const from = Math.min(...cards.map(({ r }) => r.p));
@@ -1101,7 +1115,7 @@ function svcDrawLeft(){
       <button class="fgrp__k" type="button" data-grp="${gi}" aria-expanded="${open}">
         <span class="eyebrow">${g}</span>
         <span class="fgrp__meta">${cards.length} ${plural(cards.length)} · от ${svcMoney(from)} BYN</span>
-        <i class="fgrp__pm" aria-hidden="true"></i>
+        ${TGL}
       </button>
       <div class="fgrp__body"><div class="fgrp__in">
         <div class="fgrp__row">
@@ -1117,14 +1131,10 @@ function svcDrawLeft(){
             </button>`).join('')}
         </div>
         ${items ? `<div class="svc__diff">
-          <button class="diff__k" type="button" aria-expanded="true">
-            <span class="diff__t">${cfg[diff.head] || ''}</span>
-            <span class="diff__b">
-              <span class="diff__lbl"><i>свернуть</i><i>развернуть</i></span>
-              <i class="diff__pm" aria-hidden="true"></i>
-            </span>
+          <button class="diff__k" type="button" aria-expanded="false">
+            <span class="diff__t">${cfg[diff.head] || ''}</span>${TGL}
           </button>
-          <div class="diff__body is-open"><div class="diff__in">${items}</div></div>
+          <div class="diff__body"><div class="diff__in">${items}</div></div>
         </div>` : ''}
       </div></div>
     </div>`;
@@ -1267,9 +1277,6 @@ function buildSvc(){
       const g = e.target.closest('[data-grp]');
       if (g){
         const gi = +g.dataset.grp;
-        /* группу с выбранным форматом не трогаем: прятать собственный
-           выбор человека — худшее, что может сделать сворачивание */
-        if (FMT[svcF] && FMT[svcF].g === gi) return;
         svcOpenG.has(gi) ? svcOpenG.delete(gi) : svcOpenG.add(gi);
         const box = g.closest('.fgrp');
         const on = svcOpenG.has(gi);
