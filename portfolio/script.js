@@ -644,6 +644,83 @@ addEventListener('scroll', magWake, { passive:true });
 addEventListener('resize', () => { menuFit(); magWake(); });
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(menuFit);
 
+/* ---------------------------------------------- витрина работ */
+/* Правый блок первого экрана: рамка браузера, внутри по очереди сменяются
+   настоящие кадры проектов. Ноутбука и стола нарочно нет — раскрывающийся
+   ноутбук стоит на тысячах портфолио и ставит в один ряд со всеми.
+
+   Экраны пока нарисованы кодом, а не сняты: скриншоты подставим позже.
+   Поэтому у витрины сейчас нулевой вес и ей нечего ждать при загрузке.
+   Чтобы подменить на фото, довольно заменить содержимое .shw__p на <img>. */
+/* Строка адреса нарочно пустая: сайты по выдуманным доменам не живут,
+   а писать их значило бы обещать то, чего нет. Пустое поле оставлено,
+   чтобы полоса всё ещё читалась как браузер. */
+const SHOW = [
+  { k:'dark',  n:'KLAUS',     d:'ресторан · меню и бронирование',
+    t:'KLAUS',    s:'дровяная печь · Сан-Марцано' },
+  { k:'noir',  n:'МЕТРИУМ',   d:'недвижимость · подбор и заявки',
+    t:'МЕТРИУМ',  s:'агентство с оплатой по факту' },
+  { k:'amber', n:'МОТОАРЕНА', d:'мотосалон · витрина и сервис',
+    t:'МОТОАРЕНА',s:'мотоциклы, экипировка, сервис' },
+  { k:'rose',  n:'Nuvelle',   d:'магазин одежды · каталог и видео',
+    t:'Nuvelle',  s:'выбирай. носи. сияй.' }
+];
+
+const shw = document.getElementById('shw');
+
+if (shw){
+  const view = shw.querySelector('.shw__view');
+  const dots = shw.querySelector('.shw__dots');
+  const nameEl = shw.querySelector('.shw__n');
+  const descEl = shw.querySelector('.shw__d');
+
+  view.innerHTML = SHOW.map((s, i) => `
+    <div class="shw__p${i === 0 ? ' is-on' : ''}" data-k="${s.k}" role="img"
+         aria-label="${s.n} — ${s.d}">
+      <span class="shw__pn">${s.t}</span>
+      <span class="shw__ps">${s.s}</span>
+      <span class="shw__pr"><i></i><i></i><i></i></span>
+    </div>`).join('');
+  dots.innerHTML = SHOW.map((s, i) =>
+    `<button type="button" role="tab" data-i="${i}" class="${i === 0 ? 'is-on' : ''}"
+             aria-label="${s.n}" aria-selected="${i === 0}"></button>`).join('');
+
+  const shots = [...view.querySelectorAll('.shw__p')];
+  const bullets = [...dots.querySelectorAll('button')];
+  let si = 0, shwTimer = 0;
+
+  function shwGo(i){
+    if (i === si) return;
+    shots[si].classList.remove('is-on');
+    bullets[si].classList.remove('is-on');
+    bullets[si].setAttribute('aria-selected', 'false');
+    si = i;
+    shots[si].classList.add('is-on');
+    bullets[si].classList.add('is-on');
+    bullets[si].setAttribute('aria-selected', 'true');
+    nameEl.textContent = SHOW[si].n;
+    descEl.textContent = SHOW[si].d;
+  }
+
+  const shwNext = () => shwGo((si + 1) % SHOW.length);
+  const shwPlay = () => { clearInterval(shwTimer); shwTimer = setInterval(shwNext, 3800); };
+  const shwStop = () => clearInterval(shwTimer);
+
+  dots.addEventListener('click', e => {
+    const b = e.target.closest('[data-i]');
+    if (!b) return;
+    shwGo(+b.dataset.i);
+    shwPlay();                       /* после ручного выбора отсчёт с нуля */
+  });
+  /* под курсором смена мешает разглядывать — придерживаем */
+  shw.addEventListener('pointerenter', shwStop);
+  shw.addEventListener('pointerleave', shwPlay);
+  /* в фоновой вкладке крутить нечего: кадры всё равно не рисуются */
+  document.addEventListener('visibilitychange', () => document.hidden ? shwStop() : shwPlay());
+
+  if (!matchMedia('(prefers-reduced-motion:reduce)').matches) shwPlay();
+}
+
 /* ---------------------------------------------- сетка */
 const colsEl = document.querySelector('.hero__cols');
 const rowsEl = document.querySelector('.hero__rows');
@@ -1737,12 +1814,21 @@ function fitFootMark(){
       return b;
     });
   }
-  lines.forEach((l, i) => {
+  /* Кегль у строк общий. Раньше каждая подгонялась под ширину блока сама,
+     и «AETERNA» с «WEBSTUDIO» выходили разного размера — знак читался как
+     две разные надписи. Берём наименьший из подошедших: тогда длинная
+     строка ровно заполняет ширину, а короткая просто не достаёт до края,
+     но набрана тем же кеглем. */
+  const fits = lines.map((l, i) => {
     l.textContent = parts[i];
     l.style.fontSize = '100px';
     const w = l.getBoundingClientRect().width;
-    if (w) l.style.fontSize = (100 * box / w) + 'px';
-  });
+    return w ? 100 * box / w : 0;
+  }).filter(Boolean);
+
+  if (!fits.length) return;
+  const size = Math.min(...fits);
+  lines.forEach(l => l.style.fontSize = size + 'px');
 }
 addEventListener('resize', fitFootMark);
 /* твикер правит текст знака — пересобираем строки, когда он это сделал */

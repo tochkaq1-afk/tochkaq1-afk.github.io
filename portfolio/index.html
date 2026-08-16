@@ -14,7 +14,7 @@
      Начертания урезаны до тех, что правда встречаются на странице. -->
 <link id="fontLink" rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Golos+Text:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="styles.css?v=84">
+<link rel="stylesheet" href="styles.css?v=89">
 </head>
 <body>
 
@@ -105,8 +105,20 @@
       <div class="bl bl--art">
         <i class="bl__ph"></i>
         <div class="bl__c">
-          <canvas class="art__c" role="img"
-                  aria-label="Знак бесконечности, собранный из пыли: частицы текут по петле и расходятся под курсором"></canvas>
+          <!-- Витрина работ: голая рамка браузера без ноутбука и без стола.
+               Первый кадр грузится сразу, остальные лениво — он и есть LCP. -->
+          <div class="shw" id="shw">
+            <div class="shw__bar" aria-hidden="true">
+              <i></i><i></i><i></i>
+              <span class="shw__url" aria-hidden="true"></span>
+            </div>
+            <div class="shw__view"></div>
+            <div class="shw__foot">
+              <span class="shw__n">KLAUS</span>
+              <span class="shw__d">ресторан · меню и бронирование</span>
+              <div class="shw__dots" role="tablist" aria-label="Работы"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -119,7 +131,6 @@
       <div class="bl__c">
         <span class="hero__scroll"><i></i>листай</span>
         <button class="hbtn hbtn--menu" type="button" data-key="menu" data-noarrow aria-expanded="false"></button>
-        <span class="hero__stage" data-stage>сетка</span>
       </div>
     </div>
   </div>
@@ -314,8 +325,8 @@
   <a class="foot__big" href="#hero" aria-label="Наверх"><span data-txt="mark">AETERNAWEBSTUDIO</span></a>
 </footer>
 
-<script src="script.js?v=84" defer></script>
-<script src="dust.js?v=84" defer></script>
+<script src="script.js?v=89" defer></script>
+<script src="dust.js?v=89" defer></script>
 
 <!-- Твикер посетителю не нужен, а весил он 33 КБ и был самым долгим
      ресурсом на странице. Теперь подгружается по требованию: клавишей
@@ -330,10 +341,10 @@
        сразу, иначе первое нажатие только скачало бы файл */
     window.PF_TWEAK_OPEN = true;
     const css = document.createElement('link');
-    css.rel = 'stylesheet'; css.href = 'tweak.css?v=84';
+    css.rel = 'stylesheet'; css.href = 'tweak.css?v=89';
     document.head.appendChild(css);
     const js = document.createElement('script');
-    js.src = 'tweak.js?v=84';
+    js.src = 'tweak.js?v=89';
     document.body.appendChild(js);
   }
   addEventListener('keydown', e => {
