@@ -78,7 +78,7 @@ const DEFAULTS = {
   font:'unbGolos', palette:'custom',
   bg:'#f2f0ea', ink:'#000000', dim:'#1f2323', accent:'#000000', wire:'#dbd7cc', line:'#d2cfc5',
 
-  h1size:9.1, h1w:600, h1track:-0.035, h1lh:0.92, bodysize:1.05,
+  h1size:7.3, h1w:600, h1track:-0.025, h1lh:1.03, bodysize:1.1,
 
   cursor:'system', curSize:8, curRing:34, curLag:0.16,
 
@@ -100,7 +100,7 @@ const DEFAULTS = {
   /* стрелку вниз из круга фигур убрали: знак не должен объяснять,
      что страницу надо листать — для этого внизу есть «листай» */
   dustShape:'infBack', dustShapes:'inf|infBack',
-  dustAuto:true, dustHold:5, dustMorph:1.9, dustChaos:52,
+  dustAuto:true, dustHold:5, dustMorph:1, dustChaos:40,
 
   tGrid:0.8, tWire:1.1, tFill:1.0, tColor:0.6, stagger:0.075,
   ease:'outQuint', autoplay:true, showStage:true,
@@ -1105,12 +1105,11 @@ function plural(n){
    объявлено через aria-expanded на самой кнопке. */
 const TGL = `<span class="tgl" aria-hidden="true"></span>`;
 
-/* Какие группы раскрыты. Набор переживает пересборку левой колонки, иначе
-   выбор формата схлопывал бы всё обратно. Заполняется один раз группой
-   выбранного формата, дальше им распоряжается только человек — свернуть
-   можно любую, включая активную. */
+/* Какие группы раскрыты. При заходе — ни одной: три свёрнутые строки
+   читаются как оглавление, человек сам открывает то, что ему нужно, и не
+   листает сквозь чужой прайс. Набор переживает пересборку левой колонки,
+   иначе выбор формата схлопывал бы всё обратно. */
 const svcOpenG = new Set();
-let svcSeeded = false;
 
 /* прайс из твикера: «имя :: цена :: дни :: метка». Позиция без цены
    просто не показывается — это дешевле, чем показать её без числа */
@@ -1158,11 +1157,6 @@ function svcCount(){
 function svcDrawLeft(){
   if (!svcFmts) return;
   const rows = fmtRows();
-
-  /* при первой сборке раскрываем группу выбранного формата: заходя на
-     услуги, человек должен сразу видеть хоть один ряд цен, а не три
-     свёрнутые строки. Дальше состоянием распоряжается только он */
-  if (!svcSeeded){ svcSeeded = true; svcOpenG.add(svcGroup()); }
 
   /* карточки раскладываем по рядам: пустой ряд не рисуем — иначе стоило
      убрать формат из прайса, и на экране оставался бы голый заголовок */
@@ -1669,6 +1663,31 @@ function heroParallax(){
 }
 addEventListener('scroll', () => requestAnimationFrame(heroParallax), { passive:true });
 addEventListener('resize', heroParallax);
+
+/* ---------------------------------------------- полоса прочитанного */
+/* Доля прокрученного пишется в --p, ширину полосы рисует CSS. Считаем
+   в кадре, а не прямо в обработчике: событий прокрутки прилетает больше,
+   чем браузер успевает рисовать, и лишние счёты просто пропадали бы. */
+const progBar = document.querySelector('.prog i');
+let progWait = false, progWas = -1;
+
+function progDraw(){
+  progWait = false;
+  const doc = document.documentElement;
+  const max = doc.scrollHeight - innerHeight;
+  const p = max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0;
+  /* меньше половины процента глазу не видно, а перезапись стиля стоит денег */
+  if (Math.abs(p - progWas) < .004) return;
+  progWas = p;
+  progBar.style.setProperty('--p', p.toFixed(4));
+}
+
+if (progBar){
+  const progAsk = () => { if (!progWait){ progWait = true; requestAnimationFrame(progDraw); } };
+  addEventListener('scroll', progAsk, { passive:true });
+  addEventListener('resize', progAsk);
+  progDraw();
+}
 
 /* ---------------------------------------------- проявление экранов */
 /* Экран проявляется и его части съезжаются по глубине — заголовок отстаёт
