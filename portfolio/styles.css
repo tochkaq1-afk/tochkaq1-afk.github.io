@@ -193,8 +193,13 @@ a{ color:inherit; text-decoration:none; }
 
 
 /* ---- цифры */
-.bl--meta .bl__c{ display:flex; flex-wrap:wrap; gap:22px; font-size:.82rem; color:var(--dim); }
+.bl--meta .bl__c{ display:flex; flex-wrap:wrap; align-items:center; gap:22px; font-size:.82rem; color:var(--dim); }
 .bl--meta b{ font-family:var(--fh); color:var(--ink); font-weight:600; }
+
+/* бейдж «берёт проекты» — на десктопе прячется, вместо него две сухие метки;
+   на телефоне наоборот: метки прячутся, а бейдж с живой точкой один держит ряд */
+.meta__badge{ display:none; align-items:center; gap:8px; padding:7px 14px; border-radius:999px;
+  border:1px solid var(--line); font-size:.72rem; letter-spacing:.02em; }
 
 /* ---- витрина работ: рамка браузера, внутри сменяются проекты.
    Ноутбука и стола нарочно нет: раскрывающийся ноутбук — самый заезженный
@@ -203,11 +208,26 @@ a{ color:inherit; text-decoration:none; }
 .bl--art{ width:100%; }
 .bl--art .bl__c{ display:block; }
 
+/* Реакция на курсор — вариант «сдвиг» (В из proto-shw-tilt.html): окно едет
+   за курсором, не поворачиваясь. Из восьми проб самая тихая: заметна боковым
+   зрением и не перетягивает внимание с заголовка слева.
+   JS пишет сюда только --tx/--ty (курсор от центра, −0.5…0.5) и класс
+   is-live — что с ними делать, решает CSS. */
 .shw{
   position:relative; display:flex; flex-direction:column;
   border-radius:16px; overflow:hidden; background:var(--bg);
   border:1px solid var(--line);
   box-shadow:0 26px 60px -34px color-mix(in srgb, var(--ink) 55%, transparent);
+  will-change:transform;
+  transform:translate3d(calc(var(--tx,0) * 22px), calc(var(--ty,0) * 22px), 0);
+  /* возврат в исходное — долгий и мягкий; пока курсор внутри, переход
+     короткий, иначе окно тащится следом с полусекундным опозданием */
+  transition:transform .9s cubic-bezier(.22,1,.36,1),
+             box-shadow .9s cubic-bezier(.22,1,.36,1);
+}
+.shw.is-live{
+  transition:transform .16s ease-out, box-shadow .3s ease;
+  box-shadow:0 40px 80px -38px color-mix(in srgb, var(--ink) 62%, transparent);
 }
 .shw__bar{
   flex:none; height:30px; display:flex; align-items:center; gap:6px; padding:0 12px;
@@ -231,31 +251,27 @@ a{ color:inherit; text-decoration:none; }
 }
 
 /* Экраны лежат стопкой и проявляются друг сквозь друга: подменять один
-   узел значило бы моргать пустотой между кадрами.
-   Пока это нарисованные заглушки — скриншоты встанут на их место позже. */
+   узел значило бы моргать пустотой между кадрами. */
 .shw__view{ position:relative; aspect-ratio:16/10; background:var(--wire); overflow:hidden; }
+/* Переход «расфокус» (вариант E из proto-shw.html): старый кадр уплывает
+   в размытие, новый выходит из тумана. Уходящий держим видимым классом
+   is-out, пока новый его накрывает, — иначе между кадрами мелькает подложка. */
 .shw__p{
-  position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center;
-  gap:6px; padding:clamp(16px,3.5%,30px);
-  opacity:0; transform:scale(1.03);
-  transition:opacity .7s ease, transform 1.2s cubic-bezier(.22,1,.36,1);
+  position:absolute; inset:0;
+  opacity:0; filter:blur(22px); transform:scale(1.08);
+  transition:opacity .6s ease, filter .8s ease, transform .9s cubic-bezier(.22,1,.36,1);
 }
-.shw__p.is-on{ opacity:1; transform:none; }
-.shw__pn{ font-family:var(--fh); font-weight:800; letter-spacing:-.04em; line-height:.95;
-  font-size:clamp(20px,4.4vw,42px); }
-.shw__ps{ font-size:clamp(11px,1.2vw,14px); opacity:.66; }
-.shw__pr{ display:flex; gap:6px; margin-top:12px; }
-.shw__pr i{ flex:1; height:clamp(26px,4.5vw,46px); border-radius:7px; background:currentColor; opacity:.14; }
+.shw__p.is-on{ opacity:1; filter:blur(0); transform:none; z-index:2; }
+.shw__p.is-out{ opacity:1; z-index:1; }
+.shw__img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:top; }
 
-/* палитры-подсказки: каждый проект узнаётся по цвету, а не по подписи */
-.shw__p[data-k="dark"] { background:#16161a; color:#f2f0ea; }
-.shw__p[data-k="dark"] .shw__pn{ color:#ff8a3d; }
-.shw__p[data-k="noir"] { background:#1d2124; color:#eef1f0; }
-.shw__p[data-k="noir"] .shw__pn{ font-family:var(--fb); font-weight:400; letter-spacing:.06em; }
-.shw__p[data-k="amber"]{ background:#141210; color:#f4ede4; }
-.shw__p[data-k="amber"] .shw__pn{ color:#e2622a; }
-.shw__p[data-k="rose"] { background:#f3e7e4; color:#2a1d1b; }
-.shw__p[data-k="rose"] .shw__pn{ color:#c8375f; font-style:italic; }
+/* цвет-подложка под картинку, пока она грузится: своя палитра на проект */
+.shw__p[data-k="dark"] { background:#16161a; }
+.shw__p[data-k="noir"] { background:#1d2124; }
+.shw__p[data-k="amber"]{ background:#141210; }
+.shw__p[data-k="rose"] { background:#f3e7e4; }
+.shw__p[data-k="acid"] { background:#101012; }
+.shw__p[data-k="bloom"]{ background:#f2ede2; }
 
 .shw__foot{
   flex:none; display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center;
@@ -281,7 +297,8 @@ a{ color:inherit; text-decoration:none; }
   .shw__view{ aspect-ratio:16/9; }
 }
 @media (prefers-reduced-motion:reduce){
-  .shw__p{ transition:opacity .2s linear; transform:none; }
+  .shw__p{ transition:opacity .2s linear; transform:none; filter:none; }
+  .shw{ transition:none; }
 }
  
 
@@ -609,6 +626,14 @@ body.is-cursor-custom .cursor{ display:block; }
     .hero__inner{ grid-template-columns:1fr; align-items:start; gap:26px; }
     .bl--h1 .bl__c{ font-size:clamp(38px, 13vw, 92px); white-space:normal; }
     .top__place{ display:none; }
+    .meta__stat{ display:none; }
+    .meta__badge{ display:inline-flex; }
+    /* на узком экране подзаголовок и лид занимали половину первого экрана
+       и отжимали витрину за сгиб — сжимаем их, заголовок не трогаем */
+    .bl--h2 .bl__c{ font-size:clamp(14px, 3.6vw, 18px); }
+    .bl--lead .bl__c{ font-size:clamp(13px, 3.3vw, 16px); }
+    .shw__n{ font-size:1rem; }
+    .shw__d{ font-size:.82rem; }
     .menu__inner{ grid-template-columns:1fr; align-content:center; gap:28px; }
     .menu__list a{ font-size:clamp(28px, 11vw, 56px); }
     .tiles{ grid-template-columns:repeat(3,1fr); }

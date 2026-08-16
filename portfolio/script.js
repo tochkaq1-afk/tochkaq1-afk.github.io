@@ -656,14 +656,13 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(menuFit);
    а писать их значило бы обещать то, чего нет. Пустое поле оставлено,
    чтобы полоса всё ещё читалась как браузер. */
 const SHOW = [
-  { k:'dark',  n:'KLAUS',     d:'ресторан · меню и бронирование',
-    t:'KLAUS',    s:'дровяная печь · Сан-Марцано' },
-  { k:'noir',  n:'МЕТРИУМ',   d:'недвижимость · подбор и заявки',
-    t:'МЕТРИУМ',  s:'агентство с оплатой по факту' },
-  { k:'amber', n:'МОТОАРЕНА', d:'мотосалон · витрина и сервис',
-    t:'МОТОАРЕНА',s:'мотоциклы, экипировка, сервис' },
-  { k:'rose',  n:'Nuvelle',   d:'магазин одежды · каталог и видео',
-    t:'Nuvelle',  s:'выбирай. носи. сияй.' }
+  { k:'dark',  n:'KLAUS',       d:'ресторан · меню и бронирование',   img:'assets/works/klaus.webp' },
+  { k:'noir',  n:'МЕТРИУМ',     d:'недвижимость · подбор и заявки',   img:'assets/works/metrium.webp' },
+  { k:'amber', n:'МОТОАРЕНА',   d:'мотосалон · витрина и сервис',     img:'assets/works/motoarena.webp' },
+  { k:'rose',  n:'Nuvelle',     d:'магазин одежды · каталог и видео', img:'assets/works/nuvelle.webp' },
+  { k:'acid',  n:'КИНОНОЧЬ',    d:'частный кинотеатр · брутализм',    img:'assets/works/cinemanight.webp' },
+  { k:'bloom', n:'FlowerHome',  d:'цветы с доставкой · каталог',      img:'assets/works/flowerhome.webp' },
+  { k:'noir',  n:'Ray-Ban Meta',d:'концепт · сцена из 275 кадров',    img:'assets/works/rayban.webp' }
 ];
 
 const shw = document.getElementById('shw');
@@ -677,9 +676,7 @@ if (shw){
   view.innerHTML = SHOW.map((s, i) => `
     <div class="shw__p${i === 0 ? ' is-on' : ''}" data-k="${s.k}" role="img"
          aria-label="${s.n} — ${s.d}">
-      <span class="shw__pn">${s.t}</span>
-      <span class="shw__ps">${s.s}</span>
-      <span class="shw__pr"><i></i><i></i><i></i></span>
+      <img class="shw__img" src="${s.img}" alt="" loading="${i === 0 ? 'eager' : 'lazy'}">
     </div>`).join('');
   dots.innerHTML = SHOW.map((s, i) =>
     `<button type="button" role="tab" data-i="${i}" class="${i === 0 ? 'is-on' : ''}"
@@ -689,12 +686,22 @@ if (shw){
   const bullets = [...dots.querySelectorAll('button')];
   let si = 0, shwTimer = 0;
 
+  let outTimer = 0;
+
   function shwGo(i){
     if (i === si) return;
-    shots[si].classList.remove('is-on');
+    const prev = shots[si];
+    prev.classList.remove('is-on');
+    /* уходящий кадр держим видимым, пока новый проступает сквозь размытие:
+       снимешь сразу — под ним на полсекунды мелькнёт серая подложка рамки */
+    prev.classList.add('is-out');
+    clearTimeout(outTimer);
+    outTimer = setTimeout(() => prev.classList.remove('is-out'), 900);
+
     bullets[si].classList.remove('is-on');
     bullets[si].setAttribute('aria-selected', 'false');
     si = i;
+    shots[si].classList.remove('is-out');
     shots[si].classList.add('is-on');
     bullets[si].classList.add('is-on');
     bullets[si].setAttribute('aria-selected', 'true');
@@ -715,6 +722,37 @@ if (shw){
   /* под курсором смена мешает разглядывать — придерживаем */
   shw.addEventListener('pointerenter', shwStop);
   shw.addEventListener('pointerleave', shwPlay);
+
+  /* Окно едет за курсором. Сюда пишем только положение курсора двумя
+     переменными, сам сдвиг считает CSS: так вид эффекта правится в стилях,
+     а не в скрипте. Считаем в rAF — pointermove на мониторе 144 Гц сыплет
+     чаще, чем браузер рисует кадры. На тач-экране не включаем: палец не
+     «наводится», и окно застревало бы сдвинутым после тапа. */
+  if (matchMedia('(hover:hover)').matches &&
+      !matchMedia('(prefers-reduced-motion:reduce)').matches){
+    let tx = 0, ty = 0, tRaf = 0;
+
+    const tiltDraw = () => {
+      tRaf = 0;
+      shw.style.setProperty('--tx', tx.toFixed(3));
+      shw.style.setProperty('--ty', ty.toFixed(3));
+    };
+
+    shw.addEventListener('pointermove', e => {
+      const r = shw.getBoundingClientRect();
+      tx = (e.clientX - r.left) / r.width - .5;
+      ty = (e.clientY - r.top) / r.height - .5;
+      shw.classList.add('is-live');
+      if (!tRaf) tRaf = requestAnimationFrame(tiltDraw);
+    }, { passive:true });
+
+    shw.addEventListener('pointerleave', () => {
+      if (tRaf){ cancelAnimationFrame(tRaf); tRaf = 0; }
+      shw.classList.remove('is-live');
+      tx = ty = 0;
+      tiltDraw();                      /* в ноль — назад вернёт долгий переход из CSS */
+    });
+  }
   /* в фоновой вкладке крутить нечего: кадры всё равно не рисуются */
   document.addEventListener('visibilitychange', () => document.hidden ? shwStop() : shwPlay());
 
@@ -902,13 +940,13 @@ let rw = cfg.curRing, rh = cfg.curRing;
    Категорий нарочно четыре: с семью работами шесть чипов превратили бы фильтр
    в подписи к одиночным карточкам */
 const WORKS = [
-  { n:'KLAUS',         c:'сайты компаний', t:'ресторан',        d:'меню, галерея, бронирование',        s:'12 секций' },
-  { n:'КИНОНОЧЬ',      c:'сайты компаний', t:'частный кинотеатр',d:'брутализм с кислотным акцентом',    s:'10 секций' },
-  { n:'FlowerHome',    c:'магазины',       t:'цветы с доставкой',d:'каталог с 3D-анимацией',            s:'CSS 3D' },
-  { n:'Nuvelle',       c:'магазины',       t:'магазин одежды',  d:'34 товара, видео в карточках',       s:'каталог, SEO' },
-  { n:'МОТОАРЕНА',     c:'каталоги',       t:'мототехника',     d:'фильтры, гео-блок, галерея',         s:'JSON-каталог' },
-  { n:'Метриум',       c:'каталоги',       t:'недвижимость',    d:'пролёт камеры по дому на скролле',   s:'скролл-секвенция' },
-  { n:'Ray-Ban Meta',  c:'концепты',       t:'концепт',         d:'прокручиваемая сцена из 275 кадров', s:'canvas, ffmpeg' }
+  { n:'KLAUS',         c:'сайты компаний', t:'ресторан',        d:'меню, галерея, бронирование',        s:'12 секций',        img:'assets/works/klaus.webp' },
+  { n:'КИНОНОЧЬ',      c:'сайты компаний', t:'частный кинотеатр',d:'брутализм с кислотным акцентом',    s:'10 секций',        img:'assets/works/cinemanight.webp' },
+  { n:'FlowerHome',    c:'магазины',       t:'цветы с доставкой',d:'каталог с 3D-анимацией',            s:'CSS 3D',           img:'assets/works/flowerhome.webp' },
+  { n:'Nuvelle',       c:'магазины',       t:'магазин одежды',  d:'34 товара, видео в карточках',       s:'каталог, SEO',     img:'assets/works/nuvelle.webp' },
+  { n:'МОТОАРЕНА',     c:'каталоги',       t:'мототехника',     d:'фильтры, гео-блок, галерея',         s:'JSON-каталог',     img:'assets/works/motoarena.webp' },
+  { n:'Метриум',       c:'каталоги',       t:'недвижимость',    d:'пролёт камеры по дому на скролле',   s:'скролл-секвенция', img:'assets/works/metrium.webp' },
+  { n:'Ray-Ban Meta',  c:'концепты',       t:'концепт',         d:'прокручиваемая сцена из 275 кадров', s:'canvas, ffmpeg',   img:'assets/works/rayban.webp' }
 ];
 
 const wgrid = document.querySelector('.wgrid');
@@ -947,7 +985,9 @@ function buildWorks(){
       <i class="bl__ph"></i>
       <div class="bl__c">
         <div class="wcard" data-cat="${w.c}">
-          <div class="wcard__empty" data-txt="worksHint"></div>
+          ${w.img
+            ? `<img class="wcard__shot" src="${w.img}" alt="${w.n}" loading="lazy">`
+            : `<div class="wcard__empty" data-txt="worksHint"></div>`}
           <div class="wcard__shade"></div>
           <span class="wcard__badge">${w.c}</span>
           <div class="wcard__meta">
