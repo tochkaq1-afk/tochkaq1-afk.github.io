@@ -1477,8 +1477,51 @@ function buildFlow(){
         l.style.setProperty('--dl', (k * 60) + 'ms');
       });
     };
-    flowAcc.addEventListener('pointerover', open);
-    flowAcc.addEventListener('click', open);
+
+    /* Наведение открывает не сразу, а с удержанием: полоса ждёт, что курсор
+       на ней задержится. Без задержки, пока ведёшь мышь к нужному шагу,
+       по дороге раскрывались все промежуточные.
+
+       Клик и касание открывают мгновенно — там намерение уже явное, и
+       заставлять держать палец было бы издевательством. На тачскрине
+       ховера нет вовсе, так что телефона это не касается. */
+    const HOLD = 260;
+    let holdTimer = 0, holdFor = -1;
+
+    const cancelHold = () => { clearTimeout(holdTimer); holdTimer = 0; holdFor = -1; };
+
+    flowAcc.addEventListener('pointerover', e => {
+      if (e.pointerType === 'touch') return;
+      const p = e.target.closest('.flow__p');
+      if (!p) return;
+      const i = +p.dataset.i;
+      if (i === flowOpen || i === holdFor) return;
+      clearTimeout(holdTimer);
+      holdFor = i;
+      holdTimer = setTimeout(() => { holdFor = -1; open(e); }, HOLD);
+    });
+    /* ушли с полосы раньше срока — значит просто проходили мимо */
+    flowAcc.addEventListener('pointerout', e => {
+      const to = e.relatedTarget;
+      if (to && flowAcc.contains(to) && to.closest('.flow__p') === e.target.closest('.flow__p')) return;
+      cancelHold();
+    });
+    /* Ушли с гармошки — закрываем. Оставлять последнюю раскрытой значит
+       держать на экране случайный выбор: тот шаг, мимо которого курсор
+       уходил последним, а не тот, который человеку был интересен.
+       Касания это не касается: там уходить некуда, и тапнутый шаг стоит. */
+    const shut = () => {
+      cancelHold();
+      if (flowOpen < 0) return;
+      flowOpen = -1;
+      flowAcc.querySelectorAll('.flow__p').forEach(n => n.classList.remove('is-on'));
+    };
+    flowAcc.addEventListener('pointerleave', e => {
+      if (e.pointerType === 'touch') return;
+      shut();
+    });
+
+    flowAcc.addEventListener('click', e => { cancelHold(); open(e); });
   }
 }
 
@@ -1833,6 +1876,15 @@ function fitFootMark(){
   if (!fits.length) return;
   const size = Math.min(...fits);
   lines.forEach(l => l.style.fontSize = size + 'px');
+
+  /* Блоку нужен запас сверху. Он подрезает всё, что выходит за строку —
+     так замаскирован выезд знака снизу, — но заодно срезал акцент над «É»:
+     при кегле в две сотни пикселей надстрочный знак поднимается заметно
+     выше строки. Запас берём долей от кегля, иначе он разъедется вместе
+     с текстом, и тут же вычитаем полем, чтобы подвал не подрос. */
+  const room = Math.round(size * 0.16);
+  footBig.style.paddingTop = room + 'px';
+  footBig.style.marginTop = `calc(${getComputedStyle(footBig).getPropertyValue('--markGap') || 'clamp(18px,3vh,40px)'} - ${room}px)`;
 }
 addEventListener('resize', fitFootMark);
 /* твикер правит текст знака — пересобираем строки, когда он это сделал */

@@ -1437,7 +1437,7 @@ select.ct__in{ cursor:pointer; }
 /* межстрочное .78 годилось для одной строки, а на двух буквы налезали
    друг на друга — при таких кеглях даже пара процентов заметна */
 .foot__big{
-  display:block; margin-top:clamp(18px,3vh,40px); margin-bottom:clamp(8px,1.6vh,22px);
+  display:block; --markGap:clamp(18px,3vh,40px); margin-top:var(--markGap); margin-bottom:clamp(8px,1.6vh,22px);
   line-height:.86; overflow:hidden; color:var(--ink);
 }
 /* исходный знак остаётся в разметке источником текста для твикера,
