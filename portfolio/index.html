@@ -14,7 +14,7 @@
      Начертания урезаны до тех, что правда встречаются на странице. -->
 <link id="fontLink" rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Golos+Text:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="styles.css?v=107">
+<link rel="stylesheet" href="styles.css?v=111">
 </head>
 <body>
 
@@ -238,6 +238,9 @@
       </div>
 
       <a class="hbtn hbtn--spark till__go" href="#contact" data-key="svcCta"></a>
+      <!-- Сброс живёт под главной кнопкой и появляется только когда есть
+           что сбрасывать: пустая кнопка рядом с пустым чеком сбивает с толку -->
+      <button class="till__reset" type="button" id="svcReset" hidden data-txt="svcReset">собрать заново</button>
       <div class="till__hint" data-txt="svcHint"></div>
     </aside>
   </div>
@@ -255,14 +258,31 @@
 </section>
 
 
-<!-- принципы: четыре карточки с крупными номерами -->
+<!-- Принципы оформлены гарантийным талоном: номер, четыре условия, подпись.
+     Были четыре плитки с крупными 01–04 — приём с половины студийных сайтов,
+     да ещё и с нумерацией, которой на этом сайте быть не должно. -->
 <section class="pr" id="principles">
+  <!-- Шапка слева, талон справа: талон в одиночку занимал шестьдесят
+       процентов ширины, а остальное оставалось пустым полем -->
+  <div class="pr__grid">
   <div class="pr__head">
     <span class="eyebrow rv" data-txt="prEyebrow">принципы</span>
     <h2 class="pr__h rv" style="--d:60ms" data-txt="prTitle"></h2>
     <p class="pr__lead rv" style="--d:120ms" data-txt="prLead"></p>
   </div>
-  <div class="pr__grid"></div>
+
+  <div class="war rv" style="--d:180ms">
+    <div class="war__top">
+      <span class="war__k" data-txt="prWarK">условия работы</span>
+      <span class="war__no" data-txt="prWarNo">№ 0001 · бессрочно</span>
+    </div>
+    <div class="war__body"></div>
+    <div class="war__foot">
+      <span data-txt="prWarFoot">действует с первого дня работы</span>
+      <span class="war__sig" data-txt="name">AETÉRNA</span>
+    </div>
+  </div>
+  </div>
 </section>
 
 <!-- обо мне — одна фраза во весь экран, слова выезжают по очереди -->
@@ -334,7 +354,7 @@
   <a class="foot__big" href="#hero" aria-label="Наверх"><span data-txt="name">AETERNA</span></a>
 </footer>
 
-<script src="script.js?v=106" defer></script>
+<script src="script.js?v=111" defer></script>
 <script src="dust.js?v=99" defer></script>
 
 <!-- Твикер посетителю не нужен, а весил он 33 КБ и был самым долгим
@@ -353,7 +373,7 @@
     css.rel = 'stylesheet'; css.href = 'tweak.css?v=99';
     document.head.appendChild(css);
     const js = document.createElement('script');
-    js.src = 'tweak.js?v=106';
+    js.src = 'tweak.js?v=111';
     document.body.appendChild(js);
   }
   addEventListener('keydown', e => {

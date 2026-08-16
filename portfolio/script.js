@@ -212,6 +212,7 @@ const DEFAULTS = {
   txtSvcRestD:'Приглашение на свадьбу, доработка чужого сайта, бот под задачу — тоже делаю. Опишите задачу, отвечу с ценой и сроком.',
   txtSvcRestBtn:'написать',
   txtSvcCta:'обсудить проект',
+  txtSvcReset:'собрать заново',
   txtSvcHint:'Сначала макет, деньги — когда увидите готовое',
   /* подписи внутри чека */
   txtSvcCheckK:'ваш чек',
@@ -252,15 +253,19 @@ const DEFAULTS = {
     'SEO-база :: Заголовки, описания, карточки для соцсетей и карта сайта.'
   ].join('|'),
 
-  /* принципы: строка = номер :: заголовок :: текст */
+  /* Принципы — гарантийный талон. Строка = слово :: обещание.
+     Слово слева короткое нарочно: в талоне это графа, а не заголовок */
   txtPrEyebrow:'принципы',
   txtPrTitle:'Как я веду работу',
   txtPrLead:'Четыре правила, по которым со мной можно иметь дело.',
+  txtPrWarK:'условия работы',
+  txtPrWarNo:'№ 0001 · бессрочно',
+  txtPrWarFoot:'действует с первого дня работы',
   txtPrList:[
-    '01 :: Сроки — это обещание :: Договорились на дату — сдам в срок. Никаких «ещё пару дней».',
-    '02 :: Результат, не процесс :: Сайт должен приносить заявки, а не просто красиво выглядеть.',
-    '03 :: Честность в деталях :: Говорю о рисках заранее. Цена не растёт в процессе без причины.',
-    '04 :: Поддержка после сдачи :: Помогаю разобраться с сайтом. Не исчезаю после оплаты.'
+    'Срок :: названная дата соблюдается, без «ещё пары дней»',
+    'Результат :: считаем заявки после запуска, а не любуемся',
+    'Цена :: о рисках говорю до начала, а не по дороге',
+    'Поддержка :: помогаю разобраться и остаюсь на связи после сдачи'
   ].join('|'),
 
   /* стек: строка = название :: зачем нужно. Звёздочка в начале — «беру
@@ -420,6 +425,25 @@ function apply(){
    как я работаю, обо мне, контакты. */
 const MENU_EYEBROWS = ['worksEyebrow', 'svcEyebrow', 'flowEyebrow', 'aboutEyebrow', 'ctEyebrow'];
 
+/* Имя секции «работы»: последние две буквы уходят в контур, остальные
+   остаются залитыми. Разметку ставим здесь, а не в index.html, потому что
+   слово приезжает из пункта меню и его длина заранее не известна.
+   Прогон безопасно повторять: после него textContent совпадает с исходным
+   словом, и общий проход drawText() узел больше не трогает. */
+const OUTLINE_TAIL = 2;
+
+function splitWorksName(){
+  const n = document.querySelector('[data-txt="worksEyebrow"]');
+  if (!n) return;
+  const word = n.textContent;
+  if (word.length <= OUTLINE_TAIL || n.querySelector('.wname__o')) return;
+
+  const head = word.slice(0, -OUTLINE_TAIL);
+  const tail = word.slice(-OUTLINE_TAIL);
+  /* data-t читает CSS: контурные копии-эхо рисуются через content:attr() */
+  n.innerHTML = `${head}<span class="wname__o" data-t="${tail}">${tail}</span>`;
+}
+
 function drawText(){
   const map = {
     name:cfg.txtName, mark:cfg.txtMark, role:cfg.txtRole,
@@ -429,7 +453,7 @@ function drawText(){
     worksTitle:cfg.txtWorksTitle,
     worksLead:cfg.txtWorksLead, worksHint:cfg.txtWorksHint, worksMore:cfg.txtWorksMore,
     svcTitle:cfg.txtSvcTitle, svcLead:cfg.txtSvcLead,
-    svcCta:cfg.txtSvcCta, svcAddsK:cfg.txtSvcAddsK, svcHint:cfg.txtSvcHint,
+    svcCta:cfg.txtSvcCta, svcReset:cfg.txtSvcReset, svcAddsK:cfg.txtSvcAddsK, svcHint:cfg.txtSvcHint,
     svcRestBtn:cfg.txtSvcRestBtn,
     svcRestT:cfg.txtSvcRestT, svcRestD:cfg.txtSvcRestD,
     svcCheckK:cfg.txtSvcCheckK, svcChFmt:cfg.txtSvcChFmt, svcChInc:cfg.txtSvcChInc,
@@ -439,6 +463,7 @@ function drawText(){
     flowTitle:cfg.txtFlowTitle, flowLead:cfg.txtFlowLead,
     advEyebrow:cfg.txtAdvEyebrow, advTitle:cfg.txtAdvTitle, advLead:cfg.txtAdvLead,
     prEyebrow:cfg.txtPrEyebrow, prTitle:cfg.txtPrTitle, prLead:cfg.txtPrLead,
+    prWarK:cfg.txtPrWarK, prWarNo:cfg.txtPrWarNo, prWarFoot:cfg.txtPrWarFoot,
     stkEyebrow:cfg.txtStkEyebrow, stkTitle:cfg.txtStkTitle,
     stkKey:cfg.txtStkKey, stkNote:cfg.txtStkNote,
     aboutEyebrow:cfg.txtAboutEyebrow,
@@ -457,6 +482,8 @@ function drawText(){
     const v = map[n.dataset.txt];
     if (v != null && n.textContent !== v) n.textContent = v;
   });
+
+  splitWorksName();
 
   /* подсказки в полях заявки живут в том же словаре, но пишутся в placeholder */
   document.querySelectorAll('[data-ph]').forEach(n => {
@@ -1145,8 +1172,26 @@ const svcSec  = document.querySelector('.svc');
 const svcFmts = document.querySelector('.svc__fmts');
 const svcCols = document.querySelector('.svc__cols');
 const svcCheck = document.getElementById('svcCheck');
-let svcF = 1;
+const svcResetBtn = document.getElementById('svcReset');
+/* формат по умолчанию запоминаем один раз: сброс возвращает именно его,
+   а не нулевой — чек без формата пустой и показывать в нём нечего */
+const SVC_F0 = 1;
+let svcF = SVC_F0;
 const svcOn = new Set();
+
+/* Кнопка сброса нужна, только когда с чеком уже поиграли: выбран другой
+   формат или добавлены допы. Иначе она предлагает отменить то, чего нет */
+function svcResetShow(){
+  if (!svcResetBtn) return;
+  svcResetBtn.hidden = svcOn.size === 0 && svcF === SVC_F0;
+}
+
+function svcReset(){
+  svcOn.clear();
+  svcF = SVC_F0;
+  svcDrawLeft();
+  svcDrawCheck();
+}
 
 const svcMoney = n => Number(n).toLocaleString('ru-RU');
 
@@ -1348,6 +1393,7 @@ function svcSync(host, want){
 /* ---- чек */
 function svcDrawCheck(){
   if (!svcCheck) return;
+  svcResetShow();
   const rows = fmtRows(), f = rows[svcF];
   if (!f) return;
   const t = svcCount();
@@ -1434,6 +1480,8 @@ function buildSvc(){
         }
         return;
       }
+      if (e.target.closest('#svcReset')){ svcReset(); return; }
+
       const a = e.target.closest('[data-a]');
       if (a){
         const i = +a.dataset.a;
@@ -2006,16 +2054,17 @@ function buildAdv(){
 }
 
 /* ---------------------------------------------- принципы */
-const prGrid = document.querySelector('.pr__grid');
+/* Гарантийный талон: слово-графа слева, обещание справа. Номера строк
+   нет нарочно — в талоне важно условие, а не его порядковый номер */
+const prGrid = document.querySelector('.war__body');
 
 function buildPrinciples(){
   if (!prGrid) return;
   prGrid.innerHTML = String(cfg.txtPrList).split('|').map((r, i) => {
     const p = r.split('::').map(x => x.trim());
-    return `<div class="pr__c" style="--d:${i * 90}ms">
-              <div class="pr__n">${p[0] || ''}</div>
-              <div class="pr__t">${p[1] || ''}</div>
-              <div class="pr__d">${p[2] || ''}</div>
+    return `<div class="war__i" style="--d:${i * 90}ms">
+              <span class="war__t">${p[0] || ''}</span>
+              <span class="war__d">${p[1] || ''}</span>
             </div>`;
   }).join('');
   drawText();

@@ -154,7 +154,10 @@ const SCHEMA = [
     { k:'txtPrEyebrow', t:'text', label:'Надзаголовок' },
     { k:'txtPrTitle',   t:'text', label:'Заголовок' },
     { k:'txtPrLead',    t:'text', label:'Описание' },
-    { k:'txtPrList',    t:'text', label:'Карточки: номер :: имя :: текст, через |' }
+    { k:'txtPrWarK',    t:'text', label:'Талон: шапка' },
+    { k:'txtPrWarNo',   t:'text', label:'Талон: номер' },
+    { k:'txtPrWarFoot', t:'text', label:'Талон: строка внизу' },
+    { k:'txtPrList',    t:'text', label:'Условия: слово :: обещание, через |' }
   ]},
 
   { title:'Стек', items:[
@@ -187,6 +190,7 @@ const SCHEMA = [
     { k:'txtSvcRestD',   t:'text', label:'Строка «другое»: текст' },
     { k:'txtSvcRestBtn', t:'text', label:'Строка «другое»: кнопка' },
     { k:'txtSvcCta',     t:'text', label:'Кнопка под чеком' },
+    { k:'txtSvcReset', t:'text', label:'Кнопка сброса' },
     { k:'txtSvcHint',    t:'text', label:'Подпись под кнопкой' },
     { k:'txtSvcCheckK',  t:'text', label:'Чек: надпись сверху' },
     { k:'txtSvcChFmt',   t:'text', label:'Чек: раздел «формат»' },

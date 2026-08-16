@@ -797,18 +797,14 @@ body.is-cursor-custom .cursor{ display:block; }
 .eyebrow{ display:block; font-size:.72rem; letter-spacing:.18em; text-transform:uppercase; color:var(--dim); }
 
 /* ============================================================
-   ИМЯ СЕКЦИИ. Эти пять надписей — не подписи, а названия разделов:
-   их текст приходит из пунктов меню, и у «работ» с «контактами» другого
-   заголовка нет вообще. Поэтому они набраны как заголовок, а не как
-   мелкая серая метка, которой они были, пока над ними стоял свой h2.
-   Бьём по data-txt, а не по классу: обёртки у пяти секций разные —
-   где-то .bl--eyebrow с плейсхолдером, где-то простой span.eyebrow.
+   ИМЯ СЕКЦИИ «РАБОТЫ». Крупно набрано только оно: своего заголовка
+   у секции нет, и мелкая серая метка оставляла главную секцию сайта
+   без названия вообще. У остальных над содержимым стоит свой h2,
+   поэтому там надзаголовок так и остаётся мелкой меткой.
+   Бьём по data-txt, а не по классу: обёртка здесь особенная —
+   .bl--eyebrow с плейсхолдером сборки, а не простой span.eyebrow.
    ============================================================ */
-[data-txt="worksEyebrow"],
-[data-txt="svcEyebrow"],
-[data-txt="flowEyebrow"],
-[data-txt="aboutEyebrow"],
-[data-txt="ctEyebrow"]{
+[data-txt="worksEyebrow"]{
   font-family:var(--fh); font-weight:600;
   font-size:clamp(26px, 3.4vw, 52px);
   line-height:1.02; letter-spacing:-.03em;
@@ -817,6 +813,30 @@ body.is-cursor-custom .cursor{ display:block; }
 /* разрядка и капс живут на обёртке — снимаем и там, иначе имя секции
    растащит буквы на пол-экрана */
 .works__head .bl--eyebrow .bl__c{ font-size:inherit; letter-spacing:normal; text-transform:none; }
+
+/* Хвост имени — контуром, с двумя убегающими эхо-копиями. Заливку снимаем
+   прозрачным цветом, форму держит обводка. Эхо рисуем псевдоэлементами,
+   а не text-shadow: тень повторяет залитую форму буквы, и вместо контуров
+   получились бы сплошные плашки. Толщина в em — чтобы обводка ужималась
+   вместе с буквой на телефоне, а не резала её пополам. */
+.wname__o{
+  position:relative; display:inline-block;
+  color:transparent;
+  -webkit-text-stroke:.032em var(--ink);
+}
+.wname__o:before,
+.wname__o:after{
+  content:attr(data-t); position:absolute; left:0; top:0; z-index:-1;
+  color:transparent; -webkit-text-stroke:.026em var(--dim);
+}
+.wname__o:before{ transform:translate(.055em,.055em); opacity:.5; }
+.wname__o:after { transform:translate(.11em,.11em);  opacity:.25; }
+
+/* Обводки нет — значит, буква стала бы невидимой: возвращаем заливку */
+@supports not (-webkit-text-stroke:1px black){
+  .wname__o{ color:var(--ink); }
+  .wname__o:before,.wname__o:after{ display:none; }
+}
 
 /* Появление секции по скроллу. Устроено «от покоя»: без is-in никаких
    правил на .rv не действует, элемент просто видим. Раньше здесь стояло
@@ -1153,6 +1173,19 @@ button[aria-expanded="true"]:hover > .tgl:after{ transform:translateX(15px); }
 .ch__bars i{ display:block; background:var(--ink); height:100%; }
 .ch__bye{ text-align:center; color:var(--dim); font-size:10.5px; letter-spacing:.1em; }
 .till__go{ width:100%; margin-top:16px; }
+/* Сброс нарочно набран текстом, а не кнопкой с рамкой: рядом с главной
+   кнопкой две одинаковые по весу — и человек не понимает, куда жать */
+.till__reset{
+  display:block; width:100%; margin-top:10px; padding:6px 0;
+  border:0; background:none; cursor:pointer;
+  font-family:var(--fb); font-size:.74rem; letter-spacing:.04em; color:var(--dim);
+  text-decoration:underline; text-decoration-color:color-mix(in srgb, var(--dim) 45%, transparent);
+  text-underline-offset:4px;
+  transition:color .25s ease;
+}
+.till__reset:hover,
+.till__reset:focus-visible{ color:var(--ink); }
+.till__reset[hidden]{ display:none; }
 .till__hint{ margin-top:10px; text-align:center; font-size:.74rem; color:var(--dim); }
 
 @media (max-width:1200px){
@@ -1605,38 +1638,88 @@ select.ct__in{ cursor:pointer; }
   position:relative; border-top:1px solid var(--line);
   padding:clamp(58px,8vh,100px) var(--pad) clamp(40px,6vh,80px);
 }
-.pr__head{ display:flex; flex-direction:column; gap:8px; align-items:flex-start; margin-bottom:clamp(20px,3.4vh,38px); }
+/* Шапка слева, талон справа. Колонка шапки уже колонки талона: заголовок
+   и три строки лида не должны растягиваться на пол-экрана, а условиям
+   нужна ширина, чтобы обещание влезало в строку целиком */
+.pr__grid{
+  display:grid; grid-template-columns:minmax(0,.78fr) minmax(0,1fr);
+  gap:clamp(24px,4vw,64px); align-items:start;
+}
+.pr__head{ display:flex; flex-direction:column; gap:8px; align-items:flex-start; }
 .pr__h{
   margin:0; font-family:var(--fh); font-weight:var(--h1w);
   font-size:clamp(23px,3.3vw,46px); line-height:1.04; letter-spacing:calc(var(--h1track) * 1em);
 }
 .pr__lead{ margin:0; color:var(--dim); max-width:56ch; }
 
-.pr__grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:clamp(12px,2vw,22px); }
-.pr__c{
-  position:relative; border:1px solid var(--line); border-radius:20px; background:var(--wire);
-  padding:clamp(22px,3vw,36px); overflow:hidden;
-  opacity:0; transform:translateY(20px);
-  transition:opacity .6s ease var(--d,0ms), transform .7s cubic-bezier(.22,1,.36,1) var(--d,0ms),
-             border-color .4s ease, background .4s ease;
+/* ============================================================
+   ГАРАНТИЙНЫЙ ТАЛОН. Обещания весят больше, когда выданы документом,
+   а не написаны плиткой. Отсюда рамка в цвет текста, номер, пунктирные
+   линии отрыва и подпись внизу. Бумага светлее фона страницы (--paper),
+   иначе талон сливается с ней и перестаёт читаться как отдельный лист.
+   ============================================================ */
+.war{
+  border:1px solid var(--ink); border-radius:18px; background:var(--paper);
+  overflow:hidden;
 }
-.pr.is-in .pr__c{ opacity:1; transform:none; }
-.pr__c:hover{ border-color:var(--ink); background:var(--bg); }
-.pr__n{
-  font-family:var(--fh); font-weight:800; letter-spacing:-.05em; line-height:.85;
-  font-size:clamp(52px,7vw,104px); color:var(--accent);
-  margin-bottom:clamp(14px,2.4vh,26px);
+.war__top,
+.war__foot{ display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.war__top{ padding:clamp(14px,2vw,20px) clamp(18px,2.6vw,30px); border-bottom:1px dashed var(--line); }
+.war__k{
+  font-family:var(--fh); font-weight:800; text-transform:uppercase;
+  letter-spacing:.12em; font-size:clamp(11px,1.1vw,13px);
 }
-.pr__t{ font-family:var(--fh); font-weight:600; font-size:clamp(17px,1.9vw,25px);
-  line-height:1.15; letter-spacing:calc(var(--h1track) * 1em); }
-.pr__d{ color:var(--dim); font-size:.9rem; margin-top:10px; max-width:38ch; }
+/* номер моноширинным: так он читается как выданный документ, а не как
+   часть вёрстки — цифры стоят в колонку и не пляшут по ширине */
+.war__no{ font-family:var(--fm); color:var(--dim); font-size:clamp(10px,1vw,12px); }
+
+/* Условия идут одной колонкой: талон теперь занимает половину ширины,
+   и в двух колонках обещание рвалось на три слова в строке */
+.war__body{
+  display:grid; gap:2px;
+  padding:clamp(14px,2vw,22px) clamp(18px,2.6vw,30px);
+}
+/* пунктирная линия между условиями — как графы в бланке */
+.war__i + .war__i{ border-top:1px dashed color-mix(in srgb, var(--line) 75%, transparent); }
+.war__i{
+  display:flex; gap:12px; align-items:baseline;
+  padding:clamp(8px,1.2vh,12px) 0;
+  opacity:0; transform:translateY(14px);
+  transition:opacity .55s ease var(--d,0ms), transform .6s cubic-bezier(.22,1,.36,1) var(--d,0ms);
+}
+.pr.is-in .war__i{ opacity:1; transform:none; }
+/* точка вместо номера: место в списке отмечено, а порядок не назначен */
+.war__i:before{
+  content:''; flex:none; width:6px; height:6px; border-radius:50%;
+  background:var(--ink); transform:translateY(-2px);
+}
+.war__t{ font-family:var(--fh); font-weight:600; font-size:clamp(14px,1.4vw,18px); flex:none; }
+.war__t:after{ content:' —'; color:var(--dim); font-weight:400; }
+.war__d{ color:var(--dim); font-size:clamp(13px,1.1vw,15.5px); line-height:1.4; }
+
+.war__foot{
+  padding:clamp(12px,1.8vw,18px) clamp(18px,2.6vw,30px);
+  border-top:1px dashed var(--line); color:var(--dim); font-size:clamp(11px,1vw,13px);
+}
+.war__sig{
+  font-family:var(--fh); font-weight:400; font-style:italic;
+  color:var(--ink); font-size:clamp(13px,1.3vw,17px); letter-spacing:-.02em;
+}
 
 @media (max-width:900px){
-   .pr__grid{ grid-template-columns:1fr; }
+   /* на узком экране шапка возвращается над талоном: в двух колонках
+      каждой досталось бы по 170 пикселей */
+   .pr__grid{ grid-template-columns:1fr; gap:clamp(18px,3vh,30px); }
 }
- 
+@media (max-width:760px){
+   /* графа и обещание встают в две строки: в одну строку
+      «Поддержка — помогаю разобраться…» ужимало текст до трёх слов в ряд */
+   .war__i{ flex-wrap:wrap; }
+   .war__d{ width:100%; padding-left:18px; }
+}
+
 @media (prefers-reduced-motion:reduce){
-  .adv__c,.pr__c{ opacity:1; transform:none; }
+  .adv__c,.war__i{ opacity:1; transform:none; }
   .adv__i path,.adv__i rect,.adv__i circle,.adv__i line{ stroke-dashoffset:0; }
 }
 
@@ -1810,13 +1893,20 @@ html.js-reveal main > section.is-full > *{
      последний раз ткнули пальцем, и остаётся пятном посреди страницы */
   .lamp{ display:none; }
 
-  /* неон оставляем видимым, но перестаём крутить: непрерывная анимация
-     конического градиента на двух десятках элементов держит GPU занятым
-     всё время, пока страница открыта */
+  /* Неон на тач-экране крутится только у выбранной карточки. Раньше он
+     не крутился нигде: непрерывная анимация конического градиента на двух
+     десятках элементов держит GPU занятым всё время, пока страница открыта.
+     Но неподвижный градиент с прозрачными разрывами читается как сломанная
+     пунктирная рамка, а не как «горит» — поэтому одному элементу движение
+     возвращаем. Один против девятнадцати телефон тянет спокойно. */
   body.is-neon-always .fmt:before,
   body.is-neon-always .aopt:before,
   body.is-neon-always .fmt:after,
   body.is-neon-always .aopt:after{ animation:none; }
+
+  body.is-neon-always .fmt.is-on:before{
+    animation:neonSpin var(--neonSpin) var(--neonDelay,0s) linear infinite;
+  }
 
   /* цели нажатия: палец промахивается по всему, что ниже 44 пикселей */
   .top__tg,.top__mark,  .menu__list a,.menu__list .flip{ min-height:48px; display:flex; align-items:center; }
