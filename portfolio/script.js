@@ -1130,14 +1130,13 @@ function svcDrawLeft(){
               <span class="fmt__t">от ${r.days} дней</span>
             </button>`).join('')}
         </div>
-        ${/* разбор разницы раскрыт сразу во всех группах: это главный вопрос
-              перед выбором формата, и прятать ответ за клик значит терять
-              тех, кто до него не догадается. Свернуть можно кнопкой */''}
+        ${/* Разбор разницы не сворачивается вовсе: это главный вопрос перед
+              выбором формата, и прятать ответ за клик значит терять тех, кто
+              до него не догадается. Поэтому здесь не кнопка, а заголовок —
+              нажимать не на что, и делать этого не нужно. */''}
         ${items ? `<div class="svc__diff">
-          <button class="diff__k" type="button" aria-expanded="true">
-            <span class="diff__t">${cfg[diff.head] || ''}</span>${TGL}
-          </button>
-          <div class="diff__body is-open"><div class="diff__in">${items}</div></div>
+          <div class="diff__k"><span class="diff__t">${cfg[diff.head] || ''}</span></div>
+          <div class="diff__in">${items}</div>
         </div>` : ''}
       </div></div>
     </div>`;
@@ -1321,15 +1320,6 @@ function buildSvc(){
       }
     });
 
-    /* раскрывашки перерисовываются вместе с рядами, поэтому слушаем секцию,
-       а не сами кнопки: иначе обработчик умирал бы при каждой смене формата */
-    svcSec.addEventListener('click', e => {
-      const k = e.target.closest('.diff__k');
-      if (!k) return;
-      const open = k.getAttribute('aria-expanded') === 'true';
-      k.setAttribute('aria-expanded', String(!open));
-      k.nextElementSibling.classList.toggle('is-open', !open);
-    });
   }
 
   drawText();

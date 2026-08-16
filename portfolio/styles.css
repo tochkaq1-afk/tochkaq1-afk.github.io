@@ -841,14 +841,11 @@ body.is-neon-always .aopt:after{ opacity:calc(var(--neonGlow) * .6); animation:n
    Раскрытие идёт через grid-template-rows 0fr → 1fr: max-height пришлось бы
    задавать на глаз, и длинный текст обрезался бы */
 .svc__diff{ margin-top:clamp(14px,2vh,22px); border-top:1px solid var(--line); }
+/* заголовок разбора: не кнопка — сворачивать его нельзя и не нужно */
 .diff__k{
-  display:flex; align-items:center; gap:14px; width:100%; padding:14px 2px;
-  background:none; border:0; color:var(--dim); font:inherit; cursor:pointer;
-  font-size:.8rem; text-align:left;
-  transition:color .25s ease;
+  display:flex; align-items:center; padding:14px 2px;
+  color:var(--ink); font-size:.8rem;
 }
-.diff__k:hover{ color:var(--ink); }
-.diff__k[aria-expanded="true"]{ color:var(--ink); }
 .diff__t{ min-width:0; }
 
 /* Кнопка-таблетка справа, общая для шапки группы и для разбора разницы.
@@ -898,18 +895,16 @@ button:hover > .tgl{ color:#fff; border-color:transparent; }
 [aria-expanded="true"] .tgl__pm:after{ transform:rotate(180deg); }
 
 /* строки разницы приходят лесенкой, а не все разом */
-.diff__body.is-open .diff__i{ animation:diffIn .5s cubic-bezier(.22,1,.36,1) backwards; }
-.diff__body.is-open .diff__i:nth-child(2){ animation-delay:.06s; }
-.diff__body.is-open .diff__i:nth-child(3){ animation-delay:.12s; }
-.diff__body.is-open .diff__i:nth-child(4){ animation-delay:.18s; }
-.diff__body.is-open .diff__i:nth-child(5){ animation-delay:.24s; }
+.is-in .diff__i{ animation:diffIn .5s cubic-bezier(.22,1,.36,1) backwards; }
+.is-in .diff__i:nth-child(2){ animation-delay:.06s; }
+.is-in .diff__i:nth-child(3){ animation-delay:.12s; }
+.is-in .diff__i:nth-child(4){ animation-delay:.18s; }
+.is-in .diff__i:nth-child(5){ animation-delay:.24s; }
 @keyframes diffIn{ from{ opacity:0; transform:translateY(10px); } }
 @media (prefers-reduced-motion:reduce){
-  .diff__body.is-open .diff__i{ animation:none; }
+  .is-in .diff__i{ animation:none; }
 }
-.diff__body{ display:grid; grid-template-rows:0fr; transition:grid-template-rows .45s cubic-bezier(.22,1,.36,1); }
-.diff__body.is-open{ grid-template-rows:1fr; }
-.diff__in{ overflow:hidden; }
+.diff__in{ min-width:0; }
 .diff__i{ padding:0 2px 14px; display:grid; grid-template-columns:minmax(120px,.32fr) minmax(0,1fr); gap:14px; }
 .diff__i + .diff__i{ border-top:1px dashed var(--line); padding-top:14px; }
 .diff__n{ font-family:var(--fh); font-weight:600; font-size:.9rem; }
