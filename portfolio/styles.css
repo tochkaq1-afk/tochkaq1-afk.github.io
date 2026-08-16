@@ -768,7 +768,45 @@ body.is-neon-always .aopt:after{ opacity:calc(var(--neonGlow) * .6); animation:n
   position:relative; border:1px solid var(--line); border-radius:20px;
   background:var(--wire); padding:14px 14px 16px;
 }
-.fgrp__k{ margin-bottom:10px; }
+/* Шапка группы — кнопка: три раскрытые группы разом занимали пять экранов
+   на телефоне, и до контактов приходилось листать сквозь весь прайс.
+   Открытой держим ту, где стоит выбранный формат, остальные свёрнуты,
+   но сообщают о себе числом форматов и ценой «от» — иначе непонятно,
+   зачем на них нажимать. */
+.fgrp__k{
+  display:flex; align-items:center; gap:10px; width:100%;
+  padding:2px 0 10px; text-align:left; color:inherit; font:inherit;
+  background:none; border:0; cursor:pointer;
+}
+.fgrp__meta{
+  margin-left:auto; font-family:var(--fm); font-size:.68rem; color:var(--dim);
+  white-space:nowrap; transition:opacity .3s ease;
+}
+/* у раскрытой группы подпись лишняя: всё и так видно под ней */
+.fgrp.is-open .fgrp__meta{ opacity:0; }
+
+/* плюс, который на раскрытии становится минусом: стрелка читалась бы
+   как «перейти», а это раскрытие на месте */
+.fgrp__pm{ position:relative; width:13px; height:13px; flex:none; }
+.fgrp__pm:before,.fgrp__pm:after{
+  content:''; position:absolute; left:0; right:0; top:50%; height:1.5px;
+  background:var(--dim); transition:transform .45s cubic-bezier(.76,0,.24,1), background .3s;
+}
+.fgrp__pm:after{ transform:rotate(90deg); }
+.fgrp.is-open .fgrp__pm:after{ transform:rotate(0); }
+.fgrp.is-open .fgrp__pm:before,
+.fgrp.is-open .fgrp__pm:after{ background:var(--ink); }
+/* у группы с выбранным форматом сворачивать нечего — знак не показываем */
+.fgrp.is-on .fgrp__pm{ opacity:0; }
+
+/* раскрытие через grid-template-rows: max-height пришлось бы задавать
+   на глаз, и длинный ряд карточек обрезался бы */
+.fgrp__body{
+  display:grid; grid-template-rows:0fr;
+  transition:grid-template-rows .5s cubic-bezier(.76,0,.24,1);
+}
+.fgrp.is-open .fgrp__body{ grid-template-rows:1fr; }
+.fgrp__in{ overflow:hidden; min-height:0; }
 /* карточка внутри панели светлее фона панели, иначе они сливаются */
 .fgrp .fmt{ background:var(--bg); }
 /* колонки подбираются под ширину: в рядах разное число карточек,

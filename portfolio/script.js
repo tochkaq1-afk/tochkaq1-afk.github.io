@@ -1013,6 +1013,19 @@ const svcOn = new Set();
 
 const svcMoney = n => Number(n).toLocaleString('ru-RU');
 
+/* «5 форматов», но «1 формат» и «2 формата» — иначе заголовок группы
+   читается как машинный вывод */
+function plural(n){
+  const t = n % 10, h = n % 100;
+  if (t === 1 && h !== 11) return 'формат';
+  if (t >= 2 && t <= 4 && (h < 10 || h >= 20)) return 'формата';
+  return 'форматов';
+}
+
+/* какие группы человек раскрыл руками: набор переживает пересборку
+   левой колонки, иначе выбор формата схлопывал бы всё обратно */
+const svcOpenG = new Set();
+
 /* прайс из твикера: «имя :: цена :: дни :: метка». Позиция без цены
    просто не показывается — это дешевле, чем показать её без числа */
 function svcRows(txt, parts){
@@ -1077,26 +1090,39 @@ function svcDrawLeft(){
     /* островок подсвечивается целиком, когда выбран формат из него:
        иначе на экране горели бы все три группы разом */
     const live = FMT[svcF] && FMT[svcF].g === gi;
-    return `<div class="fgrp${live ? ' is-on' : ''}">
-      <span class="eyebrow fgrp__k">${g}</span>
-      <div class="fgrp__row">
-        ${cards.map(({ r, i }) => `
-          <button class="fmt neon${i === svcF ? ' is-on' : ''}" type="button" role="tab"
-                  aria-selected="${i === svcF}" data-f="${i}">
-            ${r.mark ? `<span class="fmt__mark">${r.mark}</span>` : ''}
-            <span class="fmt__dot"></span>
-            <span class="fmt__n">${r.n}</span>
-            <span class="fmt__d">${FMT[i].d}</span>
-            <span class="fmt__p">${svcMoney(r.p)}<small>BYN</small></span>
-            <span class="fmt__t">от ${r.days} дней</span>
-          </button>`).join('')}
-      </div>
-      ${items ? `<div class="svc__diff">
-        <button class="diff__k" type="button" aria-expanded="false">
-          <span>${cfg[diff.head] || ''}</span><i class="diff__ar" aria-hidden="true"></i>
-        </button>
-        <div class="diff__body"><div class="diff__in">${items}</div></div>
-      </div>` : ''}
+    /* группа, где стоит выбранный формат, открыта всегда: свернуть её
+       значило бы спрятать от человека его собственный выбор */
+    const open = live || svcOpenG.has(gi);
+    /* в свёрнутом виде заголовок обязан сам что-то сообщать, иначе это
+       просто строка, на которую непонятно зачем нажимать */
+    const from = Math.min(...cards.map(({ r }) => r.p));
+
+    return `<div class="fgrp${live ? ' is-on' : ''}${open ? ' is-open' : ''}">
+      <button class="fgrp__k" type="button" data-grp="${gi}" aria-expanded="${open}">
+        <span class="eyebrow">${g}</span>
+        <span class="fgrp__meta">${cards.length} ${plural(cards.length)} · от ${svcMoney(from)} BYN</span>
+        <i class="fgrp__pm" aria-hidden="true"></i>
+      </button>
+      <div class="fgrp__body"><div class="fgrp__in">
+        <div class="fgrp__row">
+          ${cards.map(({ r, i }) => `
+            <button class="fmt neon${i === svcF ? ' is-on' : ''}" type="button" role="tab"
+                    aria-selected="${i === svcF}" data-f="${i}">
+              ${r.mark ? `<span class="fmt__mark">${r.mark}</span>` : ''}
+              <span class="fmt__dot"></span>
+              <span class="fmt__n">${r.n}</span>
+              <span class="fmt__d">${FMT[i].d}</span>
+              <span class="fmt__p">${svcMoney(r.p)}<small>BYN</small></span>
+              <span class="fmt__t">от ${r.days} дней</span>
+            </button>`).join('')}
+        </div>
+        ${items ? `<div class="svc__diff">
+          <button class="diff__k" type="button" aria-expanded="false">
+            <span>${cfg[diff.head] || ''}</span><i class="diff__ar" aria-hidden="true"></i>
+          </button>
+          <div class="diff__body"><div class="diff__in">${items}</div></div>
+        </div>` : ''}
+      </div></div>
     </div>`;
   }).join('');
 
@@ -1232,6 +1258,22 @@ function buildSvc(){
     svcSec.dataset.wired = '1';
 
     svcSec.addEventListener('click', e => {
+      /* сворачивание группы: ловим раньше форматов, иначе клик по шапке
+         пролетал бы дальше и ничего не делал */
+      const g = e.target.closest('[data-grp]');
+      if (g){
+        const gi = +g.dataset.grp;
+        /* группу с выбранным форматом не трогаем: прятать собственный
+           выбор человека — худшее, что может сделать сворачивание */
+        if (FMT[svcF] && FMT[svcF].g === gi) return;
+        svcOpenG.has(gi) ? svcOpenG.delete(gi) : svcOpenG.add(gi);
+        const box = g.closest('.fgrp');
+        const on = svcOpenG.has(gi);
+        box.classList.toggle('is-open', on);
+        g.setAttribute('aria-expanded', String(on));
+        return;
+      }
+
       const f = e.target.closest('[data-f]');
       if (f){
         const i = +f.dataset.f;
