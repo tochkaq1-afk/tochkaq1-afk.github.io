@@ -1130,11 +1130,14 @@ function svcDrawLeft(){
               <span class="fmt__t">от ${r.days} дней</span>
             </button>`).join('')}
         </div>
+        ${/* разбор разницы раскрыт сразу во всех группах: это главный вопрос
+              перед выбором формата, и прятать ответ за клик значит терять
+              тех, кто до него не догадается. Свернуть можно кнопкой */''}
         ${items ? `<div class="svc__diff">
-          <button class="diff__k" type="button" aria-expanded="false">
+          <button class="diff__k" type="button" aria-expanded="true">
             <span class="diff__t">${cfg[diff.head] || ''}</span>${TGL}
           </button>
-          <div class="diff__body"><div class="diff__in">${items}</div></div>
+          <div class="diff__body is-open"><div class="diff__in">${items}</div></div>
         </div>` : ''}
       </div></div>
     </div>`;
