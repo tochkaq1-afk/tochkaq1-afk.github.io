@@ -1188,6 +1188,22 @@ button[aria-expanded="true"]:hover > .tgl:after{ transform:translateX(15px); }
 .till__reset[hidden]{ display:none; }
 .till__hint{ margin-top:10px; text-align:center; font-size:.74rem; color:var(--dim); }
 
+/* Поля, заполненные за человека при переходе из чека: короткая вспышка,
+   иначе он доезжает до формы и не замечает, что за него уже написали */
+.ct__form.is-prefilled .ct__in[name="about"],
+.ct__form.is-prefilled .ct__in[name="kind"]{
+  animation:prefill 1.9s ease forwards;
+}
+@keyframes prefill{
+  0%, 55%{ background:color-mix(in srgb, var(--accent) 12%, transparent);
+           border-color:var(--accent); }
+  100%   { background:transparent; }
+}
+@media (prefers-reduced-motion:reduce){
+  .ct__form.is-prefilled .ct__in{ animation:none; }
+}
+
+
 @media (max-width:1200px){
    .svc__fmts{ grid-template-columns:repeat(2,minmax(0,1fr)); }
 }
@@ -1893,20 +1909,10 @@ html.js-reveal main > section.is-full > *{
      последний раз ткнули пальцем, и остаётся пятном посреди страницы */
   .lamp{ display:none; }
 
-  /* Неон на тач-экране крутится только у выбранной карточки. Раньше он
-     не крутился нигде: непрерывная анимация конического градиента на двух
-     десятках элементов держит GPU занятым всё время, пока страница открыта.
-     Но неподвижный градиент с прозрачными разрывами читается как сломанная
-     пунктирная рамка, а не как «горит» — поэтому одному элементу движение
-     возвращаем. Один против девятнадцати телефон тянет спокойно. */
-  body.is-neon-always .fmt:before,
-  body.is-neon-always .aopt:before,
-  body.is-neon-always .fmt:after,
-  body.is-neon-always .aopt:after{ animation:none; }
-
-  body.is-neon-always .fmt.is-on:before{
-    animation:neonSpin var(--neonSpin) var(--neonDelay,0s) linear infinite;
-  }
+  /* Неон на тач-экране крутится так же, как на мониторе. Раньше анимация
+     здесь была выключена ради GPU, но неподвижный градиент с прозрачными
+     разрывами читается как сломанная пунктирная рамка, а не как «горит» —
+     а это первое, что видно в разделе услуг. */
 
   /* цели нажатия: палец промахивается по всему, что ниже 44 пикселей */
   .top__tg,.top__mark,  .menu__list a,.menu__list .flip{ min-height:48px; display:flex; align-items:center; }

@@ -140,7 +140,8 @@ const SCHEMA = [
     { k:'txtBtn2',  t:'text', label:'Кнопка 2' },
     { k:'txtBtnLoad', t:'text', label:'Кнопка: отправка' },
     { k:'txtBtnDone', t:'text', label:'Кнопка: готово' },
-    { k:'txtTgUrl',  t:'text', label:'Ссылка в телеграм' }
+    { k:'txtTgUrl',  t:'text', label:'Ссылка в телеграм' },
+    { k:'txtCtGo',   t:'text', label:'Если телеграм не открылся' }
   ]},
 
   { title:'Преимущества', items:[

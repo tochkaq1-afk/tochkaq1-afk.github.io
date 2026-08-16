@@ -112,7 +112,10 @@ const DEFAULTS = {
   txtMark:'AETERNAWEBSTUDIO',
   txtPlace:'Минск',
   txtTg:'TELEGRAM',
-  txtTgUrl:'',
+  txtTgCta:'или сразу в телеграм',
+  /* адрес живой: пока он пустой, все ссылки в телеграм намеренно
+     не кликаются — см. конец drawText() */
+  txtTgUrl:'https://t.me/aeternaweb',
   txtMenu:'МЕНЮ',
   txtMenuOpen:'ЗАКРЫТЬ',
   txtMenuList:'РАБОТЫ|УСЛУГИ|КАК Я РАБОТАЮ|ОБО МНЕ|КОНТАКТЫ',
@@ -316,7 +319,8 @@ const DEFAULTS = {
   txtCtSend:'отправить заявку',
   txtCtErr:'Поля «имя» и «связь» — обязательные.',
   txtCtOk:'Заявка ушла. Отвечу в течение дня.',
-  txtCtOffline:'Приём заявок ещё не подключён. Текст заявки скопирован — вставьте его мне в телеграм.',
+  txtCtOffline:'Текст заявки скопирован — открываю телеграм, осталось вставить его в чат.',
+  txtCtGo:'Телеграм не открылся сам — вот ссылка:',
   txtFootNote:'Сайт собран вручную: без конструкторов, библиотек анимации и готовых тем.'
 };
 
@@ -418,6 +422,34 @@ function apply(){
   drawText();
 }
 
+/* ---------------------------------------------- плавные переходы по якорям
+   «Смотреть работы», пункты меню и всё остальное, что ведёт на #секцию,
+   раньше швыряло страницу мгновенно. Ведём сами, а не через
+   scroll-behavior:smooth в CSS: браузерное сглаживание нельзя ни замедлить,
+   ни выключить для одного случая, а нам нужно и то и другое — при
+   выключенных анимациях прыжок обязан остаться мгновенным. */
+function smoothTo(el){
+  if (!el) return;
+  const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block:'start' });
+}
+
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[href^="#"]');
+  if (!a || a.hasAttribute('data-empty')) return;
+
+  const id = a.getAttribute('href').slice(1);
+  if (!id) return;                       /* href="#" — заглушка, не якорь */
+  const target = document.getElementById(id);
+  if (!target) return;
+
+  e.preventDefault();
+  smoothTo(target);
+  /* адрес правим сами: без preventDefault браузер прыгнул бы сам,
+     а без этой строки ссылку нельзя было бы скопировать из адресной строки */
+  history.replaceState(null, '', '#' + id);
+});
+
 /* ---------------------------------------------- тексты */
 /* Имя секции берётся из пункта меню, а не пишется рядом второй раз: иначе
    они разъезжаются при первой же правке — в меню «РАБОТЫ», а над секцией
@@ -450,6 +482,7 @@ function drawText(){
     tag:cfg.txtTag, tagDim:cfg.txtTagDim,
     btn1:cfg.txtBtn1, btn2:cfg.txtBtn2, btnLoad:cfg.txtBtnLoad, btnDone:cfg.txtBtnDone,
     place:cfg.txtPlace, tg:cfg.txtTg, status:cfg.txtStatus,
+    tgCta:cfg.txtTgCta, tgName:cfg.txtTgName,
     worksTitle:cfg.txtWorksTitle,
     worksLead:cfg.txtWorksLead, worksHint:cfg.txtWorksHint, worksMore:cfg.txtWorksMore,
     svcTitle:cfg.txtSvcTitle, svcLead:cfg.txtSvcLead,
@@ -468,6 +501,7 @@ function drawText(){
     stkKey:cfg.txtStkKey, stkNote:cfg.txtStkNote,
     aboutEyebrow:cfg.txtAboutEyebrow,
     ctTitle:cfg.txtCtTitle, ctLead:cfg.txtCtLead,
+    ctGo:cfg.txtCtGo,
     ctWho:cfg.txtCtWho, ctSend:cfg.txtCtSend, footNote:cfg.txtFootNote,
     menu:menuOpen ? cfg.txtMenuOpen : cfg.txtMenu
   };
@@ -1432,6 +1466,74 @@ function svcStamp(){
   if (no) no.textContent = 'чек № ' + String(Math.floor(Math.random() * 8999) + 1000);
 }
 
+/* ---------------------------------------------- отрыв чека и переход в заявку
+   Кнопка под чеком не просто уводит вниз: лента сначала отрывается, и уже
+   после этого страница едет к форме, а поля заполняются тем, что человек
+   набрал в чеке. Смысл в том, что заявка — продолжение чека, а не новая
+   анкета с нуля: набирал полторы минуты, и вводить всё заново обидно. */
+
+/* Что выбрано, словами. Формат идёт первым, допы за ним через запятую —
+   это же уходит в поле «о задаче» и потом придёт мне в телеграм. */
+function svcSummary(){
+  const f = fmtRows()[svcF];
+  const adds = [...svcOn].map(i => { const a = addAt(i); return a && a.row ? a.row.n : null; }).filter(Boolean);
+  const t = svcCount();
+  const parts = [f ? f.n : ''];
+  if (adds.length) parts.push('плюс ' + adds.join(', '));
+  parts.push(`итого ${svcMoney(t.sum)} ${cfg.txtSvcCur || 'BYN'}`, `срок ${t.days} дн.`);
+  return parts.filter(Boolean).join(' · ');
+}
+
+/* Формат в чеке и пункт списка в форме — разные словари, поэтому ищем
+   совпадение по словам, а не по индексу: списки правятся из твикера
+   независимо друг от друга и разъедутся при первой же правке */
+function svcKindFor(name){
+  const kinds = String(cfg.txtCtKinds).split('|').map(s => s.trim());
+  const low = String(name).toLowerCase();
+  const hit = kinds.find(k => low.includes(k.toLowerCase().split(' ')[0]));
+  return hit || kinds[kinds.length - 1] || '';
+}
+
+function svcTearToForm(){
+  const check = document.getElementById('svcCheck');
+  const go = () => {
+    const form = document.querySelector('.ct__form');
+    smoothTo(document.getElementById('contact'));
+    if (!form) return;
+
+    const about = form.querySelector('[name="about"]');
+    const kind = form.querySelector('[name="kind"]');
+    if (about) about.value = svcSummary();
+    if (kind){
+      const want = svcKindFor((fmtRows()[svcF] || {}).n || '');
+      const opt = [...kind.options].find(o => o.textContent.trim() === want);
+      if (opt) kind.value = opt.value || opt.textContent;
+    }
+    /* подсвечиваем заполненное: иначе человек доезжает до формы и не видит,
+       что за него уже написали — глаз цепляется за пустое поле имени */
+    form.classList.add('is-prefilled');
+    setTimeout(() => form.classList.remove('is-prefilled'), 2000);
+    const nameIn = form.querySelector('[name="name"]');
+    if (nameIn) setTimeout(() => nameIn.focus({ preventScroll:true }), 700);
+  };
+
+  /* без ленты (или при выключенных анимациях) просто едем вниз */
+  if (!check || matchMedia('(prefers-reduced-motion:reduce)').matches){ go(); return; }
+
+  check.classList.add('is-tear');
+  const done = () => {
+    check.classList.remove('is-tear');
+    /* печатаем новую ленту с новым номером — секция не должна остаться пустой,
+       если человек вернётся к ней скроллом */
+    svcStamp(); svcBars();
+    go();
+  };
+  check.addEventListener('animationend', done, { once:true });
+  /* страховка: если анимация не проиграет (вкладка в фоне — кадры не рисуются
+     и animationend не приходит), заявка всё равно должна открыться */
+  setTimeout(() => { if (check.classList.contains('is-tear')) done(); }, 1100);
+}
+
 /* штрихкод декоративный, но одинаковые полосы сразу выдают подделку */
 function svcBars(){
   const b = document.getElementById('chBars');
@@ -1481,6 +1583,10 @@ function buildSvc(){
         return;
       }
       if (e.target.closest('#svcReset')){ svcReset(); return; }
+
+      /* «обсудить проект» под чеком: рвём ленту и уносим выбор в заявку */
+      const goBtn = e.target.closest('.till__go');
+      if (goBtn){ e.preventDefault(); svcTearToForm(); return; }
 
       const a = e.target.closest('[data-a]');
       if (a){
@@ -1728,6 +1834,27 @@ async function sendLead(){
     out.innerHTML = `${cfg.txtCtOffline} <b>${cfg.txtTgName}</b>`;
   } finally {
     btn.removeAttribute('aria-busy');
+  }
+
+  openTelegram(text);
+}
+
+/* После отправки уводим человека прямо в чат со мной. Текст заявки уже лежит
+   в буфере — остаётся вставить его одним движением, и я вижу задачу целиком,
+   а не «здравствуйте» в пустоту.
+   Вкладку открываем в том же обработчике клика, что и отправку: открытую
+   позже, из ответа сервера, браузер посчитает всплывающим окном и погасит. */
+function openTelegram(text){
+  const url = String(cfg.txtTgUrl).trim();
+  if (!url) return;                 /* адрес не задан — никуда не ведём */
+
+  const w = window.open(url, '_blank', 'noopener');
+  /* блокировщик всплывающих окон съел вкладку — показываем ссылку вместо неё,
+     иначе человек решит, что кнопка не сработала */
+  if (!w){
+    const out = ctForm.querySelector('.ct__out');
+    out.innerHTML = `${cfg.txtCtGo} <a href="${url}" target="_blank" rel="noopener">` +
+                    `<b>${cfg.txtTgName}</b></a>`;
   }
 }
 
