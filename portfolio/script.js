@@ -1000,72 +1000,9 @@ const ADD = [
   ]]
 ];
 
-/* ============================================================
-   ЗВУК. Файлов нет — всё синтезируем: щелчок головки это короткий
-   импульс шума через полосовой фильтр, протяжка ленты — низкий тон
-   с быстрым затуханием. Так звук ничего не весит и не грузится.
-   ============================================================ */
-const Snd = (() => {
-  let ctx = null, on = true, noise = null;
+/* Звук печати чека убран: на телефоне он включался неожиданно,
+   а выключить его можно было только кнопкой, которую ещё надо найти. */
 
-  function ac(){
-    if (!ctx){
-      const AC = window.AudioContext || window.webkitAudioContext;
-      if (!AC) return null;
-      ctx = new AC();
-      /* буфер шума делаем один раз: пересоздавать его на каждый щелчок —
-         это сотни аллокаций в секунду */
-      noise = ctx.createBuffer(1, ctx.sampleRate * .3, ctx.sampleRate);
-      const d = noise.getChannelData(0);
-      for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
-    }
-    if (ctx.state === 'suspended') ctx.resume();
-    return ctx;
-  }
-
-  return {
-    get on(){ return on; },
-    toggle(){ on = !on; if (on) ac(); return on; },
-    /* щелчок головки: тон каждый раз чуть разный, иначе очередь
-       звучит как будильник */
-    tick(){
-      const c = on && ac(); if (!c) return;
-      const src = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
-      src.buffer = noise; src.loop = true;
-      f.type = 'bandpass'; f.frequency.value = 1500 + Math.random() * 900; f.Q.value = 7;
-      g.gain.setValueAtTime(.09, c.currentTime);
-      g.gain.exponentialRampToValueAtTime(.0001, c.currentTime + .022);
-      src.connect(f); f.connect(g); g.connect(c.destination);
-      src.start(); src.stop(c.currentTime + .05);
-    },
-    /* протяжка ленты под строкой */
-    feed(){
-      const c = on && ac(); if (!c) return;
-      const o = c.createOscillator(), g = c.createGain();
-      o.type = 'sawtooth';
-      o.frequency.setValueAtTime(78, c.currentTime);
-      o.frequency.linearRampToValueAtTime(64, c.currentTime + .12);
-      g.gain.setValueAtTime(.035, c.currentTime);
-      g.gain.exponentialRampToValueAtTime(.0001, c.currentTime + .14);
-      o.connect(g); g.connect(c.destination);
-      o.start(); o.stop(c.currentTime + .16);
-    },
-    /* отрыв бумаги: шум с падающей полосой */
-    tear(){
-      const c = on && ac(); if (!c) return;
-      const src = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
-      src.buffer = noise; src.loop = true;
-      f.type = 'bandpass'; f.Q.value = 1.2;
-      f.frequency.setValueAtTime(2600, c.currentTime);
-      f.frequency.exponentialRampToValueAtTime(600, c.currentTime + .45);
-      g.gain.setValueAtTime(.0001, c.currentTime);
-      g.gain.exponentialRampToValueAtTime(.14, c.currentTime + .06);
-      g.gain.exponentialRampToValueAtTime(.0001, c.currentTime + .5);
-      src.connect(f); f.connect(g); g.connect(c.destination);
-      src.start(); src.stop(c.currentTime + .55);
-    }
-  };
-})();
 
 const svcSec  = document.querySelector('.svc');
 const svcFmts = document.querySelector('.svc__fmts');
@@ -1205,10 +1142,9 @@ function svcRunQueue(){
   svcPrinting = true;
 
   el.classList.add('is-print');
-  Snd.feed();
   const steps = 12, step = 880 / steps;
   let i = 0;
-  const beat = setInterval(() => { Snd.tick(); if (++i >= steps) clearInterval(beat); }, step);
+  const beat = setInterval(() => { if (++i >= steps) clearInterval(beat); }, step);
 
   setTimeout(() => { svcPrinting = false; svcRunQueue(); }, 240);   /* следующая внахлёст */
 }
@@ -1337,13 +1273,6 @@ function buildSvc(){
       const open = k.getAttribute('aria-expanded') === 'true';
       k.setAttribute('aria-expanded', String(!open));
       k.nextElementSibling.classList.toggle('is-open', !open);
-    });
-
-    const snd = document.getElementById('svcSnd');
-    if (snd) snd.addEventListener('click', () => {
-      const on = Snd.toggle();
-      snd.classList.toggle('is-on', on);
-      snd.textContent = on ? cfg.txtSvcSndOn : cfg.txtSvcSndOff;
     });
   }
 
@@ -1578,61 +1507,53 @@ addEventListener('scroll', () => requestAnimationFrame(heroParallax), { passive:
 addEventListener('resize', heroParallax);
 
 /* ---------------------------------------------- проявление экранов */
-/* Каждый экран набирает непрозрачность, пока въезжает снизу: сюда пишем
-   только долю въезда (--tin), сам эффект живёт в styles.css.
-   Считаем по событию прокрутки, а не вечным requestAnimationFrame —
-   постоянный цикл жёг бы батарею на неподвижной странице.
-   Зона 105% экрана и выбег выбраны в лаборатории (lab/, порт 8141). */
-const TIN_ZONE = 1.05;
+/* Экран проявляется и его части съезжаются по глубине — заголовок отстаёт
+   сильнее содержимого, отчего на стыке двух экранов видно слои. Ходы взяты
+   в пропорциях 70/55/40/10, пересчитанных в пиксели.
+
+   Ведёт всё это IntersectionObserver, а не событие прокрутки. Раньше доля
+   въезда считалась на каждый scroll, и это оказалось опасной схемой: стоило
+   событию не прийти — а такое бывает и при восстановлении позиции после
+   перезагрузки, и в части встроенных браузеров — как секции навсегда
+   оставались с opacity:0. Содержимое, которое исчезает целиком из-за
+   недоставленного события, того не стоит.
+
+   Поэтому теперь: видимость — состояние по умолчанию, скрывать разрешено
+   только когда скрипт жив и сам ставит класс js-reveal. Не отработал
+   скрипт — сайт просто виден целиком, без анимации. */
 const tinSecs = [...document.querySelectorAll('main > section')];
-
-function screenFade(){
-  const vh = innerHeight || 1;
-  tinSecs.forEach((s, i) => {
-    /* первый экран уже на месте: гасить его нечем и не за чем */
-    const raw = i === 0 ? 1
-      : Math.max(0, Math.min(1, (vh - s.getBoundingClientRect().top) / (vh * TIN_ZONE)));
-    const p = 1 - (1 - raw) * (1 - raw);          /* «с выбегом» */
-    s.style.setProperty('--tin', p.toFixed(3));
-    s.classList.toggle('is-full', p > .999);
-  });
-}
-/* ---------------------------------------------- глубина на переходе */
-/* Приём из слоистого параллакса, но без декораций: пока экран въезжает,
-   его части идут вверх с разной скоростью — заголовок отстаёт сильнее
-   содержимого, и на стыке двух экранов видно глубину. К концу въезда
-   все слои сходятся в ноль, дальше секция едет как обычно.
-
-   Ходы взяты в тех же пропорциях, что у оригинальных слоёв (70/55/40/10),
-   пересчитанных в пиксели. Контейнер чека пропускаем: трансформ на
-   родителе отменяет position:sticky, и чек перестал бы липнуть. */
-const PIN_ZONE = 0.85;
 const PIN_STEP = [64, 44, 28, 16];
+/* контейнер чека пропускаем: трансформ на родителе отменяет position:sticky */
 const SKIP_DEPTH = ['svc__grid'];
 
 tinSecs.forEach((s, i) => {
   if (i === 0) return;                       /* первый экран уже на месте */
   [...s.children].forEach((c, k) => {
-    if (SKIP_DEPTH.includes(c.className.split(' ')[0])) return;
+    const cls = typeof c.className === 'string' ? c.className.split(' ')[0] : '';
+    if (SKIP_DEPTH.includes(cls)) return;
     c.style.setProperty('--dz', PIN_STEP[Math.min(k, PIN_STEP.length - 1)]);
   });
 });
 
-function screenDepth(){
-  const vh = innerHeight || 1;
-  tinSecs.forEach((s, i) => {
-    if (i === 0) return;
-    const raw = Math.max(0, Math.min(1, (vh - s.getBoundingClientRect().top) / (vh * PIN_ZONE)));
-    s.style.setProperty('--pin', (1 - (1 - raw) * (1 - raw)).toFixed(3));
-  });
-}
+if ('IntersectionObserver' in window){
+  document.documentElement.classList.add('js-reveal');
 
-/* прокрутку слушаем один раз на оба эффекта: лишний слушатель на странице
-   с тяжёлым холстом стоит дороже, чем вызов функции */
-function onScroll(){ screenFade(); screenDepth(); }
-addEventListener('scroll', onScroll, { passive:true });
-addEventListener('resize', onScroll);
-onScroll();
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('is-full');
+      /* показали — больше следить незачем: экран не прячется обратно */
+      io.unobserve(e.target);
+    });
+  }, {
+    /* нижний край подтянут на четверть экрана: проявление начинается,
+       когда секция уже заметно вошла, а не краем в один пиксель */
+    rootMargin: '0px 0px -18% 0px',
+    threshold: 0
+  });
+
+  tinSecs.forEach((s, i) => { if (i > 0) io.observe(s); });
+}
 
 /* ---------------------------------------------- свет под курсором */
 /* Два слоя: фонарь на всю страницу и пятно внутри карточки, над которой

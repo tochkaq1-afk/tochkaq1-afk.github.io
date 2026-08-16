@@ -887,13 +887,6 @@ body.is-neon-always .aopt:after{ opacity:calc(var(--neonGlow) * .6); animation:n
 /* ---- касса и чек */
 .till{ position:sticky; top:20px; }
 .till__bar{ display:flex; align-items:center; gap:8px; margin-bottom:9px; }
-.till__snd{
-  margin-left:auto; font-size:.62rem; letter-spacing:.14em; text-transform:uppercase; color:var(--dim);
-  border:1px solid var(--line); border-radius:999px; padding:5px 11px;
-  background:none; font-family:inherit; cursor:pointer;
-  transition:border-color .25s, color .25s;
-}
-.till__snd.is-on{ border-color:var(--ink); color:var(--ink); }
 /* щель кассы, из которой лезет лента */
 .till__slot{
   height:16px; border-radius:3px; background:var(--ink); position:relative; z-index:3;
@@ -1536,26 +1529,35 @@ select.ct__in{ cursor:pointer; }
    ============================================================ */
 :root{ --tamp:1.75; }
 
+/* Видимость — состояние по умолчанию. Прятать разрешено только когда
+   скрипт жив и сам поставил js-reveal: иначе один недоставленный scroll
+   оставлял секцию с opacity:0 навсегда, и услуги просто пропадали. */
 main > section{
   position:relative; z-index:1; background:var(--bg);
-  opacity:calc(1 - (1 - var(--tin,1)) * var(--tamp));
+}
+html.js-reveal main > section:not(.hero){
+  opacity:0;
+  transition:opacity .75s cubic-bezier(.22,1,.36,1);
   will-change:opacity;
 }
 .foot{ position:relative; z-index:1; background:var(--bg); }
 
-/* доехавшую секцию отпускаем совсем: постоянная opacity меньше единицы
-   поднимает её на свой слой и без нужды греет отрисовку */
-main > section.is-full{ opacity:1; will-change:auto; }
+/* Слои съезжаются на проявлении: --dz у каждой части свой, отсюда разная
+   скорость и ощущение глубины на стыке экранов. Без js-reveal сдвига нет
+   вовсе — содержимое сразу на месте.
 
-/* Глубина на стыке экранов: части въезжающей секции отстают от прокрутки
-   по-разному, --dz задаёт ход каждой. Долю въезда пишет в --pin скрипт.
-   Доехавшую секцию обнуляем начисто — трансформ и will-change создают
-   containing block и ломают position:sticky у чека внутри услуг */
-main > section:not(.hero) > *{
-  transform:translateY(calc((1 - var(--pin,1)) * var(--dz,0) * 1px));
+   Доехавшую секцию обнуляем начисто: трансформ и will-change создают
+   containing block и ломают position:sticky у чека внутри услуг. */
+html.js-reveal main > section:not(.hero) > *{
+  transform:translateY(calc(var(--dz,0) * 1px));
+  transition:transform .8s cubic-bezier(.22,1,.36,1);
   will-change:transform;
 }
-main > section.is-full > *{ transform:none; will-change:auto; }
+/* Селектор повторяет js-reveal нарочно: без него правило показа было менее
+   специфичным, чем правило скрытия, и доехавшая секция оставалась
+   прозрачной — при том что класс на ней уже стоял */
+html.js-reveal main > section.is-full{ opacity:1; will-change:auto; }
+html.js-reveal main > section.is-full > *{ transform:none; will-change:auto; }
 
 @media (prefers-reduced-motion:reduce){
   main > section:not(.hero) > *{ transform:none; will-change:auto; }
@@ -1597,10 +1599,7 @@ main > section.is-full > *{ transform:none; will-change:auto; }
   body.is-neon-always .aopt:after{ animation:none; }
 
   /* цели нажатия: палец промахивается по всему, что ниже 44 пикселей */
-  .top__tg,.top__mark,.till__snd{
-    display:inline-flex; align-items:center; min-height:44px;
-  }
-  .menu__list a,.menu__list .flip{ min-height:48px; display:flex; align-items:center; }
+  .top__tg,.top__mark,  .menu__list a,.menu__list .flip{ min-height:48px; display:flex; align-items:center; }
   /* ссылки на телеграм в меню и подвале — без класса, ловим по месту */
   .menu__meta a,.foot__right a{ display:inline-flex; align-items:center; min-height:44px; }
   .hbtn{ min-height:44px; }

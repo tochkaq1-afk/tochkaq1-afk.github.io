@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Телефонный стенд — AETÉRNA</title>
+<style>
+/* ============================================================
+   Стенд для просмотра сайта в телефонных размерах прямо с компьютера.
+   Внутри рамок — живой сайт в iframe, поэтому правки видно сразу после
+   перезагрузки, а не в виде картинки.
+
+   Честная оговорка: iframe на десктопе остаётся десктопом. Размеры,
+   переносы и сетки видно точно, а правила под (hover:none) — фонарь,
+   магнит, крупные цели нажатия — здесь не включатся, для них нужен
+   режим устройства в самом хроме (Ctrl+Shift+M).
+   ============================================================ */
+:root{
+  --bg:#16161a; --panel:#1e1e24; --line:#32323c; --ink:#f2f0ea; --dim:#8f8f9c;
+  --fm:ui-monospace, Consolas, monospace;
+}
+*{ box-sizing:border-box; }
+html,body{ margin:0; }
+body{
+  background:var(--bg); color:var(--ink); min-height:100vh;
+  font-family:system-ui, sans-serif; font-size:14px;
+}
+.bar{
+  position:sticky; top:0; z-index:10; display:flex; gap:18px; align-items:center; flex-wrap:wrap;
+  padding:12px 20px; background:var(--panel); border-bottom:1px solid var(--line);
+}
+.bar h1{ font-size:14px; font-weight:600; margin:0; letter-spacing:.04em; }
+.bar label{ display:flex; gap:7px; align-items:center; color:var(--dim); font-size:12.5px; }
+.bar input[type=text]{
+  width:260px; padding:6px 9px; border-radius:7px; border:1px solid var(--line);
+  background:var(--bg); color:var(--ink); font-family:var(--fm); font-size:12px;
+}
+.bar button{
+  padding:6px 12px; border-radius:7px; border:1px solid var(--line);
+  background:var(--bg); color:var(--ink); font:inherit; font-size:12.5px; cursor:pointer;
+}
+.bar button:hover{ border-color:var(--ink); }
+.hint{ color:var(--dim); font-size:12px; padding:10px 20px 0; }
+
+.stand{ display:flex; gap:26px; align-items:flex-start; padding:20px; overflow-x:auto; }
+
+.dev{ flex:none; }
+.dev__k{
+  display:flex; justify-content:space-between; align-items:baseline; gap:10px;
+  font-family:var(--fm); font-size:11px; color:var(--dim); margin-bottom:8px; padding:0 4px;
+}
+.dev__k b{ color:var(--ink); font-weight:600; }
+/* корпус: скруглённая рамка с ободком, внутри вырез под экран */
+.dev__body{
+  position:relative; border-radius:34px; padding:11px;
+  background:linear-gradient(160deg,#3a3a45,#22222a);
+  box-shadow:0 18px 44px -18px #000, inset 0 0 0 1px #4a4a57;
+}
+.dev__notch{
+  position:absolute; top:15px; left:50%; transform:translateX(-50%);
+  width:36%; height:19px; border-radius:0 0 12px 12px; background:#16161a; z-index:2;
+}
+.dev__screen{
+  position:relative; border-radius:24px; overflow:hidden; background:#fff; display:block;
+}
+.dev__screen iframe{ display:block; border:0; width:100%; height:100%; }
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <h1>ТЕЛЕФОННЫЙ СТЕНД</h1>
+  <label>адрес
+    <input type="text" id="url" value="http://localhost:8135/">
+  </label>
+  <button id="go">открыть</button>
+  <button id="reload">перезагрузить всё</button>
+  <button id="rot">повернуть</button>
+  <button id="live">взять с хоста</button>
+</div>
+
+<p class="hint">
+  Внутри рамок живой сайт, а не картинка — после правок жми «перезагрузить всё».
+  Размеры и переносы видно точно; правила только для сенсора (крупные цели нажатия,
+  выключенный фонарь) здесь не включаются — для них режим устройства в хроме, Ctrl+Shift+M.
+</p>
+
+<div class="stand" id="stand"></div>
+
+<script>
+/* Ширины взяты по «логическим» пикселям, в которых верстают: физическое
+   разрешение у этих аппаратов вдвое больше, но CSS видит именно столько. */
+const DEVICES = [
+  { n:'iPhone SE',      w:375, h:667 },
+  { n:'iPhone 14',      w:390, h:844 },
+  { n:'iPhone 14 Pro Max', w:430, h:932 },
+  { n:'Android средний',   w:412, h:915 }
+];
+
+const HOST = 'https://tochkaq1-afk.github.io/portfolio/';
+const stand = document.getElementById('stand');
+const urlEl = document.getElementById('url');
+let turned = false;
+
+function build(){
+  const src = urlEl.value.trim() || 'http://localhost:8135/';
+  stand.innerHTML = DEVICES.map(d => {
+    const w = turned ? d.h : d.w;
+    const h = turned ? d.w : d.h;
+    return `<div class="dev">
+      <div class="dev__k"><b>${d.n}</b><span>${w}×${h}</span></div>
+      <div class="dev__body">
+        ${turned ? '' : '<i class="dev__notch"></i>'}
+        <div class="dev__screen" style="width:${w}px;height:${h}px">
+          <iframe src="${src}" loading="lazy" title="${d.n}"></iframe>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+document.getElementById('go').addEventListener('click', build);
+document.getElementById('reload').addEventListener('click', build);
+document.getElementById('rot').addEventListener('click', () => { turned = !turned; build(); });
+document.getElementById('live').addEventListener('click', () => { urlEl.value = HOST; build(); });
+urlEl.addEventListener('keydown', e => { if (e.key === 'Enter') build(); });
+
+build();
+</script>
+</body>
+</html>
