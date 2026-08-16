@@ -35,7 +35,7 @@
      уходят за читаемые 75 знаков, выверенные отступы перестают работать.
      Поля по краям — не пустое место, а то, что держит один и тот же
      дизайн и на ноутбуке, и на 27 дюймах. */
-  --maxw:600px;
+  --maxw:1440px;
   /* Поля считаем сразу с запасом под контейнер: пока экран уже предела,
      работает обычный отступ, дальше он растёт и центрует содержимое.
      Так контейнер получают все секции разом, без обёртки в разметке. */
@@ -200,9 +200,10 @@ a{ color:inherit; text-decoration:none; }
 .bl--art{ width:100%; }
 .bl--art .bl__c{ display:block; }
 .art__c{ display:block; width:100%; aspect-ratio:16/11; }
-/* было @media (max-width:900px) — колонка теперь не бывает шире 600,
-   поэтому условие выполнялось всегда и только мешало читать */
- .art__c{ aspect-ratio:16/9; } 
+@media (max-width:900px){
+   .art__c{ aspect-ratio:16/9; }
+}
+ 
 
 /* ---- плитки работ (вернутся в блоке работ ниже) */
 .hero__right{ position:relative; }
@@ -524,16 +525,17 @@ body.is-cursor-custom .cursor{ display:block; }
 [data-cursor="minimal"]   .cursor__dot{ opacity:1; }
 
 /* ---------------------------------------------- телефон */
-/* было @media (max-width:900px) — колонка теперь не бывает шире 600,
-   поэтому условие выполнялось всегда и только мешало читать */
-  .hero__inner{ grid-template-columns:1fr; align-items:start; gap:26px; }
-  .bl--h1 .bl__c{ font-size:clamp(38px, 13vw, 92px); white-space:normal; }
-  .top__place{ display:none; }
-  .menu__inner{ grid-template-columns:1fr; align-content:center; gap:28px; }
-  .menu__list a{ font-size:clamp(28px, 11vw, 56px); }
-  .tiles{ grid-template-columns:repeat(3,1fr); }
-  body.is-cursor-custom{ cursor:auto; }
-  .cursor{ display:none !important; }
+@media (max-width:900px){
+    .hero__inner{ grid-template-columns:1fr; align-items:start; gap:26px; }
+    .bl--h1 .bl__c{ font-size:clamp(38px, 13vw, 92px); white-space:normal; }
+    .top__place{ display:none; }
+    .menu__inner{ grid-template-columns:1fr; align-content:center; gap:28px; }
+    .menu__list a{ font-size:clamp(28px, 11vw, 56px); }
+    .tiles{ grid-template-columns:repeat(3,1fr); }
+    body.is-cursor-custom{ cursor:auto; }
+    .cursor{ display:none !important; }
+}
+
 
 @media (prefers-reduced-motion:reduce){
   *{ animation-duration:.01ms !important; transition-duration:.01ms !important; }
@@ -640,10 +642,11 @@ body.is-cursor-custom .cursor{ display:block; }
   transition:clip-path .5s cubic-bezier(.76,0,.24,1) calc(var(--d,0ms) + 430ms);
 }
 
-/* было @media (max-width:900px) — колонка теперь не бывает шире 600,
-   поэтому условие выполнялось всегда и только мешало читать */
-  .wgrid{ grid-template-columns:1fr; gap:10px; }
-  .wcard{ aspect-ratio:16/10; padding:16px; }
+@media (max-width:900px){
+    .wgrid{ grid-template-columns:1fr; gap:10px; }
+    .wcard{ aspect-ratio:16/10; padding:16px; }
+}
+
 @media (prefers-reduced-motion:reduce){
   .works .bl__ph{ display:none; }
   .works .bl__c{ clip-path:none; }
@@ -873,9 +876,10 @@ body.is-neon-always .aopt:after{ opacity:calc(var(--neonGlow) * .6); animation:n
 .diff__i + .diff__i{ border-top:1px dashed var(--line); padding-top:14px; }
 .diff__n{ font-family:var(--fh); font-weight:600; font-size:.9rem; }
 .diff__d{ color:var(--dim); font-size:.88rem; }
-/* было @media (max-width:700px) — колонка теперь не бывает шире 600,
-   поэтому условие выполнялось всегда и только мешало читать */
- .diff__i{ grid-template-columns:1fr; gap:4px; } 
+@media (max-width:700px){
+   .diff__i{ grid-template-columns:1fr; gap:4px; }
+}
+ 
 
 /* ---- допы: разделы колонками, строка в один ярус.
    Разделы во всю ширину и строки в три яруса съедали пол-экрана —
@@ -993,26 +997,29 @@ body.is-neon-always .aopt:after{ opacity:calc(var(--neonGlow) * .6); animation:n
 .till__go{ width:100%; margin-top:16px; }
 .till__hint{ margin-top:10px; text-align:center; font-size:.74rem; color:var(--dim); }
 
-/* было @media (max-width:1200px) — колонка теперь не бывает шире 600,
-   поэтому условие выполнялось всегда и только мешало читать */
- .svc__fmts{ grid-template-columns:repeat(2,minmax(0,1fr)); } 
-/* было @media (max-width:900px) — колонка теперь не бывает шире 600,
-   поэтому условие выполнялось всегда и только мешало читать */
-  .svc__grid{ grid-template-columns:1fr; }
-  .till{ position:static; }
-  .check{ max-width:400px; }
-  .fmt__d{ min-height:0; }
+@media (max-width:1200px){
+   .svc__fmts{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+ 
+@media (max-width:900px){
+    .svc__grid{ grid-template-columns:1fr; }
+    .till{ position:static; }
+    .check{ max-width:400px; }
+    .fmt__d{ min-height:0; }
+}
+
 /* Ниже 760 острова групп встают в одну колонку. В двух они получали по
    165 пикселей, а карточка внутри не ужимается меньше своего самого
    длинного слова — «Многостраничный» держал 210, и карточки торчали
    за края острова. */
-/* было @media (max-width:760px) — колонка теперь не бывает шире 600,
-   поэтому условие выполнялось всегда и только мешало читать */
-  .svc__fmts{ grid-template-columns:1fr; }
-  /* minmax(0,1fr) вместо 1fr: обычный 1fr не даёт колонке стать уже
-     содержимого, поэтому длинное слово распирало сетку изнутри */
-  .fgrp__row{ grid-template-columns:repeat(auto-fill,minmax(min(196px,100%),1fr)); }
-  .fmt__n{ overflow-wrap:anywhere; }
+@media (max-width:760px){
+    .svc__fmts{ grid-template-columns:1fr; }
+    /* minmax(0,1fr) вместо 1fr: обычный 1fr не даёт колонке стать уже
+       содержимого, поэтому длинное слово распирало сетку изнутри */
+    .fgrp__row{ grid-template-columns:repeat(auto-fill,minmax(min(196px,100%),1fr)); }
+    .fmt__n{ overflow-wrap:anywhere; }
+}
+
 @media (prefers-reduced-motion:reduce){
   .rv{ opacity:1; transform:none; }
   .li{ clip-path:none; }
@@ -1089,41 +1096,36 @@ body.is-neon-always .aopt:after{ opacity:calc(var(--neonGlow) * .6); animation:n
 .flow.is-in .flow__p{ animation:flowIn .6s cubic-bezier(.22,1,.36,1) both var(--d,0ms); }
 @keyframes flowIn{ from{ opacity:0; transform:translateY(20px) } }
 
-/* было @media (max-width:900px) — колонка теперь не бывает шире 600,
-   поэтому условие выполнялось всегда и только мешало читать.
+@media (max-width:900px){
+  .flow{ min-height:0; }
+  .flow__acc{ flex-direction:column; flex:none; }
+  /* flex:none обязателен: базовое «flex:1 1 0» делит между полосами высоту
+     контейнера, а в стопке её задаёт само содержимое — иначе все четыре
+     схлопываются в пару пикселей */
+  .flow__p{ display:flex; flex-direction:column; min-height:0; flex:none; }
+  .flow__p.is-on{ flex:none; }
 
-   В стопке полоса стала широкой и низкой, и вертикальная подпись в неё
-   перестала помещаться — от «Разбора» оставался огрызок. Поэтому здесь
-   вся полоса перебирается заново: подпись ложится горизонтально, боковая
-   колонка становится шапкой, а содержимое идёт обычным потоком и само
-   задаёт высоту, вместо того чтобы висеть абсолютом в отмеренных 330. */
-.flow{ min-height:0; }
-.flow__acc{ flex-direction:column; flex:none; }
-/* flex:none обязателен: базовое «flex:1 1 0» делит между полосами высоту
-   контейнера, а в стопке её задаёт само содержимое — иначе все четыре
-   схлопываются в пару пикселей */
-.flow__p{ display:flex; flex-direction:column; min-height:0; flex:none; }
-.flow__p.is-on{ flex:none; }
+  .flow__side{
+    position:relative; inset:auto; width:auto; height:auto; z-index:1;
+    flex-direction:row; align-items:center; justify-content:flex-start;
+    gap:12px; padding:15px 16px;
+  }
+  .flow__vert{ writing-mode:horizontal-tb; transform:none; }
+  /* нижний кружок держал распорку в вертикальной раскладке, в строке он лишний */
+  .flow__side .flow__dot:last-child{ display:none; }
 
-.flow__side{
-  position:relative; inset:auto; width:auto; height:auto; z-index:1;
-  flex-direction:row; align-items:center; justify-content:flex-start;
-  gap:12px; padding:15px 16px;
+  .flow__in{
+    position:relative; inset:auto; transform:none;
+    padding:0 16px; max-height:0; overflow:hidden;
+    transition:max-height .55s cubic-bezier(.76,0,.24,1),
+               opacity .4s ease,
+               padding-bottom .55s cubic-bezier(.76,0,.24,1);
+  }
+  .flow__p.is-on .flow__in{ max-height:460px; opacity:1; padding-bottom:16px; pointer-events:auto; }
+  /* чертёж без flex:1 сжимался бы в ноль: высоту в потоке задаём сами */
+  .flow__art{ flex:none; height:180px; }
 }
-.flow__vert{ writing-mode:horizontal-tb; transform:none; }
-/* нижний кружок держал распорку в вертикальной раскладке, в строке он лишний */
-.flow__side .flow__dot:last-child{ display:none; }
 
-.flow__in{
-  position:relative; inset:auto; transform:none;
-  padding:0 16px; max-height:0; overflow:hidden;
-  transition:max-height .55s cubic-bezier(.76,0,.24,1),
-             opacity .4s ease,
-             padding-bottom .55s cubic-bezier(.76,0,.24,1);
-}
-.flow__p.is-on .flow__in{ max-height:460px; opacity:1; padding-bottom:16px; pointer-events:auto; }
-/* чертёж без flex:1 сжимался бы в ноль: высоту в потоке задаём сами */
-.flow__art{ flex:none; height:180px; }
 @media (prefers-reduced-motion:reduce){
   .flow.is-in .flow__p{ animation:none; }
   .flow__p.is-on .flow__art .ln{ animation:none; stroke-dashoffset:0; }
@@ -1169,9 +1171,10 @@ body.is-neon-always .aopt:after{ opacity:calc(var(--neonGlow) * .6); animation:n
 .ab.is-in .ab__f{ opacity:1; transform:none; }
 .ab__f b{ display:block; font-family:var(--fh); color:var(--ink); font-size:1.12rem; margin-bottom:4px; }
 
-/* было @media (max-width:900px) — колонка теперь не бывает шире 600,
-   поэтому условие выполнялось всегда и только мешало читать */
-  .ab{ min-height:0; padding-top:clamp(50px,8vh,80px); }
+@media (max-width:900px){
+    .ab{ min-height:0; padding-top:clamp(50px,8vh,80px); }
+}
+
 @media (prefers-reduced-motion:reduce){
   .ab__big w b{ transform:none; }
   .ab__f{ opacity:1; transform:none; }
@@ -1360,11 +1363,12 @@ select.ct__in{ cursor:pointer; }
   .foot__ln{ transform:translateY(0); }
 }
 
-/* было @media (max-width:900px) — колонка теперь не бывает шире 600,
-   поэтому условие выполнялось всегда и только мешало читать */
-  .ct{ min-height:0; }
-  .ct__grid{ grid-template-columns:1fr; gap:24px; }
-  .foot{ flex-direction:column; align-items:flex-start; }
+@media (max-width:900px){
+    .ct{ min-height:0; }
+    .ct__grid{ grid-template-columns:1fr; gap:24px; }
+    .foot{ flex-direction:column; align-items:flex-start; }
+}
+
 @media (prefers-reduced-motion:reduce){
   .ct__card{ transform:none !important; }
 }
@@ -1421,12 +1425,14 @@ select.ct__in{ cursor:pointer; }
 .adv__t{ font-family:var(--fh); font-weight:600; font-size:clamp(15px,1.6vw,20px); letter-spacing:-.02em; }
 .adv__d{ color:var(--dim); font-size:.86rem; margin-top:8px; }
 
-/* было @media (max-width:1100px) — колонка теперь не бывает шире 600,
-   поэтому условие выполнялось всегда и только мешало читать */
- .adv__grid{ grid-template-columns:repeat(2,minmax(0,1fr)); } 
-/* было @media (max-width:700px) — колонка теперь не бывает шире 600,
-   поэтому условие выполнялось всегда и только мешало читать */
- .adv__grid{ grid-template-columns:1fr; } 
+@media (max-width:1100px){
+   .adv__grid{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+ 
+@media (max-width:700px){
+   .adv__grid{ grid-template-columns:1fr; }
+}
+ 
 
 /* ============================================================
    Принципы — четыре карточки с крупными номерами.
@@ -1461,9 +1467,10 @@ select.ct__in{ cursor:pointer; }
   line-height:1.15; letter-spacing:calc(var(--h1track) * 1em); }
 .pr__d{ color:var(--dim); font-size:.9rem; margin-top:10px; max-width:38ch; }
 
-/* было @media (max-width:900px) — колонка теперь не бывает шире 600,
-   поэтому условие выполнялось всегда и только мешало читать */
- .pr__grid{ grid-template-columns:1fr; } 
+@media (max-width:900px){
+   .pr__grid{ grid-template-columns:1fr; }
+}
+ 
 @media (prefers-reduced-motion:reduce){
   .adv__c,.pr__c{ opacity:1; transform:none; }
   .adv__i path,.adv__i rect,.adv__i circle,.adv__i line{ stroke-dashoffset:0; }
@@ -1507,10 +1514,11 @@ select.ct__in{ cursor:pointer; }
 .stk__note{ margin:clamp(18px,3vh,30px) 0 0; font-size:.78rem; color:var(--dim); }
 .stk__note b{ font-weight:400; border-bottom:1px dashed var(--dim); }
 
-/* было @media (max-width:900px) — колонка теперь не бывает шире 600,
-   поэтому условие выполнялось всегда и только мешало читать */
-  .stk__grid{ grid-template-columns:1fr; }
-  .stk__side{ border-left:0; border-top:1px solid var(--line); padding:16px 0 0; min-height:0; }
+@media (max-width:900px){
+    .stk__grid{ grid-template-columns:1fr; }
+    .stk__side{ border-left:0; border-top:1px solid var(--line); padding:16px 0 0; min-height:0; }
+}
+
 @media (prefers-reduced-motion:reduce){ .stk__i{ opacity:1; transform:none; } }
 
 /* ============================================================
