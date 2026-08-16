@@ -106,7 +106,7 @@ const DEFAULTS = {
   ease:'outQuint', autoplay:true, showStage:true,
 
   txtName:'AETÉRNA',
-  txtMark:'AETÉRNASTUDIO',
+  txtMark:'AETERNAWEBSTUDIO',
   txtPlace:'Минск',
   txtTg:'TELEGRAM',
   txtTgUrl:'',
@@ -1696,12 +1696,26 @@ document.addEventListener('pointerleave', () => {
 const footBig = document.querySelector('.foot__big');
 const footSrc = document.querySelector('.foot__big span');
 
-/* делим по пробелу, если он есть, иначе пополам по буквам:
-   «AETÉRNASTUDIO» → «AETÉRNA» и «STUDIO» */
+/* Делим знак на две строки. Сначала по пробелу, потом по known-словам в
+   хвосте, и только в самом крайнем случае пополам по буквам.
+
+   Деление пополам было единственным, и на «AETERNAWEBSTUDIO» оно дало
+   «AETERNAW / EBSTUDIO» — слово разрубило посреди слога. Поэтому сперва
+   ищем осмысленную границу: имя отдельно, приписка отдельно. */
+const MARK_TAILS = ['WEBSTUDIO', 'WEBLAB', 'STUDIO', 'AGENCY', 'DESIGN', 'LAB', 'WEB'];
+
 function markLines(txt){
   const sp = txt.indexOf(' ');
   if (sp > 0) return [txt.slice(0, sp), txt.slice(sp + 1)];
   if (txt.length < 6) return [txt];
+
+  const up = txt.toUpperCase();
+  for (const tail of MARK_TAILS){
+    /* хвост должен именно заканчивать строку и что-то оставлять перед собой */
+    if (up.length > tail.length && up.endsWith(tail)){
+      return [txt.slice(0, txt.length - tail.length), txt.slice(txt.length - tail.length)];
+    }
+  }
   return [txt.slice(0, Math.ceil(txt.length / 2)), txt.slice(Math.ceil(txt.length / 2))];
 }
 
