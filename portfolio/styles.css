@@ -796,6 +796,28 @@ body.is-cursor-custom .cursor{ display:block; }
 /* надзаголовок вне главного экрана: там его роль играет .bl--eyebrow */
 .eyebrow{ display:block; font-size:.72rem; letter-spacing:.18em; text-transform:uppercase; color:var(--dim); }
 
+/* ============================================================
+   ИМЯ СЕКЦИИ. Эти пять надписей — не подписи, а названия разделов:
+   их текст приходит из пунктов меню, и у «работ» с «контактами» другого
+   заголовка нет вообще. Поэтому они набраны как заголовок, а не как
+   мелкая серая метка, которой они были, пока над ними стоял свой h2.
+   Бьём по data-txt, а не по классу: обёртки у пяти секций разные —
+   где-то .bl--eyebrow с плейсхолдером, где-то простой span.eyebrow.
+   ============================================================ */
+[data-txt="worksEyebrow"],
+[data-txt="svcEyebrow"],
+[data-txt="flowEyebrow"],
+[data-txt="aboutEyebrow"],
+[data-txt="ctEyebrow"]{
+  font-family:var(--fh); font-weight:600;
+  font-size:clamp(26px, 3.4vw, 52px);
+  line-height:1.02; letter-spacing:-.03em;
+  color:var(--ink); text-transform:none;
+}
+/* разрядка и капс живут на обёртке — снимаем и там, иначе имя секции
+   растащит буквы на пол-экрана */
+.works__head .bl--eyebrow .bl__c{ font-size:inherit; letter-spacing:normal; text-transform:none; }
+
 /* Появление секции по скроллу. Устроено «от покоя»: без is-in никаких
    правил на .rv не действует, элемент просто видим. Раньше здесь стояло
    .rv{opacity:0}, и содержимое зависело от того, доедет ли класс — а он
