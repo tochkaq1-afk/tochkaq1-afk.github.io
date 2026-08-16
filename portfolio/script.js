@@ -75,8 +75,8 @@ const TILES = [
 
 /* ---------------------------------------------- настройки */
 const DEFAULTS = {
-  font:'unbGolos', palette:'custom',
-  bg:'#f2f0ea', ink:'#000000', dim:'#1f2323', accent:'#000000', wire:'#dbd7cc', line:'#d2cfc5',
+  font:'unbGolos', palette:'paperInk',
+  bg:'#f2f0ea', ink:'#111113', dim:'#6c6a64', accent:'#000000', wire:'#dbd7cc', line:'#d2cfc5',
 
   h1size:7.3, h1w:600, h1track:-0.025, h1lh:1.03, bodysize:1.1,
 
@@ -86,9 +86,12 @@ const DEFAULTS = {
   btnPadY:16, btnPadX:31, btnFs:0.83, btnTrack:0.105, btnMinW:10.5,
   btnBw:0.5, btnR:14, btnDot:7, btnSpeed:0.75, btnFill:0.75, btnLower:false,
 
-  /* неоновая рамка на карточках форматов: свечение наружу выключено,
-     рамка горит всегда — светится сам контур, без ореола вокруг блока */
-  neon1:'#0d75fd', neon2:'#000000', neon3:'#12f3e4',
+  /* Рамка на карточках форматов: свечение наружу выключено, горит всегда —
+     светится сам контур, без ореола вокруг блока. Все три стопа чёрные:
+     синь с бирюзой были единственным цветным пятном на бумажной палитре
+     и выбивались из неё. Цена одноцветного градиента — вращение больше
+     не читается, контур стоит ровной чёрной линией. */
+  neon1:'#000000', neon2:'#000000', neon3:'#000000',
   neonW:1.6, neonSpin:3, neonGlow:0, neonBlur:21, neonAlways:true,
   btn:'wide', radius:12,
 
@@ -114,15 +117,22 @@ const DEFAULTS = {
   txtMenuOpen:'ЗАКРЫТЬ',
   txtMenuList:'РАБОТЫ|УСЛУГИ|КАК Я РАБОТАЮ|ОБО МНЕ|КОНТАКТЫ',
   txtRole:'дизайнер и разработчик',
-  txtTag:'Собираю сайты, боты и системы. Всё на своём коде.',
-  txtLead:'Без конструкторов и шаблонов. Каждый экран — отдельная идея, а не блок из библиотеки.',
+  /* статус в нижней строке на телефоне. От первого лица — как в
+     карточке контактов; «берёт» звучало бы как рассказ о ком-то третьем */
+  txtStatus:'беру проекты',
+  /* Первый экран говорит одной крупной фразой: хвост про свой код идёт
+     приглушённым и живёт отдельным ключом — тексты подставляются через
+     textContent, разметку внутри строки браузер бы не получил */
+  txtTag:'Сайты, боты и системы',
+  txtTagDim:'на своём коде',
   txtBtn1:'обсудить проект',
   txtBtn2:'смотреть работы',
   txtBtnLoad:'отправляю…',
   txtBtnDone:'готово',
   txtWorks:'KLAUS|КИНОНОЧЬ|FlowerHome|Nuvelle|МОТОАРЕНА|Метриум|Ray-Ban Meta',
-  txtWorksEyebrow:'Работы',
-  txtWorksTitle:'Портфолио',
+  /* пусто: имя секции теперь несёт надзаголовок из меню («РАБОТЫ»),
+     а «Портфолио» рядом было тем же самым словом другими буквами */
+  txtWorksTitle:'',
   txtWorksLead:'Разные жанры нарочно: магазин, каталог, кинотеатр, концепт. Чтобы не застрять в одном приёме.',
   txtWorksHint:'обложка появится позже',
   txtWorksMore:'показать ещё',
@@ -130,7 +140,6 @@ const DEFAULTS = {
   /* услуги. Состав форматов живёт в коде (FMT, ADD), а деньги и сроки —
      здесь: строка на позицию. Так их правит твикер, а не приходится
      лезть в разметку. Порядок строк обязан совпадать с порядком в FMT/ADD */
-  txtSvcEyebrow:'услуги',
   txtSvcTitle:'Выберите формат — чек соберётся сам',
   txtSvcLead:'Слева форматы и то, что можно добавить. Справа сразу видно, что войдёт в работу и сколько это стоит.',
   /* формат: «название :: цена :: дней :: метка». Порядок строк обязан
@@ -220,7 +229,6 @@ const DEFAULTS = {
   txtSvcSndOff:'звук выкл',
 
   /* как я работаю: строка на шаг, «название :: текст» */
-  txtFlowEyebrow:'как я работаю',
   txtFlowTitle:'Четыре шага, без сюрпризов в конце',
   txtFlowLead:'Показываю варианты по ходу, а не приношу готовое в последний день.',
   txtFlowKeys:'шаг первый|шаг второй|шаг третий|шаг четвёртый',
@@ -281,7 +289,6 @@ const DEFAULTS = {
 
   /* обо мне: одна фраза во весь экран. Звёздочками помечено то,
      что уходит в приглушённый цвет — так правится из твикера без разметки */
-  txtAboutEyebrow:'обо мне',
   txtAboutPhrase:'Каждый экран — *отдельная идея,* а не блок из библиотеки',
   txtAboutFacts:[
     'Минск :: работаю удалённо',
@@ -292,8 +299,7 @@ const DEFAULTS = {
 
   /* контакты. Строки визитки — «подпись :: значение», {tg} подставляет
      адрес телеграма, чтобы он жил в одном месте, а не в двух */
-  txtCtEyebrow:'',
-  txtCtTitle:'КОНТАКТЫ',
+  txtCtTitle:'',   /* то же: надзаголовок уже говорит «КОНТАКТЫ» */
   txtCtWho:'Тимофей',
   txtCtLead:'Отвечаю в телеграме, обычно в тот же день. Если проект не мой — так и скажу и подскажу, к кому идти.',
   txtCtCard:'Город :: Минск|Telegram :: {tg}|Ответ :: в течение дня|• Сейчас :: беру проекты',
@@ -408,14 +414,21 @@ function apply(){
 }
 
 /* ---------------------------------------------- тексты */
+/* Имя секции берётся из пункта меню, а не пишется рядом второй раз: иначе
+   они разъезжаются при первой же правке — в меню «РАБОТЫ», а над секцией
+   «Портфолио». Порядок тот же, что у MENU_IDS ниже: работы, услуги,
+   как я работаю, обо мне, контакты. */
+const MENU_EYEBROWS = ['worksEyebrow', 'svcEyebrow', 'flowEyebrow', 'aboutEyebrow', 'ctEyebrow'];
+
 function drawText(){
   const map = {
-    name:cfg.txtName, mark:cfg.txtMark, role:cfg.txtRole, tag:cfg.txtTag, lead:cfg.txtLead,
+    name:cfg.txtName, mark:cfg.txtMark, role:cfg.txtRole,
+    tag:cfg.txtTag, tagDim:cfg.txtTagDim,
     btn1:cfg.txtBtn1, btn2:cfg.txtBtn2, btnLoad:cfg.txtBtnLoad, btnDone:cfg.txtBtnDone,
-    place:cfg.txtPlace, tg:cfg.txtTg,
-    worksEyebrow:cfg.txtWorksEyebrow, worksTitle:cfg.txtWorksTitle,
+    place:cfg.txtPlace, tg:cfg.txtTg, status:cfg.txtStatus,
+    worksTitle:cfg.txtWorksTitle,
     worksLead:cfg.txtWorksLead, worksHint:cfg.txtWorksHint, worksMore:cfg.txtWorksMore,
-    svcEyebrow:cfg.txtSvcEyebrow, svcTitle:cfg.txtSvcTitle, svcLead:cfg.txtSvcLead,
+    svcTitle:cfg.txtSvcTitle, svcLead:cfg.txtSvcLead,
     svcCta:cfg.txtSvcCta, svcAddsK:cfg.txtSvcAddsK, svcHint:cfg.txtSvcHint,
     svcRestBtn:cfg.txtSvcRestBtn,
     svcRestT:cfg.txtSvcRestT, svcRestD:cfg.txtSvcRestD,
@@ -423,16 +436,23 @@ function drawText(){
     svcChAdd:cfg.txtSvcChAdd, svcChN:cfg.txtSvcChN, svcChOff:cfg.txtSvcChOff,
     svcChDays:cfg.txtSvcChDays, svcChTot:cfg.txtSvcChTot, svcChMonth:cfg.txtSvcChMonth,
     svcChBye:cfg.txtSvcChBye,
-    flowEyebrow:cfg.txtFlowEyebrow, flowTitle:cfg.txtFlowTitle, flowLead:cfg.txtFlowLead,
+    flowTitle:cfg.txtFlowTitle, flowLead:cfg.txtFlowLead,
     advEyebrow:cfg.txtAdvEyebrow, advTitle:cfg.txtAdvTitle, advLead:cfg.txtAdvLead,
     prEyebrow:cfg.txtPrEyebrow, prTitle:cfg.txtPrTitle, prLead:cfg.txtPrLead,
     stkEyebrow:cfg.txtStkEyebrow, stkTitle:cfg.txtStkTitle,
     stkKey:cfg.txtStkKey, stkNote:cfg.txtStkNote,
     aboutEyebrow:cfg.txtAboutEyebrow,
-    ctEyebrow:cfg.txtCtEyebrow, ctTitle:cfg.txtCtTitle, ctLead:cfg.txtCtLead,
+    ctTitle:cfg.txtCtTitle, ctLead:cfg.txtCtLead,
     ctWho:cfg.txtCtWho, ctSend:cfg.txtCtSend, footNote:cfg.txtFootNote,
     menu:menuOpen ? cfg.txtMenuOpen : cfg.txtMenu
   };
+
+  /* надзаголовки пяти секций — те же слова, что в меню. Правишь пункт —
+     переименовывается и секция, разъехаться они больше не могут */
+  String(cfg.txtMenuList).split('|').forEach((t, i) => {
+    if (MENU_EYEBROWS[i]) map[MENU_EYEBROWS[i]] = t.trim();
+  });
+
   document.querySelectorAll('[data-txt]').forEach(n => {
     const v = map[n.dataset.txt];
     if (v != null && n.textContent !== v) n.textContent = v;

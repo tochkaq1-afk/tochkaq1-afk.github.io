@@ -14,7 +14,7 @@
      Начертания урезаны до тех, что правда встречаются на странице. -->
 <link id="fontLink" rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Golos+Text:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="styles.css?v=102">
+<link rel="stylesheet" href="styles.css?v=106">
 </head>
 <body>
 
@@ -67,9 +67,12 @@
   <div class="hero__inner">
 
     <div class="hero__left">
+      <!-- Город в надстрочнике показывается только на телефоне: на мониторе
+           он и так стоит в шапке справа, и вышло бы два «Минска» на экране -->
       <div class="bl bl--eyebrow">
         <i class="bl__ph"></i>
-        <span class="bl__c"><span data-txt="role">дизайнер и разработчик</span></span>
+        <span class="bl__c"><span data-txt="role">дизайнер и разработчик</span><span
+              class="eyebrow__place"> · <span data-txt="place">Минск</span></span></span>
       </div>
 
       <h1 class="hero__title">
@@ -77,16 +80,15 @@
           <i class="bl__ph"></i>
           <span class="bl__c" data-txt="name">AETÉRNA</span>
         </span>
+        <!-- Одна крупная мысль вместо фразы и описания. Приглушённый хвост —
+             отдельный узел, а не <em> внутри строки: тексты подставляются
+             через textContent, разметка внутри них не выживет -->
         <span class="bl bl--h2">
           <i class="bl__ph"></i>
-          <span class="bl__c" data-txt="tag">Собираю сайты, боты и системы. Всё на своём коде.</span>
+          <span class="bl__c"><span data-txt="tag">Сайты, боты и системы</span> <em
+                data-txt="tagDim">на своём коде</em></span>
         </span>
       </h1>
-
-      <div class="bl bl--lead">
-        <i class="bl__ph"></i>
-        <p class="bl__c" data-txt="lead">Без конструкторов и шаблонов. Каждый экран — отдельная идея, а не блок из библиотеки.</p>
-      </div>
 
       <div class="bl bl--cta">
         <i class="bl__ph"></i>
@@ -96,12 +98,14 @@
         </div>
       </div>
 
+      <!-- Нижняя строка говорит разное на разных экранах: на мониторе процент
+           своего кода, на телефоне — живой статус. Города нет ни там, ни там:
+           он уже стоит в шапке, а на узком экране в надстрочнике -->
       <div class="bl bl--meta">
         <i class="bl__ph"></i>
         <div class="bl__c">
           <span class="meta__stat"><b class="num" data-num="100">0</b>% своего кода</span>
-          <span class="meta__stat" data-txt="place">Минск</span>
-          <span class="meta__badge is-lit"><i class="dot"></i>берёт проекты · <span data-txt="place">Минск</span></span>
+          <span class="meta__badge is-lit"><i class="dot"></i><span data-txt="status">беру проекты</span></span>
         </div>
       </div>
     </div>
@@ -330,7 +334,7 @@
   <a class="foot__big" href="#hero" aria-label="Наверх"><span data-txt="name">AETERNA</span></a>
 </footer>
 
-<script src="script.js?v=102" defer></script>
+<script src="script.js?v=106" defer></script>
 <script src="dust.js?v=99" defer></script>
 
 <!-- Твикер посетителю не нужен, а весил он 33 КБ и был самым долгим
@@ -349,7 +353,7 @@
     css.rel = 'stylesheet'; css.href = 'tweak.css?v=99';
     document.head.appendChild(css);
     const js = document.createElement('script');
-    js.src = 'tweak.js?v=99';
+    js.src = 'tweak.js?v=106';
     document.body.appendChild(js);
   }
   addEventListener('keydown', e => {

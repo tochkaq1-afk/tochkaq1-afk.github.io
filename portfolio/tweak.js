@@ -133,8 +133,9 @@ const SCHEMA = [
     { k:'txtMark',  t:'text', label:'Знак в шапке' },
     { k:'txtPlace', t:'text', label:'Город' },
     { k:'txtRole',  t:'text', label:'Кто ты' },
-    { k:'txtTag',   t:'text', label:'Строка под именем' },
-    { k:'txtLead',  t:'text', label:'Описание' },
+    { k:'txtStatus', t:'text', label:'Статус на телефоне' },
+    { k:'txtTag',    t:'text', label:'Фраза под именем' },
+    { k:'txtTagDim', t:'text', label:'Фраза: приглушённый хвост' },
     { k:'txtBtn1',  t:'text', label:'Кнопка 1' },
     { k:'txtBtn2',  t:'text', label:'Кнопка 2' },
     { k:'txtBtnLoad', t:'text', label:'Кнопка: отправка' },
@@ -165,14 +166,12 @@ const SCHEMA = [
   ]},
 
   { title:'Второй экран — работы', items:[
-    { k:'txtWorksEyebrow', t:'text', label:'Надзаголовок' },
     { k:'txtWorksTitle',   t:'text', label:'Заголовок' },
     { k:'txtWorksLead',    t:'text', label:'Описание' },
     { k:'txtWorksHint',    t:'text', label:'Подпись в заглушке' }
   ]},
 
   { title:'Третий экран — услуги', open:true, items:[
-    { k:'txtSvcEyebrow', t:'text', label:'Надзаголовок' },
     { k:'txtSvcTitle',   t:'text', label:'Заголовок' },
     { k:'txtSvcLead',    t:'text', label:'Описание' },
     { k:'txtSvcFmt',     t:'text', label:'Форматы: имя :: цена :: дней :: метка, через |' },
@@ -205,7 +204,6 @@ const SCHEMA = [
   ]},
 
   { title:'Четвёртый экран — как я работаю', items:[
-    { k:'txtFlowEyebrow', t:'text', label:'Надзаголовок' },
     { k:'txtFlowTitle',   t:'text', label:'Заголовок' },
     { k:'txtFlowLead',    t:'text', label:'Описание' },
     { k:'txtFlowKeys',    t:'text', label:'Подписи шагов через |' },
@@ -213,13 +211,11 @@ const SCHEMA = [
   ]},
 
   { title:'Пятый экран — обо мне', items:[
-    { k:'txtAboutEyebrow', t:'text', label:'Надзаголовок' },
     { k:'txtAboutPhrase',  t:'text', label:'Фраза (*приглушённое*)' },
     { k:'txtAboutFacts',   t:'text', label:'Факты: имя :: текст, через |' }
   ]},
 
   { title:'Шестой экран — контакты', items:[
-    { k:'txtCtEyebrow', t:'text', label:'Надзаголовок' },
     { k:'txtCtTitle',   t:'text', label:'Заголовок' },
     { k:'txtCtLead',    t:'text', label:'Описание' },
     { k:'txtCtWho',     t:'text', label:'Имя на визитке' },
@@ -239,7 +235,7 @@ const SCHEMA = [
   { title:'Меню', items:[
     { k:'txtMenu',     t:'text', label:'Кнопка закрыта' },
     { k:'txtMenuOpen', t:'text', label:'Кнопка открыта' },
-    { k:'txtMenuList', t:'text', label:'Пункты через |' },
+    { k:'txtMenuList', t:'text', label:'Пункты через | (они же имена секций)' },
     { k:'txtTg',       t:'text', label:'Подпись ссылки' }
   ]}
 ];

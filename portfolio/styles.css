@@ -183,23 +183,40 @@ a{ color:inherit; text-decoration:none; }
   white-space:nowrap;
 }
 .bl--h1{ align-self:stretch; }
+/* Одна крупная мысль вместо строки и описания под ней: набрана заголовочным
+   шрифтом, хвост приглушён. Описание про конструкторы убрано совсем —
+   шесть блоков текста подряд на телефоне читались стеной */
 .bl--h2 .bl__c{
-  font-family:var(--fb); font-weight:300;
-  font-size:clamp(15px, 1.5vw, 24px); color:var(--dim); letter-spacing:.01em;
+  font-family:var(--fh); font-weight:600;
+  font-size:clamp(21px, 3vw, 44px); line-height:1.06; letter-spacing:-.03em;
+  color:var(--ink);
 }
+.bl--h2 em{ font-style:normal; color:var(--dim); }
 
-.bl--lead{ max-width:46ch; }
-.bl--lead .bl__c{ margin:0; color:var(--dim); }
+/* город в надстрочнике — только там, где его нет в шапке (см. .top__place) */
+.eyebrow__place{ display:none; }
+
+/* Заголовок, оставшийся без текста, не должен занимать место: у секций
+   «работы» и «контакты» имя несёт надзаголовок из меню, а пустой h2
+   иначе оставлял бы за собой отступ в половину экрана.
+   Проверяем через :has() вложенный узел, а не :empty на самом заголовке:
+   внутри лежат служебные <i class="bl__ph"> и обёртка, из-за которых
+   заголовок никогда не бывает пустым в смысле :empty */
+.works__h:empty, .ct__h:empty, .svc__h:empty, .flow__h:empty,
+.works__h:has(.bl__c:empty), .ct__h:has(.bl__c:empty){ display:none; }
 
 
 /* ---- цифры */
 .bl--meta .bl__c{ display:flex; flex-wrap:wrap; align-items:center; gap:22px; font-size:.82rem; color:var(--dim); }
 .bl--meta b{ font-family:var(--fh); color:var(--ink); font-weight:600; }
 
-/* бейдж «берёт проекты» — на десктопе прячется, вместо него две сухие метки;
-   на телефоне наоборот: метки прячутся, а бейдж с живой точкой один держит ряд */
+/* Статус с живой точкой — только на телефоне: на мониторе то же самое
+   говорит огонёк в шапке рядом с телеграмом, и два индикатора подряд
+   спорили бы друг с другом. «Беру», а не «берёт»: сайт везде от первого
+   лица, как и карточка в контактах */
 .meta__badge{ display:none; align-items:center; gap:8px; padding:7px 14px; border-radius:999px;
   border:1px solid var(--line); font-size:.72rem; letter-spacing:.02em; }
+
 
 /* ---- витрина работ: рамка браузера, внутри сменяются проекты.
    Ноутбука и стола нарочно нет: раскрывающийся ноутбук — самый заезженный
@@ -625,13 +642,14 @@ body.is-cursor-custom .cursor{ display:block; }
 @media (max-width:900px){
     .hero__inner{ grid-template-columns:1fr; align-items:start; gap:26px; }
     .bl--h1 .bl__c{ font-size:clamp(38px, 13vw, 92px); white-space:normal; }
+    /* город уходит из шапки — и тем же движением появляется в надстрочнике,
+       чтобы он был ровно в одном месте экрана, а не в двух и не в нуле */
     .top__place{ display:none; }
+    .eyebrow__place{ display:inline; }
+    /* нижняя строка меняет содержимое: процент своего кода уходит,
+       вместо него живой статус — он короче и работает лучше */
     .meta__stat{ display:none; }
     .meta__badge{ display:inline-flex; }
-    /* на узком экране подзаголовок и лид занимали половину первого экрана
-       и отжимали витрину за сгиб — сжимаем их, заголовок не трогаем */
-    .bl--h2 .bl__c{ font-size:clamp(14px, 3.6vw, 18px); }
-    .bl--lead .bl__c{ font-size:clamp(13px, 3.3vw, 16px); }
     .shw__n{ font-size:1rem; }
     .shw__d{ font-size:.82rem; }
     .menu__inner{ grid-template-columns:1fr; align-content:center; gap:28px; }
@@ -815,9 +833,9 @@ body.is-cursor-custom .cursor{ display:block; }
 :root{
   /* запасные значения на случай, если скрипт не отработал: рабочие живут
      в DEFAULTS и пишутся в переменные из apply() */
-  --neon1:#0d75fd;
+  --neon1:#000000;
   --neon2:#000000;
-  --neon3:#12f3e4;
+  --neon3:#000000;
   --neonw:1.6px;        /* толщина рамки */
   --neonSpin:3s;        /* оборот градиента */
   --neonGlow:0;         /* яркость свечения наружу */
