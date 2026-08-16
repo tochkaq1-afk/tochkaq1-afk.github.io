@@ -855,20 +855,71 @@ body.is-neon-always .aopt:after{ opacity:calc(var(--neonGlow) * .6); animation:n
    задавать на глаз, и длинный текст обрезался бы */
 .svc__diff{ margin-top:clamp(14px,2vh,22px); border-top:1px solid var(--line); }
 .diff__k{
-  display:flex; align-items:center; gap:10px; width:100%; padding:14px 2px;
+  display:flex; align-items:center; gap:14px; width:100%; padding:14px 2px;
   background:none; border:0; color:var(--dim); font:inherit; cursor:pointer;
   font-size:.8rem; text-align:left;
   transition:color .25s ease;
 }
 .diff__k:hover{ color:var(--ink); }
-.diff__ar{
-  width:7px; height:7px; margin-left:auto; flex:none;
-  border-right:1px solid currentColor; border-bottom:1px solid currentColor;
-  transform:rotate(45deg) translate(-2px,-2px);
-  transition:transform .35s cubic-bezier(.22,1,.36,1);
-}
 .diff__k[aria-expanded="true"]{ color:var(--ink); }
-.diff__k[aria-expanded="true"] .diff__ar{ transform:rotate(225deg) translate(-2px,-2px); }
+.diff__t{ min-width:0; }
+
+/* Кнопка-таблетка справа. Раньше тут была голая галочка-уголок: понять,
+   что на строку вообще можно нажать, было неоткуда. Теперь у действия
+   есть имя, и оно меняется вместе с состоянием. */
+.diff__b{
+  margin-left:auto; flex:none; position:relative; overflow:hidden;
+  display:inline-flex; align-items:center; gap:9px;
+  padding:7px 13px; border-radius:999px;
+  border:1px solid var(--line); background:var(--bg);
+  font-family:var(--fm); font-size:.66rem; letter-spacing:.1em; text-transform:uppercase;
+  transition:border-color .3s ease, color .3s ease;
+}
+.diff__k:hover .diff__b{ border-color:var(--ink); }
+/* заливка растёт из центра кружком, как у галочки в допах: один приём
+   на весь экран услуг, а не три разных */
+.diff__b:before{
+  content:''; position:absolute; left:50%; top:50%; width:130%; aspect-ratio:1;
+  translate:-50% -50%; border-radius:50%;
+  background:linear-gradient(120deg, var(--neon1), var(--neon3));
+  transform:scale(0); transition:transform .45s cubic-bezier(.76,0,.24,1);
+}
+.diff__k:hover .diff__b:before{ transform:scale(1); }
+.diff__k:hover .diff__b{ color:#fff; border-color:transparent; }
+
+/* Надпись — две строки в одной обойме: при переключении верхняя уезжает
+   вверх, нижняя приходит снизу. Тот же приём, что у пунктов меню. */
+.diff__lbl{
+  position:relative; z-index:1; display:block; overflow:hidden;
+  height:1em; line-height:1;
+}
+.diff__lbl i{
+  display:block; font-style:normal; height:1em; line-height:1;
+  transition:transform .45s cubic-bezier(.76,0,.24,1);
+}
+.diff__k[aria-expanded="false"] .diff__lbl i{ transform:translateY(-100%); }
+
+/* плюс, который на раскрытии становится минусом и доворачивается на пол-оборота */
+.diff__pm{ position:relative; z-index:1; width:11px; height:11px; flex:none; }
+.diff__pm:before,.diff__pm:after{
+  content:''; position:absolute; left:0; right:0; top:50%; height:1.5px;
+  background:currentColor; border-radius:2px;
+  transition:transform .5s cubic-bezier(.76,0,.24,1);
+}
+.diff__k[aria-expanded="false"] .diff__pm:before{ transform:rotate(180deg); }
+.diff__k[aria-expanded="false"] .diff__pm:after{ transform:rotate(90deg); }
+.diff__k[aria-expanded="true"] .diff__pm:after{ transform:rotate(180deg); }
+
+/* строки разницы приходят лесенкой, а не все разом */
+.diff__body.is-open .diff__i{ animation:diffIn .5s cubic-bezier(.22,1,.36,1) backwards; }
+.diff__body.is-open .diff__i:nth-child(2){ animation-delay:.06s; }
+.diff__body.is-open .diff__i:nth-child(3){ animation-delay:.12s; }
+.diff__body.is-open .diff__i:nth-child(4){ animation-delay:.18s; }
+.diff__body.is-open .diff__i:nth-child(5){ animation-delay:.24s; }
+@keyframes diffIn{ from{ opacity:0; transform:translateY(10px); } }
+@media (prefers-reduced-motion:reduce){
+  .diff__body.is-open .diff__i{ animation:none; }
+}
 .diff__body{ display:grid; grid-template-rows:0fr; transition:grid-template-rows .45s cubic-bezier(.22,1,.36,1); }
 .diff__body.is-open{ grid-template-rows:1fr; }
 .diff__in{ overflow:hidden; }

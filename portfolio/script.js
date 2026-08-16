@@ -1117,10 +1117,14 @@ function svcDrawLeft(){
             </button>`).join('')}
         </div>
         ${items ? `<div class="svc__diff">
-          <button class="diff__k" type="button" aria-expanded="false">
-            <span>${cfg[diff.head] || ''}</span><i class="diff__ar" aria-hidden="true"></i>
+          <button class="diff__k" type="button" aria-expanded="true">
+            <span class="diff__t">${cfg[diff.head] || ''}</span>
+            <span class="diff__b">
+              <span class="diff__lbl"><i>свернуть</i><i>развернуть</i></span>
+              <i class="diff__pm" aria-hidden="true"></i>
+            </span>
           </button>
-          <div class="diff__body"><div class="diff__in">${items}</div></div>
+          <div class="diff__body is-open"><div class="diff__in">${items}</div></div>
         </div>` : ''}
       </div></div>
     </div>`;
