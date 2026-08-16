@@ -264,6 +264,7 @@ const DEFAULTS = {
   txtPrWarK:'условия работы',
   txtPrWarNo:'№ 0001 · бессрочно',
   txtPrWarFoot:'действует с первого дня работы',
+  txtPrWarStamp:'выдан',
   txtPrList:[
     'Срок :: названная дата соблюдается, без «ещё пары дней»',
     'Результат :: считаем заявки после запуска, а не любуемся',
@@ -497,6 +498,7 @@ function drawText(){
     advEyebrow:cfg.txtAdvEyebrow, advTitle:cfg.txtAdvTitle, advLead:cfg.txtAdvLead,
     prEyebrow:cfg.txtPrEyebrow, prTitle:cfg.txtPrTitle, prLead:cfg.txtPrLead,
     prWarK:cfg.txtPrWarK, prWarNo:cfg.txtPrWarNo, prWarFoot:cfg.txtPrWarFoot,
+    prWarStamp:cfg.txtPrWarStamp,
     stkEyebrow:cfg.txtStkEyebrow, stkTitle:cfg.txtStkTitle,
     stkKey:cfg.txtStkKey, stkNote:cfg.txtStkNote,
     aboutEyebrow:cfg.txtAboutEyebrow,
@@ -1520,6 +1522,13 @@ function svcTearToForm(){
   /* без ленты (или при выключенных анимациях) просто едем вниз */
   if (!check || matchMedia('(prefers-reduced-motion:reduce)').matches){ go(); return; }
 
+  /* Лента должна быть на виду, иначе рвётся за кадром: на телефоне чек стоит
+     ниже колонки с форматами, и к моменту нажатия кнопка видна, а сам чек нет */
+  const box = check.getBoundingClientRect();
+  if (box.top < 0 || box.bottom > innerHeight){
+    check.scrollIntoView({ behavior:'smooth', block:'center' });
+  }
+
   check.classList.add('is-tear');
   const done = () => {
     check.classList.remove('is-tear');
@@ -1584,9 +1593,12 @@ function buildSvc(){
       }
       if (e.target.closest('#svcReset')){ svcReset(); return; }
 
-      /* «обсудить проект» под чеком: рвём ленту и уносим выбор в заявку */
+      /* «обсудить проект» под чеком: рвём ленту и уносим выбор в заявку.
+         stopPropagation обязателен: кнопка — обычная ссылка на #contact,
+         и общий обработчик якорей на document уехал бы к форме сразу,
+         не дав ленте оторваться */
       const goBtn = e.target.closest('.till__go');
-      if (goBtn){ e.preventDefault(); svcTearToForm(); return; }
+      if (goBtn){ e.preventDefault(); e.stopPropagation(); svcTearToForm(); return; }
 
       const a = e.target.closest('[data-a]');
       if (a){

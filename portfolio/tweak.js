@@ -158,6 +158,7 @@ const SCHEMA = [
     { k:'txtPrWarK',    t:'text', label:'Талон: шапка' },
     { k:'txtPrWarNo',   t:'text', label:'Талон: номер' },
     { k:'txtPrWarFoot', t:'text', label:'Талон: строка внизу' },
+    { k:'txtPrWarStamp', t:'text', label:'Талон: печать' },
     { k:'txtPrList',    t:'text', label:'Условия: слово :: обещание, через |' }
   ]},
 

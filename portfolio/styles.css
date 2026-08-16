@@ -742,6 +742,24 @@ body.is-cursor-custom .cursor{ display:block; }
   background:color-mix(in srgb, var(--ink) 55%, transparent);
   border-radius:100px; padding:5px 10px;
 }
+/* Блик по стеклу: под курсором по обложке проходит светлая полоса.
+   Держим её отдельным слоем поверх снимка, но под подписью — иначе засветит
+   текст. Анимацию вешаем на :hover, а не гоняем всегда: семь карточек
+   с вечно бегущим градиентом держали бы GPU занятым без всякой пользы. */
+.wcard:after{
+  content:''; position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:linear-gradient(105deg, transparent 38%,
+    color-mix(in srgb, #fff 42%, transparent) 50%, transparent 62%);
+  transform:translateX(-120%);
+}
+.wcard:hover:after{ animation:wscan .85s cubic-bezier(.4,0,.2,1); }
+@keyframes wscan{ to{ transform:translateX(120%) } }
+/* на тач-экране наведения нет: полоса проходит один раз, когда карточка
+   доехала до экрана — иначе приём не увидят вообще */
+@media (hover:none){
+  .works.is-in .wcard:after{ animation:wscan 1s cubic-bezier(.4,0,.2,1) var(--d,0ms); }
+}
+
 .wcard__meta{ position:relative; z-index:2; color:var(--bg); }
 .wcard__meta .t{ font-family:var(--fh); font-weight:600; font-size:clamp(14px,1.5vw,19px); line-height:1.1; }
 .wcard__meta .s{
@@ -1675,8 +1693,28 @@ select.ct__in{ cursor:pointer; }
    иначе талон сливается с ней и перестаёт читаться как отдельный лист.
    ============================================================ */
 .war{
+  position:relative;
   border:1px solid var(--ink); border-radius:18px; background:var(--paper);
   overflow:hidden;
+}
+
+/* ПЕЧАТЬ. Прилетает сверху крупной и садится на место — так читается удар,
+   а не проявление. Наклон нарочный: ровно поставленный штамп выглядит
+   напечатанным вместе с бланком, а не пришлёпнутым поверх.
+   Полупрозрачность и лёгкий поворот делают её краской, а не текстом. */
+.war__stamp{
+  position:absolute; right:clamp(16px,2.4vw,30px); bottom:clamp(52px,7vh,74px); z-index:3;
+  font-family:var(--fh); font-weight:800; text-transform:uppercase; letter-spacing:.08em;
+  font-size:clamp(12px,1.2vw,15px); color:var(--ink);
+  border:2px solid var(--ink); border-radius:7px; padding:8px 14px;
+  transform:rotate(-13deg) scale(2.6); opacity:0;
+  pointer-events:none;
+}
+.pr.is-in .war__stamp{ animation:warStamp .45s cubic-bezier(.3,1.4,.5,1) .75s forwards; }
+@keyframes warStamp{ to{ transform:rotate(-13deg) scale(1); opacity:.82 } }
+
+@media (prefers-reduced-motion:reduce){
+  .pr.is-in .war__stamp{ animation:none; transform:rotate(-13deg); opacity:.82; }
 }
 .war__top,
 .war__foot{ display:flex; align-items:center; justify-content:space-between; gap:16px; }
