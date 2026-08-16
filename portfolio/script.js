@@ -1793,6 +1793,10 @@ function markLines(txt){
       return [txt.slice(0, txt.length - tail.length), txt.slice(txt.length - tail.length)];
     }
   }
+  /* Одно короткое слово оставляем одной строкой. Деление пополам осмысленно
+     только для длинных склеек вроде AETERNAWEBSTUDIO; «AETERNA» оно разрубило
+     бы на «AETE» и «RNA», а это уже не знак, а опечатка. */
+  if (txt.length < 12) return [txt];
   return [txt.slice(0, Math.ceil(txt.length / 2)), txt.slice(Math.ceil(txt.length / 2))];
 }
 
