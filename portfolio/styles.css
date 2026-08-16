@@ -670,11 +670,23 @@ body.is-cursor-custom .cursor{ display:block; }
 /* надзаголовок вне главного экрана: там его роль играет .bl--eyebrow */
 .eyebrow{ display:block; font-size:.72rem; letter-spacing:.18em; text-transform:uppercase; color:var(--dim); }
 
-/* появление секции по скроллу */
-.rv{ opacity:0; transform:translateY(18px); }
+/* Появление секции по скроллу. Устроено «от покоя»: без is-in никаких
+   правил на .rv не действует, элемент просто видим. Раньше здесь стояло
+   .rv{opacity:0}, и содержимое зависело от того, доедет ли класс — а он
+   не доезжал: наблюдатель ждал 22% площади секции, чего у услуг на
+   телефоне не бывает. Блок пропадал целиком.
+
+   backwards нужен ради ступенчатости: он держит стартовый кадр во время
+   задержки. Если анимации в системе выключены совсем — кадр не
+   применяется и элемент остаётся видимым, что и требуется. */
+@keyframes rvIn{
+  from{ opacity:0; transform:translateY(18px); }
+}
 .is-in .rv{
-  opacity:1; transform:none;
-  transition:opacity .6s ease var(--d,0ms), transform .7s cubic-bezier(.22,1,.36,1) var(--d,0ms);
+  animation:rvIn .7s cubic-bezier(.22,1,.36,1) var(--d,0ms) backwards;
+}
+@media (prefers-reduced-motion:reduce){
+  .is-in .rv{ animation:none; }
 }
 
 .svc__grid{
@@ -1529,38 +1541,36 @@ select.ct__in{ cursor:pointer; }
    ============================================================ */
 :root{ --tamp:1.75; }
 
-/* Видимость — состояние по умолчанию. Прятать разрешено только когда
-   скрипт жив и сам поставил js-reveal: иначе один недоставленный scroll
-   оставлял секцию с opacity:0 навсегда, и услуги просто пропадали. */
 main > section{
   position:relative; z-index:1; background:var(--bg);
 }
-html.js-reveal main > section:not(.hero){
-  opacity:0;
-  transition:opacity .75s cubic-bezier(.22,1,.36,1);
-  will-change:opacity;
-}
+
 .foot{ position:relative; z-index:1; background:var(--bg); }
 
-/* Слои съезжаются на проявлении: --dz у каждой части свой, отсюда разная
-   скорость и ощущение глубины на стыке экранов. Без js-reveal сдвига нет
-   вовсе — содержимое сразу на месте.
+/* ПРАВИЛО, КОТОРОЕ ЗДЕСЬ ГЛАВНОЕ: покой — это видимое состояние.
+   Раньше секции прятались (opacity:0), а показывались по событию — и
+   дважды выходило так, что показать не удавалось и содержимое пропадало
+   насовсем: сперва из-за недоставленного scroll, потом из-за предела
+   композитного слоя в iOS. Красота проявления столько не стоит.
 
-   Доехавшую секцию обнуляем начисто: трансформ и will-change создают
-   containing block и ломают position:sticky у чека внутри услуг. */
-html.js-reveal main > section:not(.hero) > *{
-  transform:translateY(calc(var(--dz,0) * 1px));
-  transition:transform .8s cubic-bezier(.22,1,.36,1);
-  will-change:transform;
+   Поэтому теперь анимация идёт только «на въезд» и только вперёд:
+   класс is-full запускает её от смещённого и прозрачного состояния к
+   обычному. Нет класса, не отработал скрипт, не поддержан наблюдатель —
+   секция просто стоит на месте, видимая. Потерять содержимое нечем. */
+@keyframes screenIn{
+  from{ transform:translateY(calc(var(--dz,0) * 1px)); }
 }
-/* Селектор повторяет js-reveal нарочно: без него правило показа было менее
-   специфичным, чем правило скрытия, и доехавшая секция оставалась
-   прозрачной — при том что класс на ней уже стоял */
-html.js-reveal main > section.is-full{ opacity:1; will-change:auto; }
-html.js-reveal main > section.is-full > *{ transform:none; will-change:auto; }
+/* Ни opacity в кадрах, ни fill-mode — нарочно. С заливкой both элемент до
+   старта анимации показывается кадром from, и если анимации не идут (фон,
+   экономия батареи, системная настройка), он застревает прозрачным. Здесь
+   же худший исход — содержимое просто стоит на месте, видимое. Гасит его
+   только .rv, у которого есть свой честный конец. */
+html.js-reveal main > section.is-full > *{
+  animation:screenIn .8s cubic-bezier(.22,1,.36,1);
+}
 
 @media (prefers-reduced-motion:reduce){
-  main > section:not(.hero) > *{ transform:none; will-change:auto; }
+  html.js-reveal main > section.is-full > *{ animation:none; }
 }
 
 /* содержимое первого экрана всё равно уходит вверх медленнее прокрутки
