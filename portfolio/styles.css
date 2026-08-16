@@ -1,0 +1,1553 @@
+/* ============================================================
+   СТАПЕЛЬ — главный экран «Конструктор».
+   Экран собирает сам себя: сетка → каркас → контент → цвет.
+   Все размеры и цвета живут в переменных: их крутит твикер.
+   ============================================================ */
+
+/* ВАЖНО: эти значения обязаны совпадать с DEFAULTS в script.js.
+   apply() не пишет переменную, если она равна дефолту, — иначе инлайн-стиль
+   на <html> убил бы мобильные медиазапросы. Разъехались — палитра не применится. */
+:root{
+  --bg:#f2f0ea;
+  --ink:#111113;
+  --dim:#6c6a64;
+  --accent:#000000;
+  --wire:#dbd7cc;
+  --line:#d2cfc5;
+  /* лента чека: чуть светлее бумаги страницы, иначе чек сливается с фоном */
+  --paper:#fbfaf7;
+
+  --fh:'Unbounded', system-ui, sans-serif;
+  --fb:'Onest', system-ui, sans-serif;
+  /* моноширинный берём системный: он нужен для цен, чека и кода за знаком,
+     и тянуть ради этого ещё одно семейство с сервера незачем */
+  --fm:ui-monospace, 'SF Mono', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace;
+  --h1w:600;
+  --h1size:9.1;
+  --h1track:-0.035;
+  --h1lh:0.92;
+  --bodysize:1.05;
+
+  --gridop:0;
+  --cols:2;
+  --pad:clamp(18px, 3.4vw, 54px);
+  --radius:12px;
+
+  --curSize:9;
+  --curRing:34;
+}
+
+*{ box-sizing:border-box; }
+
+html,body{ margin:0; padding:0; }
+
+html{ background:var(--bg); }
+
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--fb);
+  font-size:calc(var(--bodysize) * 1rem);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+body.is-cursor-custom{ cursor:none; }
+body.is-cursor-custom a,
+body.is-cursor-custom button{ cursor:none; }
+
+a{ color:inherit; text-decoration:none; }
+
+/* ---------------------------------------------- шапка */
+.top{
+  position:fixed; inset:0 0 auto 0; z-index:40;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:20px; padding:20px var(--pad);
+  opacity:0; transform:translateY(-12px);
+  transition:opacity .7s ease, transform .7s ease;
+}
+.is-lit .top{ opacity:1; transform:none; }
+
+.top__mark{ font-family:var(--fh); font-weight:600; letter-spacing:.06em; font-size:.95rem; }
+.top__right{ display:flex; align-items:center; gap:22px; }
+.top__place,.top__tg{
+  font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; color:var(--dim);
+}
+/* живая точка слева от телеграма */
+.top__tg{ display:inline-flex; align-items:center; gap:9px; }
+.top__live{
+  width:6px; height:6px; border-radius:50%; background:var(--accent); flex:none;
+  box-shadow:0 0 0 0 color-mix(in srgb, var(--accent) 45%, transparent);
+}
+.is-lit .top__live{ animation:beat 2.6s ease-out infinite; }
+@keyframes beat{
+  0%{ box-shadow:0 0 0 0 color-mix(in srgb, var(--accent) 45%, transparent) }
+  70%{ box-shadow:0 0 0 9px color-mix(in srgb, var(--accent) 0%, transparent) }
+  100%{ box-shadow:0 0 0 0 color-mix(in srgb, var(--accent) 0%, transparent) }
+}
+.top__tg{ position:relative; color:var(--ink); }
+.top__tg span{ position:relative; }
+.top__tg span:after{
+  content:''; position:absolute; left:0; right:0; bottom:-4px; height:1px; background:var(--ink);
+  transform:scaleX(0); transform-origin:left;
+  transition:transform .4s cubic-bezier(.22,1,.36,1);
+}
+.top__tg:hover span:after{ transform:scaleX(1); }
+.top__tg[data-empty]{ color:var(--dim); }
+
+/* ---------------------------------------------- экран */
+.hero{
+  position:relative;
+  min-height:100svh;
+  display:flex; flex-direction:column;
+  padding:clamp(96px,12vh,150px) var(--pad) clamp(24px,4vh,44px);
+  overflow:hidden;
+}
+
+/* ---- чертёжная сетка */
+.hero__grid{
+  position:absolute; inset:0; z-index:0; pointer-events:none;
+  opacity:var(--gridop);
+}
+.hero__cols,.hero__rows{ position:absolute; inset:0; }
+.hero__cols i{
+  position:absolute; top:0; bottom:0; width:1px; background:var(--line);
+  transform:scaleY(var(--gin,0)); transform-origin:top;
+}
+.hero__rows i{
+  position:absolute; left:0; right:0; height:1px; background:var(--line);
+  transform:scaleX(var(--gin,0)); transform-origin:left;
+}
+.hero__cols i.is-key,.hero__rows i.is-key{ background:var(--accent); opacity:.28; }
+
+/* ---- блок «каркас → контент» */
+.bl{
+  position:relative;
+  --in:0;    /* прилёт серого блока   */
+  --rev:0;   /* замена его контентом  */
+}
+.bl__ph{
+  position:absolute; inset:0; display:block;
+  background:var(--wire); border-radius:var(--radius);
+  transform:scaleX(var(--in)); transform-origin:left center;
+  clip-path:inset(0 0 0 calc(var(--rev) * 100%));
+}
+/* блик по заглушке: считается от цвета текста, поэтому работает
+   и на тёмной палитре, и на светлой */
+.bl__ph:after{
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(90deg, transparent, color-mix(in srgb, var(--ink) 7%, transparent));
+}
+.bl__c{
+  position:relative; display:block;
+  clip-path:inset(0 calc((1 - var(--rev)) * 100%) 0 0);
+}
+.bl.is-done .bl__c{ clip-path:none; }
+.bl.is-done .bl__ph{ display:none; }
+.tile.is-done .tile__c{ clip-path:none; }
+.tile.is-done .tile__ph{ display:none; }
+
+.hero__inner{
+  position:relative; z-index:2;
+  flex:1;
+  display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);
+  gap:clamp(24px,4vw,64px); align-items:center;
+}
+
+.hero__left{ display:flex; flex-direction:column; gap:clamp(14px,2.2vh,26px); align-items:flex-start; }
+
+/* ---- надзаголовок */
+.bl--eyebrow{ min-height:20px; }
+.bl--eyebrow .bl__c{ display:flex; align-items:center; gap:10px;
+  font-size:.78rem; letter-spacing:.16em; text-transform:uppercase; color:var(--dim); }
+.dot{ width:6px; height:6px; border-radius:50%; background:var(--accent); flex:none; }
+.is-lit .dot{ animation:pulse 2.4s ease-in-out infinite; }
+@keyframes pulse{ 0%,100%{ transform:scale(1); opacity:1 } 50%{ transform:scale(1.5); opacity:.55 } }
+
+/* ---- заголовок */
+.hero__title{ margin:0; display:flex; flex-direction:column; gap:6px; width:100%; }
+.bl--h1 .bl__c{
+  font-family:var(--fh); font-weight:var(--h1w);
+  font-size:calc(var(--h1size) * 1vw);
+  line-height:var(--h1lh); letter-spacing:calc(var(--h1track) * 1em);
+  white-space:nowrap;
+}
+.bl--h1{ align-self:stretch; }
+.bl--h2 .bl__c{
+  font-family:var(--fb); font-weight:300;
+  font-size:clamp(15px, 1.5vw, 24px); color:var(--dim); letter-spacing:.01em;
+}
+
+.bl--lead{ max-width:46ch; }
+.bl--lead .bl__c{ margin:0; color:var(--dim); }
+
+
+/* ---- цифры */
+.bl--meta .bl__c{ display:flex; flex-wrap:wrap; gap:22px; font-size:.82rem; color:var(--dim); }
+.bl--meta b{ font-family:var(--fh); color:var(--ink); font-weight:600; }
+
+/* ---- знак бесконечности из пыли */
+.bl--art{ width:100%; }
+.bl--art .bl__c{ display:block; }
+.art__c{ display:block; width:100%; aspect-ratio:16/11; }
+@media (max-width:900px){ .art__c{ aspect-ratio:16/9; } }
+
+/* ---- плитки работ (вернутся в блоке работ ниже) */
+.hero__right{ position:relative; }
+.tiles{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.tile{
+  position:relative; aspect-ratio:4/3; overflow:hidden; border-radius:var(--radius);
+  --in:0; --rev:0;
+}
+.tile__ph{
+  position:absolute; inset:0; background:var(--wire);
+  transform:scale(var(--in)); transform-origin:center;
+}
+.tile__c{
+  position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end;
+  gap:5px; padding:9px; background:var(--wire);
+  clip-path:inset(calc((1 - var(--rev)) * 100%) 0 0 0);
+  transition:transform .5s cubic-bezier(.22,1,.36,1);
+}
+.tile__bar{ height:4px; border-radius:2px; background:var(--line); }
+.tile__bar--a{ background:var(--accent); opacity:.85; }
+/* --dim на светлой заглушке давал контраст 3.9 — для мелких подписей мало */
+.tile__n{ font-size:.62rem; letter-spacing:.1em; text-transform:uppercase;
+  color:color-mix(in srgb, var(--ink) 78%, var(--wire)); }
+.tile:hover .tile__c{ transform:scale(1.04); }
+.tile:hover .tile__n{ color:var(--ink); }
+
+/* ---- подвал экрана: «листай» слева, МЕНЮ строго по центру, фаза справа */
+.hero__foot{ position:relative; z-index:2; margin-top:auto; padding-top:22px; }
+.bl--foot .bl__c{
+  display:grid; grid-template-columns:1fr auto 1fr; align-items:center;
+  font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--dim);
+}
+.bl--foot .hero__stage{ justify-self:end; }
+.hbtn--menu{ justify-self:center; }
+.hero__scroll{ display:inline-flex; align-items:center; gap:9px; }
+.hero__scroll i{ width:26px; height:1px; background:var(--dim); position:relative; overflow:hidden; }
+.is-lit .hero__scroll i:after{
+  content:''; position:absolute; inset:0; background:var(--accent);
+  animation:run 1.9s cubic-bezier(.76,0,.24,1) infinite;
+}
+@keyframes run{ 0%{ transform:translateX(-100%) } 60%,100%{ transform:translateX(100%) } }
+.hero__stage{ font-family:var(--fb); color:var(--accent); }
+
+/* ---------------------------------------------- кнопка с растущей точкой */
+/* Порт interactive-hover-button на ваниль: точка разрастается в фон,
+   надпись уезжает вправо, снизу-слева выезжает второй слой в инверсии.
+   Состояния idle → loading → success держим на data-state, без React. */
+/* Размеры кнопки вынесены в переменные: их крутит твикер. Режим кнопок
+   (data-btn) отвечает только за форму и поведение, но не за размеры —
+   иначе ползунки спорили бы с режимом и не действовали */
+.hbtn{
+  position:relative; display:inline-flex; align-items:center; justify-content:center; gap:.6em;
+  min-width:calc(var(--btnMinW, 12.5) * 1em);
+  padding:calc(var(--btnPadY, 16) * 1px) calc(var(--btnPadX, 34) * 1px);
+  border:calc(var(--btnBw, 1) * 1px) solid var(--ink);
+  border-radius:calc(var(--btnR, 999) * 1px);
+  background:var(--bg); color:var(--ink); font:inherit;
+  font-size:calc(var(--btnFs, .78) * 1rem);
+  letter-spacing:calc(var(--btnTrack, .14) * 1em);
+  overflow:hidden; cursor:pointer; -webkit-tap-highlight-color:transparent;
+  transition:min-width var(--btnSpeed, .45s) cubic-bezier(.76,0,.24,1),
+             padding var(--btnSpeed, .45s) cubic-bezier(.76,0,.24,1);
+}
+[data-btn="wide"] .hbtn{ text-transform:uppercase; }
+body.is-btn-lower .hbtn{ text-transform:none; }
+
+/* Один приём на все кнопки, разница только в весе покоя:
+   главная — в рамке, второстепенная — без неё. Наведение у них одинаковое,
+   и это нарочно: так экран читается как система, а не как набор трюков. */
+.hbtn--quiet{ border-color:transparent; color:var(--dim); min-width:0; }
+.hbtn--quiet:hover{ color:var(--bg); }
+/* МЕНЮ стоит в одной строке с «листай» и подписью фазы, поэтому её высота
+   должна совпадать с ними — иначе строка визуально ломается */
+.hbtn--menu{ min-width:0; padding:9px 22px; font-size:.72rem; }
+[data-btn="wide"] .hbtn--menu{ padding:9px 22px; font-size:.72rem; }
+/* точка в покое остаётся только у главной кнопки: три точки подряд
+   на одном экране читались как сор */
+/* точка невидима, но раньше занимала место в строке вместе с отступом —
+   из-за этого текст уезжал вправо. Вынимаем её из потока: подпись центрируется
+   честно, а заливка растёт из середины кнопки */
+.hbtn--quiet .hbtn__dot,
+.hbtn--menu .hbtn__dot{
+  position:absolute; left:50%; top:50%; margin:-4px 0 0 -4px;
+  opacity:0; transition:transform .55s cubic-bezier(.76,0,.24,1), opacity .18s ease;
+}
+.hbtn--quiet:hover .hbtn__dot,
+.hbtn--quiet:focus-visible .hbtn__dot,
+.hbtn--menu:hover .hbtn__dot,
+.hbtn--menu:focus-visible .hbtn__dot{ opacity:1; }
+
+.hbtn__dot{
+  width:calc(var(--btnDot, 8) * 1px); height:calc(var(--btnDot, 8) * 1px);
+  flex:none; border-radius:50%; background:var(--ink);
+  transition:transform var(--btnFill, .55s) cubic-bezier(.76,0,.24,1);
+}
+.hbtn__label{
+  transition:transform .5s cubic-bezier(.76,0,.24,1), opacity .35s ease;
+}
+.hbtn__over{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  color:var(--bg); transform:translateX(-4rem); opacity:0;
+  transition:transform .5s cubic-bezier(.76,0,.24,1), opacity .35s ease;
+}
+.hbtn__st{ display:none; align-items:center; gap:.55em; white-space:nowrap; }
+.hbtn__st svg{ width:1em; height:1em; flex:none; }
+
+/* точка вырастает в фон — и по ховеру, и когда кнопка занята */
+.hbtn:hover .hbtn__dot,
+.hbtn:focus-visible .hbtn__dot,
+.hbtn:not([data-state="idle"]) .hbtn__dot{ transform:scale(46); }
+
+.hbtn:hover .hbtn__label,
+.hbtn:focus-visible .hbtn__label,
+.hbtn:not([data-state="idle"]) .hbtn__label{ transform:translateX(5rem); opacity:0; }
+
+.hbtn:hover .hbtn__over,
+.hbtn:focus-visible .hbtn__over,
+.hbtn:not([data-state="idle"]) .hbtn__over{ transform:none; opacity:1; }
+
+.hbtn[data-state="idle"]    .hbtn__st--idle{ display:inline-flex; }
+.hbtn[data-state="loading"] .hbtn__st--load{ display:inline-flex; }
+.hbtn[data-state="success"] .hbtn__st--done{ display:inline-flex; }
+.hbtn[data-state="loading"]{ min-width:9em; padding-left:14px; padding-right:14px; }
+
+.hbtn__spin{
+  width:1em; height:1em; flex:none; border-radius:50%;
+  border:2px solid color-mix(in srgb, var(--bg) 35%, transparent);
+  border-top-color:var(--bg);
+  animation:hspin .7s linear infinite;
+}
+@keyframes hspin{ to{ transform:rotate(360deg) } }
+
+/* та же логика для главной кнопки: рамка и растущая точка убираются,
+   но состояния «отправляю» и «готово» остаются — просто без инверсии */
+[data-btn="line"] .hbtn{
+  min-width:0; padding:10px 2px 12px; border:0; border-radius:0;
+  background:transparent; text-transform:uppercase; font-size:.78rem; letter-spacing:.14em;
+}
+[data-btn="line"] .hbtn__dot{ display:none; }
+[data-btn="line"] .hbtn:after{
+  content:''; position:absolute; left:0; right:0; bottom:0; height:1px; background:var(--ink);
+  transform:scaleX(0); transform-origin:center;
+  transition:transform .45s cubic-bezier(.22,1,.36,1);
+}
+[data-btn="line"] .hbtn:hover:after,
+[data-btn="line"] .hbtn:focus-visible:after,
+[data-btn="line"] .hbtn:not([data-state="idle"]):after{ transform:scaleX(1); }
+
+[data-btn="line"] .hbtn:hover .hbtn__label,
+[data-btn="line"] .hbtn:focus-visible .hbtn__label{ transform:none; opacity:1; }
+[data-btn="line"] .hbtn:not([data-state="idle"]) .hbtn__label{ opacity:0; }
+
+[data-btn="line"] .hbtn__over{ color:var(--ink); background:var(--bg); transform:none; }
+[data-btn="line"] .hbtn[data-state="idle"] .hbtn__over{ opacity:0; }
+[data-btn="line"] .hbtn__spin{
+  border-color:color-mix(in srgb, var(--ink) 28%, transparent);
+  border-top-color:var(--ink);
+}
+
+@media (prefers-reduced-motion:reduce){
+  .hbtn__dot,.hbtn__label,.hbtn__over{ transition:none; }
+}
+
+/* ---------------------------------------------- меню */
+/* нижняя полоса остаётся поверх шторы — МЕНЮ должно оставаться нажимаемым */
+.hero__foot{ z-index:80; }
+
+/* МЕНЮ вынута из подвала первого экрана в отдельный слой: подвал уезжает
+   вверх и гаснет при прокрутке, а кнопка должна оставаться на виду.
+   На её месте в сетке стоит пустышка, чтобы «листай» и подпись фазы
+   не съехали, а координаты кнопке считает JS — отсюда и fixed. */
+.hbtn__slot{ display:block; justify-self:center; }
+.hbtn--float{
+  position:fixed; left:0; top:0; margin:0; z-index:85;
+  transform:translate3d(var(--fx,0px), var(--fy,0px), 0);
+  will-change:transform;
+}
+@media (prefers-reduced-motion:reduce){
+  .hbtn--float{ transition:none; }
+}
+
+.menu{
+  position:fixed; inset:0; z-index:60; background:var(--bg);
+  clip-path:inset(100% 0 0 0); pointer-events:none;
+  transition:clip-path .85s cubic-bezier(.76,0,.24,1);
+}
+body.is-menu .menu{ clip-path:inset(0 0 0 0); pointer-events:auto; }
+
+.menu__inner{
+  height:100%; display:grid; grid-template-columns:minmax(0,1fr) auto;
+  gap:clamp(24px,5vw,80px); align-items:center;
+  padding:clamp(90px,13vh,150px) var(--pad) clamp(80px,11vh,120px);
+}
+
+.menu__list{ list-style:none; margin:0; padding:0; }
+.menu__list li{ overflow:hidden; }
+.menu__list a{
+  display:block; position:relative; width:max-content;
+  font-family:var(--fh); font-weight:var(--h1w);
+  font-size:clamp(30px, 6.4vw, 96px); line-height:1.04;
+  letter-spacing:calc(var(--h1track) * 1em);
+  transform:translateY(108%);
+  transition:transform .75s cubic-bezier(.22,1,.36,1), color .3s ease;
+  transition-delay:calc(var(--i) * 65ms);
+}
+body.is-menu .menu__list a{ transform:none; }
+.menu__list a:after{
+  content:''; position:absolute; left:0; right:0; bottom:.08em; height:2px;
+  background:var(--accent); transform:scaleX(0); transform-origin:right;
+  transition:transform .5s cubic-bezier(.22,1,.36,1);
+}
+.menu__list a:hover:after{ transform:scaleX(1); transform-origin:left; }
+.menu__side{
+  display:flex; flex-direction:column; gap:20px; align-items:flex-start;
+  opacity:0; transform:translateY(16px);
+  transition:opacity .6s ease .4s, transform .6s ease .4s;
+}
+body.is-menu .menu__side{ opacity:1; transform:none; }
+.menu__meta{
+  display:flex; flex-direction:column; gap:6px;
+  font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--dim);
+}
+.menu__meta a:hover{ color:var(--accent); }
+
+/* ---------------------------------------------- курсор */
+/* ---------------------------------------------- свет под курсором */
+/* Фонарь на всю страницу. Белый свет через soft-light на бумаге пропадал —
+   осветлять почти белый фон нечем. Поэтому светим сгущением --ink: на
+   светлой палитре это серое пятно, на тёмной — наоборот светлое, потому
+   что там --ink светлый. Один слой на все восемь палитр твикера.
+   Лежит ниже шапки и меню (40 и 60) — интерфейс он не мутит. */
+.lamp{
+  position:fixed; inset:0; z-index:35; pointer-events:none;
+  background:radial-gradient(var(--lampR,420px) var(--lampR,420px) at var(--gx,50vw) var(--gy,50vh),
+    color-mix(in srgb, var(--ink) 11%, transparent) 0,
+    color-mix(in srgb, var(--ink) 6%, transparent) 38%,
+    color-mix(in srgb, var(--ink) 2%, transparent) 62%,
+    transparent 78%);
+  opacity:0; transition:opacity .6s ease;
+}
+body.is-lamp .lamp{ opacity:1; }
+
+/* локальное пятно на карточках: то же, что на визитке, но общим слоем.
+   Вставляет его скрипт при первом наведении — секции пересобираются
+   из твикера, и заранее разложенные узлы всё равно бы пропали */
+.glow{
+  position:absolute; inset:0; z-index:1; pointer-events:none;
+  border-radius:inherit;
+  background:radial-gradient(42% 54% at var(--mx,50%) var(--my,50%),
+    color-mix(in srgb, var(--ink) 12%, transparent) 0,
+    color-mix(in srgb, var(--ink) 4%, transparent) 46%,
+    transparent 74%);
+  opacity:0; transition:opacity .4s ease;
+}
+.is-glow > .glow{ opacity:1; }
+/* этим карточкам relative не задан, а пятно кладём внутрь них */
+.adv__c,.fmt,.wchip,.stk__i{ position:relative; }
+
+@media (prefers-reduced-motion:reduce){
+  .lamp{ display:none; }
+  .glow{ transition:none; }
+}
+
+.cursor{ position:fixed; inset:0; z-index:90; pointer-events:none; display:none; }
+body.is-cursor-custom .cursor{ display:block; }
+.cursor > *{ position:absolute; top:0; left:0; opacity:0; }
+
+.cursor__cross{ inset:0; width:100%; height:100%; }
+.cursor__cx,.cursor__cy{ position:absolute; background:var(--accent); opacity:.34; }
+.cursor__cx{ left:0; right:0; height:1px; transform:translateY(var(--my,0)); }
+.cursor__cy{ top:0; bottom:0; width:1px; transform:translateX(var(--mx,0)); }
+
+.cursor__dot{
+  width:calc(var(--curSize) * 1px); height:calc(var(--curSize) * 1px);
+  margin:calc(var(--curSize) * -.5px) 0 0 calc(var(--curSize) * -.5px);
+  border-radius:50%; background:var(--accent);
+  transform:translate(var(--mx,0), var(--my,0));
+}
+/* кольцо умеет обнимать кнопку: размер приезжает из JS через --rw/--rh */
+.cursor__ring{
+  width:var(--rw, 34px); height:var(--rh, 34px);
+  margin-top:calc(var(--rh, 34px) / -2);
+  margin-left:calc(var(--rw, 34px) / -2);
+  border:1px solid var(--accent); border-radius:999px;
+  transform:translate(var(--rx,0), var(--ry,0));
+  transition:width .3s cubic-bezier(.22,1,.36,1), height .3s cubic-bezier(.22,1,.36,1),
+             border-radius .3s ease, opacity .2s ease;
+}
+.cursor__frame{
+  width:38px; height:38px; margin:-19px 0 0 -19px;
+  transform:translate(var(--rx,0), var(--ry,0)) scale(var(--rs,1));
+}
+.cursor__frame i{ position:absolute; width:9px; height:9px; border:1px solid var(--accent); }
+.cursor__frame i:nth-child(1){ top:0; left:0; border-right:0; border-bottom:0; }
+.cursor__frame i:nth-child(2){ top:0; right:0; border-left:0; border-bottom:0; }
+.cursor__frame i:nth-child(3){ bottom:0; left:0; border-right:0; border-top:0; }
+.cursor__frame i:nth-child(4){ bottom:0; right:0; border-left:0; border-top:0; }
+.cursor__lens{
+  width:120px; height:120px; margin:-60px 0 0 -60px; border-radius:50%;
+  background:var(--ink); mix-blend-mode:difference;
+  transform:translate(var(--rx,0), var(--ry,0)) scale(var(--rs,1));
+}
+.cursor__read{
+  margin:14px 0 0 14px; display:flex; gap:8px;
+  font-family:var(--fb); font-size:10px; letter-spacing:.1em; color:var(--accent);
+  transform:translate(var(--mx,0), var(--my,0));
+}
+
+[data-cursor="crosshair"] .cursor__cross,
+[data-cursor="crosshair"] .cursor__dot,
+[data-cursor="ruler"]     .cursor__cross,
+[data-cursor="ruler"]     .cursor__read,
+[data-cursor="ruler"]     .cursor__dot,
+[data-cursor="dot"]       .cursor__dot,
+[data-cursor="dot"]       .cursor__ring,
+[data-cursor="frame"]     .cursor__dot,
+[data-cursor="frame"]     .cursor__frame,
+[data-cursor="lens"]      .cursor__lens,
+[data-cursor="minimal"]   .cursor__dot{ opacity:1; }
+
+/* ---------------------------------------------- телефон */
+@media (max-width:900px){
+  .hero__inner{ grid-template-columns:1fr; align-items:start; gap:26px; }
+  .bl--h1 .bl__c{ font-size:clamp(38px, 13vw, 92px); white-space:normal; }
+  .top__place{ display:none; }
+  .menu__inner{ grid-template-columns:1fr; align-content:center; gap:28px; }
+  .menu__list a{ font-size:clamp(28px, 11vw, 56px); }
+  .tiles{ grid-template-columns:repeat(3,1fr); }
+  body.is-cursor-custom{ cursor:auto; }
+  .cursor{ display:none !important; }
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{ animation-duration:.01ms !important; transition-duration:.01ms !important; }
+}
+
+/* ============================================================
+   Второй экран — работы. Тот же приём, что на главном: серый
+   каркас прилетает, потом вытесняется содержимым. Разница только
+   в спуске: здесь его запускает скролл, а не таймер загрузки.
+   ============================================================ */
+.works{
+  position:relative; padding:clamp(80px,12vh,150px) var(--pad) clamp(70px,10vh,120px);
+  border-top:1px solid var(--line);
+}
+/* шапка работ стоит по центру — под ней центрованный ряд фильтров,
+   и заголовок, прижатый влево, разъезжался бы с ним */
+.works__head{
+  display:flex; flex-direction:column; gap:12px; align-items:center; text-align:center;
+  margin-bottom:clamp(28px,5vh,52px);
+}
+.works__h{ align-self:auto; }
+.bl--h2b{ align-self:stretch; }
+.bl--h2b .bl__c{
+  margin:0; font-family:var(--fh); font-weight:var(--h1w);
+  font-size:clamp(26px,4.2vw,58px); line-height:1.04; letter-spacing:calc(var(--h1track) * 1em);
+}
+.works__lead{ max-width:52ch; }
+.works__lead .bl__c{ margin:0; color:var(--dim); }
+
+/* Раскладка работ по разбору alexwebstudio.ru:
+   карточка — это обложка целиком картинкой, поверх только чип категории
+   и подпись внизу. Их вордмарк и «2026» вшиты в саму картинку, вёрсткой
+   не собираются. Пропорция 16/9, скругление 18, контент прижат вниз.
+   Анимации (3D-наклон, стагger) не переносил — попросил не трогать. */
+.wfilter{ display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-bottom:clamp(24px,4vh,36px); }
+.wchip{
+  display:flex; align-items:center; gap:10px;
+  border:1px solid var(--line); border-radius:14px; padding:14px 20px;
+  background:var(--wire); color:var(--dim); cursor:pointer; font:inherit;
+  font-size:.72rem; letter-spacing:.1em; text-transform:uppercase;
+  transition:border-color .3s ease, background .3s ease, color .3s ease;
+}
+.wchip b{ font-weight:400; opacity:.5; }
+.wchip:hover{ border-color:var(--ink); color:var(--ink); }
+.wchip.is-on{ background:var(--ink); border-color:var(--ink); color:var(--bg); }
+.wchip.is-on b{ opacity:.6; }
+
+.wgrid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; }
+
+.wcard{
+  position:relative; aspect-ratio:16/9; border-radius:18px; overflow:hidden;
+  border:1px solid var(--line); background:var(--wire);
+  display:flex; align-items:flex-end; padding:20px; cursor:pointer;
+}
+.wcard[hidden]{ display:none; }
+
+/* пока нет снятых обложек — миллиметровка вместо картинки */
+.wcard__shot{
+  position:absolute; inset:0; z-index:0; width:100%; height:100%;
+  object-fit:cover; object-position:top;
+}
+.wcard__empty{
+  position:absolute; inset:0; z-index:0;
+  display:flex; align-items:center; justify-content:center; padding:0 20px;
+  background-image:linear-gradient(to right, color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 1px),
+                   linear-gradient(to bottom, color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 1px);
+  background-size:26px 26px;
+  font-size:.6rem; letter-spacing:.1em; text-transform:uppercase; color:var(--dim); text-align:center;
+}
+/* затемнение снизу, чтобы подпись читалась поверх любой обложки */
+.wcard__shade{
+  position:absolute; inset:0; z-index:1;
+  background:linear-gradient(to top,
+    color-mix(in srgb, var(--ink) 88%, transparent),
+    color-mix(in srgb, var(--ink) 10%, transparent) 60%, transparent);
+}
+.wcard__badge{
+  position:absolute; top:14px; left:14px; z-index:2;
+  font-family:var(--fb); font-size:.58rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--bg); border:1px solid color-mix(in srgb, var(--bg) 35%, transparent);
+  background:color-mix(in srgb, var(--ink) 55%, transparent);
+  border-radius:100px; padding:5px 10px;
+}
+.wcard__meta{ position:relative; z-index:2; color:var(--bg); }
+.wcard__meta .t{ font-family:var(--fh); font-weight:600; font-size:clamp(14px,1.5vw,19px); line-height:1.1; }
+.wcard__meta .s{
+  font-size:.66rem; margin-top:6px; letter-spacing:.04em;
+  color:color-mix(in srgb, var(--bg) 72%, transparent);
+}
+
+.wmore{ display:flex; justify-content:center; margin-top:clamp(20px,3vh,32px); }
+
+/* спуск по скроллу: те же две фазы, но на задержках вместо таймлайна */
+.works .bl__ph{ transform:scaleX(0); clip-path:inset(0 0 0 0); }
+.works .bl__c{ clip-path:inset(0 100% 0 0); }
+.works.is-in .bl__ph{
+  transform:scaleX(1);
+  transition:transform .45s cubic-bezier(.76,0,.24,1) var(--d,0ms),
+             clip-path .5s cubic-bezier(.76,0,.24,1) calc(var(--d,0ms) + 430ms);
+  clip-path:inset(0 0 0 100%);
+}
+.works.is-in .bl__c{
+  clip-path:inset(0 0 0 0);
+  transition:clip-path .5s cubic-bezier(.76,0,.24,1) calc(var(--d,0ms) + 430ms);
+}
+
+@media (max-width:900px){
+  .wgrid{ grid-template-columns:1fr; gap:10px; }
+  .wcard{ aspect-ratio:16/10; padding:16px; }
+}
+@media (prefers-reduced-motion:reduce){
+  .works .bl__ph{ display:none; }
+  .works .bl__c{ clip-path:none; }
+}
+
+/* ============================================================
+   Третий экран — услуги. Слева форматы и допы, справа кассовый чек:
+   каждая выбранная позиция допечатывается на ленте под щелчки головки.
+
+   Чек не перерисовывается целиком: строки добавляются и убираются
+   поштучно и встают в очередь печати — иначе при каждом клике заново
+   печаталась бы вся лента и приём бы потерялся.
+   ============================================================ */
+.svc{
+  position:relative; border-top:1px solid var(--line);
+  padding:clamp(58px,8vh,100px) var(--pad) clamp(40px,6vh,72px);
+}
+.svc__head{ display:flex; flex-direction:column; gap:8px; align-items:flex-start; margin-bottom:clamp(18px,3vh,36px); }
+.svc__h{
+  margin:0; font-family:var(--fh); font-weight:var(--h1w);
+  font-size:clamp(23px,3.3vw,46px); line-height:1.04; letter-spacing:calc(var(--h1track) * 1em);
+}
+.svc__lead{ margin:0; color:var(--dim); max-width:54ch; }
+/* надзаголовок вне главного экрана: там его роль играет .bl--eyebrow */
+.eyebrow{ display:block; font-size:.72rem; letter-spacing:.18em; text-transform:uppercase; color:var(--dim); }
+
+/* появление секции по скроллу */
+.rv{ opacity:0; transform:translateY(18px); }
+.is-in .rv{
+  opacity:1; transform:none;
+  transition:opacity .6s ease var(--d,0ms), transform .7s cubic-bezier(.22,1,.36,1) var(--d,0ms);
+}
+
+.svc__grid{
+  display:grid; grid-template-columns:minmax(0,1fr) 352px;
+  gap:clamp(18px,2.6vw,48px); align-items:start;
+}
+
+/* ============================================================
+   НЕОНОВАЯ РАМКА. Контур — конический градиент, который крутится вокруг
+   карточки. Чтобы он остался именно рамкой, а не залил карточку целиком,
+   слой маскируется двумя прямоугольниками: внешний минус внутренний.
+
+   Угол крутим через @property: без него --ang для браузера просто строка,
+   и анимация щёлкает с 0 на 360 без промежуточных кадров.
+   ============================================================ */
+@property --ang{ syntax:'<angle>'; initial-value:0deg; inherits:false; }
+
+:root{
+  /* запасные значения на случай, если скрипт не отработал: рабочие живут
+     в DEFAULTS и пишутся в переменные из apply() */
+  --neon1:#0d75fd;
+  --neon2:#000000;
+  --neon3:#12f3e4;
+  --neonw:1.6px;        /* толщина рамки */
+  --neonSpin:3s;        /* оборот градиента */
+  --neonGlow:0;         /* яркость свечения наружу */
+  --neonBlur:21px;      /* мягкость свечения */
+}
+
+.neon{ position:relative; }
+.neon:before{
+  content:''; position:absolute; inset:0; z-index:2; pointer-events:none;
+  border-radius:inherit; padding:var(--neonw);
+  background:conic-gradient(from var(--ang),
+    transparent 0 8%, var(--neon1) 20%, var(--neon2) 34%,
+    transparent 46% 58%, var(--neon3) 72%, var(--neon1) 86%, transparent 96%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor; mask-composite:exclude;
+  opacity:0; transition:opacity .45s ease;
+}
+/* свечение наружу — отдельным размытым слоем, иначе тень легла бы
+   на весь блок, а не только под рамку */
+.neon:after{
+  content:''; position:absolute; inset:-2px; z-index:1; pointer-events:none;
+  border-radius:inherit;
+  background:conic-gradient(from var(--ang),
+    transparent 0 8%, var(--neon1) 20%, var(--neon2) 34%,
+    transparent 46% 58%, var(--neon3) 72%, var(--neon1) 86%, transparent 96%);
+  filter:blur(var(--neonBlur)); opacity:0; transition:opacity .45s ease;
+}
+/* крутим только там, где рамка видна: анимация угла на десятке карточек
+   разом греет видеокарту без всякой пользы.
+   --neonDelay приезжает из JS: карточки услуг пересобираются на каждый клик,
+   и без общей фазы рамка каждый раз стартовала бы заново */
+.neon:hover:before,.neon.is-on:before{ opacity:1; animation:neonSpin var(--neonSpin) var(--neonDelay,0s) linear infinite; }
+.neon:hover:after{ opacity:var(--neonGlow); animation:neonSpin var(--neonSpin) var(--neonDelay,0s) linear infinite; }
+.neon.is-on:after{ opacity:calc(var(--neonGlow) * .65); animation:neonSpin var(--neonSpin) var(--neonDelay,0s) linear infinite; }
+/* «гореть всегда» из твикера светит тем, что выбирают: карточкам форматов
+   и кнопкам допов. Острова групп и подвал «Нужно другое?» из режима
+   исключены нарочно — это рамки вокруг рамок, и когда горело всё разом,
+   сам выбор тонул в общем сиянии */
+body.is-neon-always .fmt:before,
+body.is-neon-always .aopt:before{ opacity:1; animation:neonSpin var(--neonSpin) var(--neonDelay,0s) linear infinite; }
+body.is-neon-always .fmt:after,
+body.is-neon-always .aopt:after{ opacity:calc(var(--neonGlow) * .6); animation:neonSpin var(--neonSpin) var(--neonDelay,0s) linear infinite; }
+@keyframes neonSpin{ to{ --ang:360deg } }
+
+@media (prefers-reduced-motion:reduce){
+  .neon:before,.neon:after{ animation:none; }
+}
+
+/* ---- форматы: ряды по типу работы, внутри ряда столбики.
+   Ряд отвечает на «что вам вообще нужно», карточка — на «какой объём» */
+.svc__fmts{ display:grid; gap:10px; }
+/* ряд живёт в своей панели: три группы вперемешку в одном потоке
+   сливались в сплошную простыню карточек */
+.fgrp{
+  position:relative; border:1px solid var(--line); border-radius:20px;
+  background:var(--wire); padding:14px 14px 16px;
+}
+.fgrp__k{ margin-bottom:10px; }
+/* карточка внутри панели светлее фона панели, иначе они сливаются */
+.fgrp .fmt{ background:var(--bg); }
+/* колонки подбираются под ширину: в рядах разное число карточек,
+   жёсткая сетка растянула бы ряд из двух на всю строку */
+.fgrp__row{ display:grid; grid-template-columns:repeat(auto-fill,minmax(196px,1fr)); gap:10px; }
+.fmt{
+  position:relative; text-align:left; display:flex; flex-direction:column;
+  padding:18px 16px 16px; border:1px solid var(--line); border-radius:18px; background:var(--wire);
+  color:inherit; font:inherit; cursor:pointer;
+  transition:border-color .3s ease, background .3s ease, transform .35s cubic-bezier(.22,1,.36,1);
+}
+.fmt:hover{ transform:translateY(-4px); border-color:var(--ink); }
+.fmt.is-on{ border-color:var(--accent); background:var(--bg); box-shadow:0 0 0 1px var(--accent) inset; }
+.fmt__mark{
+  position:absolute; top:-8px; left:14px;
+  font-size:.54rem; letter-spacing:.14em; text-transform:uppercase;
+  padding:2px 8px; border:1px solid var(--ink); border-radius:999px; background:var(--bg);
+}
+.fmt__dot{
+  width:13px; height:13px; border:1px solid var(--dim); border-radius:50%;
+  display:grid; place-items:center; margin-bottom:12px; transition:border-color .25s;
+}
+.fmt__dot:after{
+  content:''; width:7px; height:7px; border-radius:50%; background:var(--accent);
+  transform:scale(0); transition:transform .3s cubic-bezier(.22,1,.36,1);
+}
+.fmt.is-on .fmt__dot{ border-color:var(--accent); }
+.fmt.is-on .fmt__dot:after{ transform:scale(1); }
+.fmt__n{ font-family:var(--fh); font-weight:600; font-size:clamp(15px,1.5vw,19px); letter-spacing:-.02em; }
+.fmt__d{ color:var(--dim); font-size:.8rem; margin-top:5px; flex:1; min-height:2.6em; }
+.fmt__p{ font-family:var(--fh); font-weight:600; font-size:clamp(19px,2.1vw,26px); letter-spacing:-.03em; margin-top:14px; }
+.fmt__p small{ font-size:.4em; font-weight:400; letter-spacing:.06em; color:var(--dim); margin-left:4px; }
+.fmt__t{ font-family:var(--fm); font-size:.72rem; color:var(--dim); }
+
+/* ---- чем форматы отличаются: свёрнуто, разворачивается по клику.
+   Раскрытие идёт через grid-template-rows 0fr → 1fr: max-height пришлось бы
+   задавать на глаз, и длинный текст обрезался бы */
+.svc__diff{ margin-top:clamp(14px,2vh,22px); border-top:1px solid var(--line); }
+.diff__k{
+  display:flex; align-items:center; gap:10px; width:100%; padding:14px 2px;
+  background:none; border:0; color:var(--dim); font:inherit; cursor:pointer;
+  font-size:.8rem; text-align:left;
+  transition:color .25s ease;
+}
+.diff__k:hover{ color:var(--ink); }
+.diff__ar{
+  width:7px; height:7px; margin-left:auto; flex:none;
+  border-right:1px solid currentColor; border-bottom:1px solid currentColor;
+  transform:rotate(45deg) translate(-2px,-2px);
+  transition:transform .35s cubic-bezier(.22,1,.36,1);
+}
+.diff__k[aria-expanded="true"]{ color:var(--ink); }
+.diff__k[aria-expanded="true"] .diff__ar{ transform:rotate(225deg) translate(-2px,-2px); }
+.diff__body{ display:grid; grid-template-rows:0fr; transition:grid-template-rows .45s cubic-bezier(.22,1,.36,1); }
+.diff__body.is-open{ grid-template-rows:1fr; }
+.diff__in{ overflow:hidden; }
+.diff__i{ padding:0 2px 14px; display:grid; grid-template-columns:minmax(120px,.32fr) minmax(0,1fr); gap:14px; }
+.diff__i + .diff__i{ border-top:1px dashed var(--line); padding-top:14px; }
+.diff__n{ font-family:var(--fh); font-weight:600; font-size:.9rem; }
+.diff__d{ color:var(--dim); font-size:.88rem; }
+@media (max-width:700px){ .diff__i{ grid-template-columns:1fr; gap:4px; } }
+
+/* ---- допы: разделы колонками, строка в один ярус.
+   Разделы во всю ширину и строки в три яруса съедали пол-экрана —
+   здесь важно быстро пробежать список, а не читать его */
+.svc__adds{ margin-top:clamp(16px,2.4vh,26px); }
+.svc__cols{ display:grid; grid-template-columns:repeat(auto-fit,minmax(228px,1fr)); gap:8px; margin-top:10px; }
+.acol{ border:1px solid var(--line); border-radius:14px; background:var(--wire); padding:12px 12px 6px; }
+.acol__k{ display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+.acol__dot{ width:5px; height:5px; border-radius:50%; background:var(--accent); }
+/* каждая позиция — свой островок: сплошной список с разделителями
+   читался как таблица, а тут надо тыкать, а не читать по строкам */
+.aopt{
+  position:relative; width:100%; text-align:left; margin-bottom:7px;
+  display:grid; grid-template-columns:auto minmax(0,1fr) auto; gap:10px; align-items:baseline;
+  padding:11px 12px; border:1px solid var(--line); border-radius:12px;
+  background:var(--bg); color:inherit; font:inherit; cursor:pointer;
+  transition:border-color .25s ease, transform .3s cubic-bezier(.22,1,.36,1);
+}
+.aopt:hover{ transform:translateY(-2px); border-color:var(--ink); }
+.aopt.is-on{ border-color:var(--accent); }
+/* включение рисуем заливкой: круг расходится из центра коробки и только
+   потом по нему проходит галочка. Смена фона рывком читалась как подмена
+   картинки, а расходящийся круг — как нажатие */
+.aopt__box{
+  width:15px; height:15px; align-self:center; border:1px solid var(--dim); border-radius:4px;
+  position:relative; overflow:hidden; transition:border-color .25s;
+}
+.aopt__box:before{
+  content:''; position:absolute; inset:0; border-radius:50%; background:var(--accent);
+  transform:scale(0); transition:transform .38s cubic-bezier(.22,1,.36,1);
+}
+.aopt.is-on .aopt__box{ border-color:var(--accent); }
+.aopt.is-on .aopt__box:before{ transform:scale(2.2); }
+.aopt__box svg{ position:absolute; inset:-1px; width:15px; height:15px; }
+.aopt__box path{
+  fill:none; stroke:var(--bg); stroke-width:2.6; stroke-linecap:round; stroke-linejoin:round;
+  stroke-dasharray:26; stroke-dashoffset:26; transition:stroke-dashoffset .3s cubic-bezier(.76,0,.24,1);
+}
+.aopt.is-on .aopt__box path{ stroke-dashoffset:0; transition-delay:.17s; }
+/* название слева, цена в своей колонке справа, пояснение мелкой строкой
+   под названием: так строка занимает два яруса вместо трёх, а цена
+   всё равно стоит столбиком и её не надо выискивать в тексте */
+.aopt__n{ display:block; font-size:.82rem; line-height:1.3; }
+.aopt__d{ display:block; color:var(--dim); font-size:.7rem; line-height:1.3; margin-top:1px; }
+.aopt__p{ font-family:var(--fm); font-size:.72rem; color:var(--dim); white-space:nowrap; transition:color .25s ease; }
+.aopt.is-on .aopt__p{ color:var(--ink); }
+.aopt.is-on .aopt__n{ font-weight:500; }
+
+/* ---- строка «нужно другое»: редкие задачи одной строкой,
+   иначе ради каждой пришлось бы заводить свой формат */
+.svc__rest{
+  margin-top:clamp(18px,2.6vh,30px); padding:clamp(16px,2.2vw,26px);
+  border:1px solid var(--ink); border-radius:18px;
+  display:flex; gap:16px; align-items:center; flex-wrap:wrap;
+}
+.svc__rt{ font-family:var(--fh); font-weight:600; font-size:clamp(15px,1.7vw,21px); }
+.svc__rd{ color:var(--dim); font-size:.88rem; flex:1; min-width:240px; }
+
+/* ---- касса и чек */
+.till{ position:sticky; top:20px; }
+.till__bar{ display:flex; align-items:center; gap:8px; margin-bottom:9px; }
+.till__snd{
+  margin-left:auto; font-size:.62rem; letter-spacing:.14em; text-transform:uppercase; color:var(--dim);
+  border:1px solid var(--line); border-radius:999px; padding:5px 11px;
+  background:none; font-family:inherit; cursor:pointer;
+  transition:border-color .25s, color .25s;
+}
+.till__snd.is-on{ border-color:var(--ink); color:var(--ink); }
+/* щель кассы, из которой лезет лента */
+.till__slot{
+  height:16px; border-radius:3px; background:var(--ink); position:relative; z-index:3;
+  box-shadow:0 6px 14px -8px color-mix(in srgb, var(--ink) 70%, transparent);
+}
+.till__slot:after{
+  content:''; position:absolute; left:12px; right:12px; top:6px; height:3px;
+  border-radius:2px; background:color-mix(in srgb, var(--bg) 35%, transparent);
+}
+.check{
+  position:relative; margin-top:-3px; padding:22px 22px 26px;
+  background:var(--paper); color:var(--ink);
+  font-family:var(--fm); font-size:12.5px; line-height:1.75;
+  box-shadow:0 26px 50px -34px color-mix(in srgb, var(--ink) 55%, transparent);
+  /* рваный край снизу: зубцы вырезаны маской, а не нарисованы картинкой */
+  -webkit-mask-image:radial-gradient(7px 7px at 7px calc(100% + 2px), transparent 6px, #000 6.5px);
+  mask-image:radial-gradient(7px 7px at 7px calc(100% + 2px), transparent 6px, #000 6.5px);
+  -webkit-mask-size:14px 100%; mask-size:14px 100%;
+  -webkit-mask-repeat:repeat-x; mask-repeat:repeat-x;
+  transform-origin:top center;
+}
+.check.is-tear{ animation:tear .9s cubic-bezier(.5,0,.75,0) forwards; }
+@keyframes tear{
+  30%{ transform:translateY(7px) rotate(.6deg) }
+  100%{ transform:translateY(120%) rotate(-3deg); opacity:0 }
+}
+.ch__mark{ text-align:center; font-family:var(--fh); font-weight:600; font-size:13px; letter-spacing:.12em; }
+.ch__sub{ text-align:center; color:var(--dim); font-size:10.5px; letter-spacing:.08em; }
+.ch__rule{ border-top:1px dashed color-mix(in srgb, var(--ink) 35%, transparent); margin:12px 0 10px; }
+.ch__k{ font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--dim); margin-bottom:4px; }
+
+/* строка чека печатается слева направо. Ступени и время подобраны под
+   звук головки: 34 шага по 26 мс — это и есть ощущение принтера */
+.li{ display:flex; align-items:baseline; gap:8px; white-space:nowrap; clip-path:inset(0 100% 0 0); }
+.li.is-print{ animation:print .88s steps(34) forwards; }
+@keyframes print{ to{ clip-path:inset(0 0 0 0) } }
+.li.is-out{ animation:unprint .32s ease forwards; }
+@keyframes unprint{ to{ clip-path:inset(0 0 0 100%); height:0; margin:0; opacity:0 } }
+.li__n{ overflow:hidden; text-overflow:ellipsis; }
+/* точки-заполнители между названием и ценой — как в настоящем чеке */
+.li__dots{ flex:1; border-bottom:1px dotted color-mix(in srgb, var(--ink) 40%, transparent); transform:translateY(-3px); }
+.li__p{ white-space:nowrap; }
+.li--free .li__p{ color:var(--dim); }
+
+.ch__tot{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin-top:6px; }
+.ch__tk{ font-size:11px; letter-spacing:.2em; text-transform:uppercase; }
+.ch__tv{ font-family:var(--fh); font-weight:600; font-size:24px; letter-spacing:-.02em; }
+.ch__tv span{ display:inline-block; animation:chRoll .36s cubic-bezier(.22,1,.36,1); }
+@keyframes chRoll{ from{ opacity:0; transform:translateY(.3em) } }
+.ch__row{ display:flex; justify-content:space-between; gap:10px; color:var(--dim); font-size:11.5px; }
+.ch__bars{ display:flex; gap:2px; align-items:flex-end; height:38px; margin:14px 0 6px; }
+.ch__bars i{ display:block; background:var(--ink); height:100%; }
+.ch__bye{ text-align:center; color:var(--dim); font-size:10.5px; letter-spacing:.1em; }
+.till__go{ width:100%; margin-top:16px; }
+.till__hint{ margin-top:10px; text-align:center; font-size:.74rem; color:var(--dim); }
+
+@media (max-width:1200px){ .svc__fmts{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:900px){
+  .svc__grid{ grid-template-columns:1fr; }
+  .till{ position:static; }
+  .check{ max-width:400px; }
+  .fmt__d{ min-height:0; }
+}
+@media (prefers-reduced-motion:reduce){
+  .rv{ opacity:1; transform:none; }
+  .li{ clip-path:none; }
+  .li.is-print{ animation:none; }
+  .check.is-tear{ animation:none; opacity:0; }
+}
+
+/* ============================================================
+   Четвёртый экран — как я работаю, «гармошка».
+   Четыре полосы с подписями вдоль: под курсором полоса разъезжается
+   и показывает чертёж шага, соседние сжимаются. Весь процесс
+   держится в одном экране — листать за ним ничего не надо.
+   ============================================================ */
+.flow{
+  position:relative; border-top:1px solid var(--line);
+  min-height:100svh; display:flex; flex-direction:column;
+  padding:clamp(58px,8vh,100px) var(--pad) clamp(34px,5vh,64px);
+}
+.flow__head{ display:flex; flex-direction:column; gap:8px; align-items:flex-start; margin-bottom:clamp(16px,2.6vh,32px); }
+.flow__h{
+  margin:0; font-family:var(--fh); font-weight:var(--h1w);
+  font-size:clamp(23px,3.3vw,46px); line-height:1.04; letter-spacing:calc(var(--h1track) * 1em);
+}
+.flow__lead{ margin:0; color:var(--dim); max-width:56ch; }
+
+.flow__acc{ flex:1 1 auto; min-height:0; display:flex; gap:10px; }
+
+.flow__p{
+  position:relative; flex:1 1 0; min-width:0; overflow:hidden; cursor:pointer;
+  border:1px solid var(--line); border-radius:18px; background:var(--wire);
+  transition:flex-grow .7s cubic-bezier(.76,0,.24,1), background .5s ease, border-color .4s ease;
+}
+.flow__p.is-on{ flex-grow:3.4; background:var(--bg); border-color:var(--ink); }
+
+/* подпись стоит вдоль полосы — в сжатом виде читается только она */
+.flow__side{
+  position:absolute; left:0; top:0; bottom:0; width:62px; z-index:2;
+  display:flex; flex-direction:column; align-items:center; justify-content:space-between;
+  padding:18px 0;
+}
+.flow__dot{ width:9px; height:9px; border-radius:50%; background:var(--line); flex:none;
+  transition:background .4s ease, transform .4s cubic-bezier(.76,0,.24,1); }
+.flow__p.is-on .flow__dot{ background:var(--accent); transform:scale(1.4); }
+.flow__vert{
+  writing-mode:vertical-rl; transform:rotate(180deg); white-space:nowrap;
+  font-family:var(--fh); font-weight:600; font-size:clamp(14px,1.5vw,19px);
+  letter-spacing:calc(var(--h1track) * 1em); color:var(--dim); transition:color .4s ease;
+}
+.flow__p.is-on .flow__vert{ color:var(--ink); }
+
+.flow__in{
+  position:absolute; inset:0 20px 20px 62px; display:flex; flex-direction:column; justify-content:flex-end;
+  opacity:0; transform:translateX(14px); pointer-events:none;
+  transition:opacity .55s cubic-bezier(.22,1,.36,1), transform .55s cubic-bezier(.22,1,.36,1);
+}
+.flow__p.is-on .flow__in{ opacity:1; transform:none; }
+
+/* чертёж шага: тот же язык, что на экране услуг — линии на миллиметровке */
+.flow__art{ flex:1; min-height:0; position:relative; margin-bottom:14px; }
+.flow__art svg{ position:absolute; inset:0; width:100%; height:100%; }
+.flow__art .ln{ stroke:var(--ink); fill:none; stroke-width:1.5; }
+.flow__art .dim{ stroke:var(--accent); stroke-width:1; stroke-dasharray:3 3; fill:none; }
+/* линии дочерчиваются только у раскрытой полосы, длину даёт JS */
+.flow__p.is-on .flow__art .ln{
+  stroke-dasharray:var(--len,600); stroke-dashoffset:var(--len,600);
+  animation:flowDraw .8s cubic-bezier(.76,0,.24,1) forwards var(--dl,0ms);
+}
+@keyframes flowDraw{ to{ stroke-dashoffset:0 } }
+
+.flow__k{ font-size:.6rem; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); }
+.flow__d{ font-size:.9rem; color:var(--dim); max-width:44ch; margin-top:6px; }
+
+/* вход секции: полосы въезжают по очереди */
+.flow.is-in .flow__p{ animation:flowIn .6s cubic-bezier(.22,1,.36,1) both var(--d,0ms); }
+@keyframes flowIn{ from{ opacity:0; transform:translateY(20px) } }
+
+@media (max-width:900px){
+  .flow{ min-height:0; }
+  .flow__acc{ flex-direction:column; }
+  .flow__p{ min-height:76px; }
+  .flow__p.is-on{ min-height:330px; }
+  .flow__in{ inset:0 16px 16px 62px; }
+}
+@media (prefers-reduced-motion:reduce){
+  .flow.is-in .flow__p{ animation:none; }
+  .flow__p.is-on .flow__art .ln{ animation:none; stroke-dashoffset:0; }
+}
+
+/* ============================================================
+   Пятый экран — обо мне. Одна мысль во весь экран: слова выезжают
+   снизу по очереди, под ними четыре сухих факта. Никакого
+   самоописания — только конкретика.
+   ============================================================ */
+.ab{
+  position:relative; border-top:1px solid var(--line);
+  min-height:100svh; display:flex; flex-direction:column; justify-content:center;
+  padding:clamp(58px,8vh,100px) var(--pad) clamp(40px,6vh,70px);
+}
+.ab__eyebrow{ margin-bottom:clamp(18px,3vh,34px); }
+
+.ab__big{
+  margin:0; font-family:var(--fh); font-weight:var(--h1w);
+  letter-spacing:calc(var(--h1track) * 1em); line-height:1.02;
+  font-size:clamp(30px,6.2vw,94px);
+}
+/* каждое слово в своей обрезке — только так строка выезжает снизу,
+   а не проявляется целиком */
+.ab__big w{ display:inline-block; overflow:hidden; vertical-align:bottom; }
+.ab__big w b{
+  display:inline-block; font-weight:inherit;
+  transform:translateY(105%);
+  transition:transform .75s cubic-bezier(.22,1,.36,1) var(--d,0ms);
+}
+.ab.is-in .ab__big w b{ transform:none; }
+.ab__big em{ font-style:normal; color:var(--dim); }
+
+.ab__facts{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  gap:clamp(14px,2vw,28px); margin-top:clamp(30px,5vh,64px);
+}
+.ab__f{
+  border-top:1px solid var(--line); padding-top:14px; font-size:.88rem; color:var(--dim);
+  opacity:0; transform:translateY(14px);
+  transition:opacity .6s ease var(--d,0ms), transform .6s cubic-bezier(.22,1,.36,1) var(--d,0ms);
+}
+.ab.is-in .ab__f{ opacity:1; transform:none; }
+.ab__f b{ display:block; font-family:var(--fh); color:var(--ink); font-size:1.12rem; margin-bottom:4px; }
+
+@media (max-width:900px){
+  .ab{ min-height:0; padding-top:clamp(50px,8vh,80px); }
+}
+@media (prefers-reduced-motion:reduce){
+  .ab__big w b{ transform:none; }
+  .ab__f{ opacity:1; transform:none; }
+}
+
+/* ============================================================
+   Шестой экран — контакты. Слева визитка, которая наклоняется
+   вслед за курсором, справа короткая заявка. Пока нет сервера,
+   кнопка кладёт текст заявки в буфер и зовёт в телеграм.
+   ============================================================ */
+.ct{
+  position:relative; border-top:1px solid var(--line);
+  min-height:100svh; display:flex; flex-direction:column; justify-content:center;
+  padding:clamp(58px,8vh,100px) var(--pad) clamp(40px,6vh,70px);
+}
+.ct__head{ display:flex; flex-direction:column; gap:8px; align-items:flex-start; margin-bottom:clamp(20px,3.4vh,40px); }
+.ct__h{
+  margin:0; font-family:var(--fh); font-weight:var(--h1w);
+  font-size:clamp(23px,3.3vw,46px); line-height:1.04; letter-spacing:calc(var(--h1track) * 1em);
+}
+.ct__lead{ margin:0; color:var(--dim); max-width:56ch; }
+
+.ct__grid{
+  display:grid; grid-template-columns:minmax(290px,.92fr) minmax(0,1.08fr);
+  gap:clamp(20px,3.4vw,58px); align-items:center;
+}
+
+/* ---- визитка. Наклон живёт на внутреннем узле, а перспектива на обёртке:
+   если поставить их на один элемент, карточка дёргается на границе */
+.ct__wrap{ perspective:900px; }
+.ct__card{
+  position:relative; overflow:hidden; border:1px solid var(--ink); border-radius:20px;
+  padding:clamp(20px,2.6vw,32px); background:var(--bg); transform-style:preserve-3d;
+  will-change:transform;
+  --mx:50%; --my:50%;      /* где стоит курсор на карточке, пишет script.js */
+  transition:transform .4s cubic-bezier(.22,1,.36,1), box-shadow .4s ease;
+  box-shadow:0 18px 50px -34px color-mix(in srgb, var(--ink) 70%, transparent);
+}
+.ct__card:hover{ box-shadow:0 34px 70px -34px color-mix(in srgb, var(--ink) 60%, transparent); }
+
+/* пятно света под курсором. Светит не белым, а сгущением --ink: на бумажной
+   палитре белое пятно на светлом фоне не видно вообще, а лёгкая тень читается
+   как наклон карточки к источнику света */
+.ct__card:before{
+  content:''; position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:radial-gradient(38% 46% at var(--mx) var(--my),
+    color-mix(in srgb, var(--ink) 13%, transparent) 0,
+    color-mix(in srgb, var(--ink) 5%, transparent) 45%,
+    transparent 72%);
+  opacity:0; transition:opacity .45s ease;
+}
+.ct__card.is-glow:before{ opacity:1; }
+
+/* знак бесконечности водяным знаком за текстом визитки. Контур — тот же
+   путь x=cos t, y=sin t·cos t, что рисует пылью герой (dust.js), только
+   не частицами, а SVG-маской: держит фигуру и по центру, и в 3D-наклоне
+   карточки, без веса видео. Маска задаёт только форму, а вся «начинка» —
+   обычный CSS-градиент, поэтому блик перекрашивается через var(--ink)
+   вместе с темой и бежит по контуру той же техникой, что «листай» на
+   первом экране (@keyframes run). */
+.ct__glyph{
+  position:absolute; inset:0; z-index:0;
+  pointer-events:none;
+}
+/* оба слоя знака растянуты на всю карточку, а форму задаёт маска по центру:
+   так координаты курсора --mx/--my и координаты градиентов совпадают —
+   иначе свет пришлось бы пересчитывать из системы карточки в систему знака */
+.ct__glyph:before,
+.ct__glyph:after{
+  content:''; position:absolute; inset:0;
+  -webkit-mask-image:url("assets/img/ct-mark.svg");
+  mask-image:url("assets/img/ct-mark.svg");
+  -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
+  -webkit-mask-size:64% auto; mask-size:64% auto;
+  -webkit-mask-position:center; mask-position:center;
+}
+.ct__glyph:before{
+  background:
+    linear-gradient(115deg,
+      transparent 22%,
+      color-mix(in srgb, var(--ink) 55%, transparent) 42%,
+      var(--ink) 50%,
+      color-mix(in srgb, var(--ink) 55%, transparent) 58%,
+      transparent 78%) 0 0 / 260% 100%,
+    color-mix(in srgb, var(--ink) 16%, transparent);
+  animation:ctSheen 4.6s ease-in-out infinite;
+}
+.ct.is-in .ct__glyph:before{ animation-play-state:running; }
+
+/* знак зажигается там, где курсор: тот же контур, но плотным цветом,
+   проявляется только внутри пятна света. Пятно живёт в координатах
+   карточки, поэтому свет и «зажжённая» часть знака всегда совпадают */
+.ct__glyph:after{
+  background:radial-gradient(24% 30% at var(--mx) var(--my),
+    var(--ink) 0,
+    color-mix(in srgb, var(--ink) 50%, transparent) 42%,
+    transparent 70%);
+  opacity:0; transition:opacity .4s ease;
+}
+.ct__card.is-glow .ct__glyph:after{ opacity:1; }
+
+@keyframes ctSheen{
+  0%,14%{ background-position:-70% 0, 0 0; }
+  62%,100%{ background-position:170% 0, 0 0; }
+}
+@media (prefers-reduced-motion:reduce){
+  .ct__glyph:before{ animation:none; background-position:50% 0, 0 0; }
+}
+
+.ct__mark,.ct__name,.ct__role,.ct__rows{ position:relative; z-index:2; }
+
+.ct__mark{ font-family:var(--fh); font-weight:600; letter-spacing:.06em; font-size:.92rem; }
+.ct__name{
+  font-family:var(--fh); font-weight:600; letter-spacing:calc(var(--h1track) * 1em);
+  font-size:clamp(24px,3vw,40px); line-height:1.05; margin:clamp(24px,4.5vh,50px) 0 5px;
+}
+.ct__role{ color:var(--dim); font-size:.9rem; }
+.ct__rows{ margin-top:clamp(20px,3.6vh,38px); border-top:1px solid var(--line); }
+.ct__row{
+  display:flex; justify-content:space-between; align-items:center; gap:14px;
+  padding:11px 0; border-bottom:1px solid var(--line); font-size:.84rem; color:var(--dim);
+}
+.ct__row b{ font-family:var(--fh); font-weight:600; color:var(--ink); text-align:right; }
+.ct__live{
+  display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--accent);
+  margin-right:8px; vertical-align:1px;
+  box-shadow:0 0 0 0 color-mix(in srgb, var(--accent) 45%, transparent);
+}
+.ct.is-in .ct__live{ animation:beat 2.6s ease-out infinite; }
+
+/* ---- заявка */
+.ct__form{ display:grid; gap:10px; align-content:center; }
+.ct__in{
+  width:100%; font:inherit; color:var(--ink); background:none;
+  border:1px solid var(--line); border-radius:var(--radius); padding:15px 16px; outline:none;
+  transition:border-color .3s ease;
+}
+.ct__in:focus{ border-color:var(--ink); }
+.ct__in::placeholder{ color:var(--dim); }
+select.ct__in{ cursor:pointer; }
+.ct__send{ justify-self:start; margin-top:6px; }
+.ct__out{ margin:2px 0 0; font-size:.84rem; color:var(--dim); min-height:2.6em; }
+.ct__out b{ color:var(--ink); font-weight:500; }
+
+/* ---- подвал: мелкая строка сверху, гигантский знак снизу */
+/* Подвал держим почти во весь экран — он читается как последний слайд,
+   а не как обрезок под контактами. «Почти», а не 100vh: остаток экрана
+   подсказывает, что страница закончилась, и не крадёт места у знака. */
+.foot{
+  min-height:92vh; display:flex; flex-direction:column;
+  border-top:1px solid var(--line); padding:22px var(--pad) 0; overflow:hidden;
+}
+.foot__row{
+  display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--dim);
+}
+.foot__note{ margin:0; letter-spacing:0; text-transform:none; font-size:.8rem; max-width:52ch; }
+/* справа оставлено место под шестерёнку твикера — иначе она села бы на «Минск» */
+.foot__right{ display:flex; gap:20px; align-items:center; padding-right:52px; }
+.foot__right a[data-empty]{ color:var(--dim); }
+
+/* Знак во всю ширину. Размер подбирает JS: на глаз выставленный vw
+   разъезжается, стоит поменять текст знака или шрифт в твикере. */
+/* межстрочное .78 годилось для одной строки, а на двух буквы налезали
+   друг на друга — при таких кеглях даже пара процентов заметна */
+.foot__big{
+  display:block; margin-top:auto; margin-bottom:clamp(8px,1.6vh,22px);
+  line-height:.86; overflow:hidden; color:var(--ink);
+}
+/* исходный знак остаётся в разметке источником текста для твикера,
+   а на экране его заменяют строки .foot__ln */
+.foot__big > span{ position:absolute; visibility:hidden; pointer-events:none; }
+
+.foot__ln{
+  /* блок с width:fit-content — каждая строка на своей строке,
+     но ширина равна тексту, иначе замерить её нельзя */
+  display:block; width:fit-content;
+  font-family:var(--fh); font-weight:var(--h1w);
+  letter-spacing:-.045em; white-space:nowrap;
+  transform:translateY(16%);
+  transition:transform 1s cubic-bezier(.22,1,.36,1) var(--d,0ms);
+}
+.foot.is-in .foot__ln{ transform:translateY(0); }
+
+@media (prefers-reduced-motion:reduce){
+  .foot__ln{ transform:translateY(0); }
+}
+
+@media (max-width:900px){
+  .ct{ min-height:0; }
+  .ct__grid{ grid-template-columns:1fr; gap:24px; }
+  .foot{ flex-direction:column; align-items:flex-start; }
+}
+@media (prefers-reduced-motion:reduce){
+  .ct__card{ transform:none !important; }
+}
+
+/* ============================================================
+   Преимущества — шесть плиток, три сверху и три снизу.
+   Иконки не картинки, а линии: вычерчиваются штрихом, когда
+   блок доезжает до экрана — тем же приёмом, что чертежи услуг.
+   ============================================================ */
+/* без верхней линии: секция наезжает на первый экран, и граница
+   читалась бы как шов посреди параллакса */
+.adv{
+  position:relative;
+  padding:clamp(58px,8vh,100px) var(--pad) clamp(40px,6vh,80px);
+}
+.adv__head{ display:flex; flex-direction:column; gap:8px; align-items:flex-start; margin-bottom:clamp(20px,3.4vh,38px); }
+.adv__h{
+  margin:0; font-family:var(--fh); font-weight:var(--h1w);
+  font-size:clamp(23px,3.3vw,46px); line-height:1.04; letter-spacing:calc(var(--h1track) * 1em);
+}
+.adv__lead{ margin:0; color:var(--dim); max-width:56ch; }
+
+.adv__grid{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+.adv__c{
+  border:1px solid var(--line); border-radius:18px; background:var(--wire);
+  padding:clamp(18px,2.4vw,28px);
+  opacity:0; transform:translateY(18px);
+  transition:opacity .6s ease var(--d,0ms), transform .7s cubic-bezier(.22,1,.36,1) var(--d,0ms),
+             border-color .35s ease, background .35s ease;
+}
+.adv.is-in .adv__c{ opacity:1; transform:none; }
+.adv__c:hover{ border-color:var(--ink); background:var(--bg); }
+/* «выдавленная» плитка: своего цвета у неё нет, объём делают две тени —
+   тёмная снизу-справа и светлая сверху-слева. Оттенки считаем от палитры,
+   иначе твикер поменял бы фон, а плитка осталась бы бежевой */
+.adv__i{
+  width:62px; height:62px; margin-bottom:16px; border-radius:17px;
+  display:grid; place-items:center;
+  background:var(--bg);
+  box-shadow:5px 5px 12px -4px color-mix(in srgb, var(--ink) 17%, transparent),
+             -5px -5px 12px -4px color-mix(in srgb, var(--bg) 25%, #fff),
+             inset 0 0 0 1px color-mix(in srgb, var(--bg) 55%, #fff);
+  transition:transform .4s cubic-bezier(.22,1,.36,1);
+}
+.adv__c:hover .adv__i{ transform:translateY(-2px) rotate(-3deg); }
+.adv__i svg{ width:56%; height:56%; overflow:visible; }
+.adv__i path,.adv__i rect,.adv__i circle,.adv__i line{
+  fill:none; stroke:var(--ink); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round;
+  stroke-dasharray:var(--len,140); stroke-dashoffset:var(--len,140);
+  transition:stroke-dashoffset .85s cubic-bezier(.76,0,.24,1) var(--dl,0ms);
+}
+.adv.is-in .adv__i path,.adv.is-in .adv__i rect,
+.adv.is-in .adv__i circle,.adv.is-in .adv__i line{ stroke-dashoffset:0; }
+.adv__t{ font-family:var(--fh); font-weight:600; font-size:clamp(15px,1.6vw,20px); letter-spacing:-.02em; }
+.adv__d{ color:var(--dim); font-size:.86rem; margin-top:8px; }
+
+@media (max-width:1100px){ .adv__grid{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:700px){ .adv__grid{ grid-template-columns:1fr; } }
+
+/* ============================================================
+   Принципы — четыре карточки с крупными номерами.
+   ============================================================ */
+.pr{
+  position:relative; border-top:1px solid var(--line);
+  padding:clamp(58px,8vh,100px) var(--pad) clamp(40px,6vh,80px);
+}
+.pr__head{ display:flex; flex-direction:column; gap:8px; align-items:flex-start; margin-bottom:clamp(20px,3.4vh,38px); }
+.pr__h{
+  margin:0; font-family:var(--fh); font-weight:var(--h1w);
+  font-size:clamp(23px,3.3vw,46px); line-height:1.04; letter-spacing:calc(var(--h1track) * 1em);
+}
+.pr__lead{ margin:0; color:var(--dim); max-width:56ch; }
+
+.pr__grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:clamp(12px,2vw,22px); }
+.pr__c{
+  position:relative; border:1px solid var(--line); border-radius:20px; background:var(--wire);
+  padding:clamp(22px,3vw,36px); overflow:hidden;
+  opacity:0; transform:translateY(20px);
+  transition:opacity .6s ease var(--d,0ms), transform .7s cubic-bezier(.22,1,.36,1) var(--d,0ms),
+             border-color .4s ease, background .4s ease;
+}
+.pr.is-in .pr__c{ opacity:1; transform:none; }
+.pr__c:hover{ border-color:var(--ink); background:var(--bg); }
+.pr__n{
+  font-family:var(--fh); font-weight:800; letter-spacing:-.05em; line-height:.85;
+  font-size:clamp(52px,7vw,104px); color:var(--accent);
+  margin-bottom:clamp(14px,2.4vh,26px);
+}
+.pr__t{ font-family:var(--fh); font-weight:600; font-size:clamp(17px,1.9vw,25px);
+  line-height:1.15; letter-spacing:calc(var(--h1track) * 1em); }
+.pr__d{ color:var(--dim); font-size:.9rem; margin-top:10px; max-width:38ch; }
+
+@media (max-width:900px){ .pr__grid{ grid-template-columns:1fr; } }
+@media (prefers-reduced-motion:reduce){
+  .adv__c,.pr__c{ opacity:1; transform:none; }
+  .adv__i path,.adv__i rect,.adv__i circle,.adv__i line{ stroke-dashoffset:0; }
+}
+
+/* ============================================================
+   Стек внутри «обо мне»: крупный список слева, справа — зачем
+   это нужно заказчику. Технологии сами по себе ему ничего не
+   говорят, поэтому каждая строка объясняет выгоду.
+   ============================================================ */
+.stk{
+  border-top:1px solid var(--line); margin-top:clamp(40px,7vh,90px);
+  padding-top:clamp(34px,5vh,60px);
+}
+.stk__head{ display:flex; flex-direction:column; gap:8px; align-items:flex-start; margin-bottom:clamp(20px,3.4vh,38px); }
+.stk__h{
+  margin:0; font-family:var(--fh); font-weight:var(--h1w);
+  font-size:clamp(21px,2.9vw,40px); line-height:1.04; letter-spacing:calc(var(--h1track) * 1em);
+}
+.stk__grid{
+  display:grid; grid-template-columns:minmax(0,1.05fr) minmax(270px,.85fr);
+  gap:clamp(22px,4vw,58px); align-items:center;
+}
+.stk__col{ display:flex; flex-wrap:wrap; gap:0 clamp(16px,2.2vw,32px); }
+.stk__i{
+  font-family:var(--fh); font-weight:600; letter-spacing:calc(var(--h1track) * 1em); line-height:1.14;
+  font-size:clamp(19px,2.9vw,42px); color:var(--dim); cursor:default;
+  opacity:0; transform:translateY(12px);
+  transition:opacity .5s ease var(--d,0ms), transform .55s cubic-bezier(.22,1,.36,1) var(--d,0ms), color .3s ease;
+}
+.ab.is-in .stk__i{ opacity:1; transform:none; }
+.stk__i:hover,.stk__i.is-on{ color:var(--ink); }
+/* контуром — то, что берётся в работу, но в портфолио пока нет */
+.stk__i[data-soon]{ -webkit-text-stroke:1px var(--dim); color:transparent; }
+.stk__i[data-soon]:hover,.stk__i[data-soon].is-on{ -webkit-text-stroke-color:var(--ink); }
+
+.stk__side{ border-left:1px solid var(--line); padding-left:clamp(16px,2.2vw,28px); min-height:8.5em; }
+.stk__k{ font-size:.62rem; letter-spacing:.16em; text-transform:uppercase; color:var(--dim); }
+.stk__t{ font-family:var(--fh); font-weight:600; font-size:clamp(17px,2.1vw,27px); margin-top:8px; }
+.stk__d{ color:var(--dim); margin-top:10px; max-width:36ch; }
+.stk__note{ margin:clamp(18px,3vh,30px) 0 0; font-size:.78rem; color:var(--dim); }
+.stk__note b{ font-weight:400; border-bottom:1px dashed var(--dim); }
+
+@media (max-width:900px){
+  .stk__grid{ grid-template-columns:1fr; }
+  .stk__side{ border-left:0; border-top:1px solid var(--line); padding:16px 0 0; min-height:0; }
+}
+@media (prefers-reduced-motion:reduce){ .stk__i{ opacity:1; transform:none; } }
+
+/* ============================================================
+   Меню: пункт собран из букв в два слоя. Верхний уезжает вверх,
+   нижний приходит снизу, каждая буква со своей задержкой.
+   ============================================================ */
+.menu__list a.flip{
+  /* line-height ниже единицы нужен приёму, иначе буква не успевает уйти
+     за край; зато строки липнут друг к другу — разводим их отступом */
+  position:relative; display:block; overflow:hidden; white-space:nowrap; line-height:.8;
+  padding:.06em 0;
+}
+.menu__list a.flip i{ display:flex; font-style:normal; }
+.menu__list a.flip .flip__b{ position:absolute; inset:0; }
+.menu__list a.flip span{
+  display:inline-block;
+  transition:transform .3s cubic-bezier(.76,0,.24,1);
+}
+.menu__list a.flip .flip__b span{ transform:translateY(110%); }
+.menu__list a.flip:hover .flip__a span{ transform:translateY(-110%); }
+.menu__list a.flip:hover .flip__b span{ transform:translateY(0); }
+.menu__list a[data-empty]{ color:var(--dim); }
+
+@media (prefers-reduced-motion:reduce){
+  .menu__list a.flip .flip__b{ display:none; }
+  .menu__list a.flip span{ transition:none; }
+}
+
+/* ============================================================
+   Кнопка с бегущей по рамке искрой. Вместо offset-path крутим
+   конический градиент и вырезаем из него рамку маской — так же
+   выглядит, но работает без библиотек и лишних узлов.
+   ============================================================ */
+@property --spark{ syntax:'<angle>'; initial-value:0deg; inherits:false; }
+
+.hbtn--spark{ position:relative; }
+.hbtn--spark:after{
+  content:''; position:absolute; inset:-1px; border-radius:inherit; padding:1.5px;
+  background:conic-gradient(from var(--spark),
+    transparent 0 62%,
+    color-mix(in srgb, var(--accent) 55%, transparent) 78%,
+    var(--accent) 88%,
+    transparent 96% 100%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor; mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite:exclude;
+  animation:hbtnSpark 4.5s linear infinite;
+  pointer-events:none;
+}
+@keyframes hbtnSpark{ to{ --spark:360deg } }
+
+@media (prefers-reduced-motion:reduce){
+  .hbtn--spark:after{ animation:none; }
+}
+
+/* ============================================================
+   Переход между экранами — «проявление». Выбран в лаборатории
+   (папка lab/, порт 8141) из двадцати вариантов: длина 105% экрана,
+   сила 175%, плавность «с выбегом».
+
+   Экран набирает непрозрачность, пока въезжает снизу. Долю въезда
+   пишет в --tin скрипт, дальше всё считает CSS. Сила 175% значит,
+   что первую половину пути секция ещё полностью прозрачна, а потом
+   быстро проявляется — иначе проявление размазывается на весь экран
+   и читается как «сайт подтормаживает».
+   ============================================================ */
+:root{ --tamp:1.75; }
+
+main > section{
+  position:relative; z-index:1; background:var(--bg);
+  opacity:calc(1 - (1 - var(--tin,1)) * var(--tamp));
+  will-change:opacity;
+}
+.foot{ position:relative; z-index:1; background:var(--bg); }
+
+/* доехавшую секцию отпускаем совсем: постоянная opacity меньше единицы
+   поднимает её на свой слой и без нужды греет отрисовку */
+main > section.is-full{ opacity:1; will-change:auto; }
+
+/* Глубина на стыке экранов: части въезжающей секции отстают от прокрутки
+   по-разному, --dz задаёт ход каждой. Долю въезда пишет в --pin скрипт.
+   Доехавшую секцию обнуляем начисто — трансформ и will-change создают
+   containing block и ломают position:sticky у чека внутри услуг */
+main > section:not(.hero) > *{
+  transform:translateY(calc((1 - var(--pin,1)) * var(--dz,0) * 1px));
+  will-change:transform;
+}
+main > section.is-full > *{ transform:none; will-change:auto; }
+
+@media (prefers-reduced-motion:reduce){
+  main > section:not(.hero) > *{ transform:none; will-change:auto; }
+}
+
+/* содержимое первого экрана всё равно уходит вверх медленнее прокрутки
+   и гаснет — это ощущение глубины остаётся от прежнего параллакса */
+.hero__inner,
+.hero__foot{
+  transform:translateY(calc(var(--out,0) * -7vh));
+  opacity:calc(1 - var(--out,0) * .75);
+  will-change:transform, opacity;
+}
+
+@media (prefers-reduced-motion:reduce){
+  main > section{ opacity:1; }
+  .hero__inner,.hero__foot{ transform:none; opacity:1; }
+}
+
+/* ============================================================
+   Телефон и всё сенсорное.
+
+   Правило отбора — (hover:none), а не ширина экрана: дело не в том,
+   что экран узкий, а в том, что курсора нет. Фонарь под курсором,
+   магнит у кнопки и вечно крутящийся неон на сенсоре либо бессмысленны,
+   либо просто жгут батарею, перерисовывая то, чего никто не наводит.
+   ============================================================ */
+@media (hover:none){
+  /* фонарь ездит за указателем — на тач-экране он замирает там, где
+     последний раз ткнули пальцем, и остаётся пятном посреди страницы */
+  .lamp{ display:none; }
+
+  /* неон оставляем видимым, но перестаём крутить: непрерывная анимация
+     конического градиента на двух десятках элементов держит GPU занятым
+     всё время, пока страница открыта */
+  body.is-neon-always .fmt:before,
+  body.is-neon-always .aopt:before,
+  body.is-neon-always .fmt:after,
+  body.is-neon-always .aopt:after{ animation:none; }
+
+  /* цели нажатия: палец промахивается по всему, что ниже 44 пикселей */
+  .top__tg,.top__mark,.till__snd{
+    display:inline-flex; align-items:center; min-height:44px;
+  }
+  .menu__list a,.menu__list .flip{ min-height:48px; display:flex; align-items:center; }
+  /* ссылки на телеграм в меню и подвале — без класса, ловим по месту */
+  .menu__meta a,.foot__right a{ display:inline-flex; align-items:center; min-height:44px; }
+  .hbtn{ min-height:44px; }
+  .diff__k{ min-height:48px; }
+
+  /* прицел вокруг наведения не нужен: наводить нечем */
+  .cursor{ display:none; }
+}
+
+/* узкий экран: тут уже про место, а не про палец */
+@media (max-width:520px){
+  .hero__title{ overflow-wrap:anywhere; }
+  .fgrp{ padding:12px 10px 13px; }
+  .fgrp__row{ grid-template-columns:1fr; }
+  .adv__grid{ gap:9px; }
+}

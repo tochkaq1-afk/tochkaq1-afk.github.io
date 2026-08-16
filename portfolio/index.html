@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="ru" data-cursor="dot" data-btn="wide">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AETERNA — дизайнер и разработчик</title>
+<meta name="description" content="Собираю сайты, боты и системы на своём коде: дизайн и разработка. Портфолио и услуги. Минск.">
+<meta name="theme-color" content="#f2f0ea">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Пара здесь обязана совпадать с DEFAULTS.font в script.js. Раньше тут
+     стоял Onest, а по умолчанию включён Golos Text — из-за этого шрифты
+     качались дважды: сначала ненужный набор, потом нужный поверх него.
+     Начертания урезаны до тех, что правда встречаются на странице. -->
+<link id="fontLink" rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Golos+Text:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="styles.css?v=67">
+</head>
+<body>
+
+<div class="lamp" aria-hidden="true"></div>
+
+<div class="cursor" aria-hidden="true">
+  <div class="cursor__cross"><i class="cursor__cx"></i><i class="cursor__cy"></i></div>
+  <div class="cursor__dot"></div>
+  <div class="cursor__ring"></div>
+  <div class="cursor__frame"><i></i><i></i><i></i><i></i></div>
+  <div class="cursor__lens"></div>
+  <div class="cursor__read"><span class="cursor__x">0</span><span class="cursor__y">0</span></div>
+</div>
+
+<header class="top">
+  <a class="top__mark" href="#"><span class="mark" data-txt="mark">AETÉRNASTUDIO</span></a>
+  <div class="top__right">
+    <a class="top__tg" data-tg href="#" target="_blank" rel="noopener">
+      <i class="top__live" aria-hidden="true"></i><span data-txt="tg">телеграм</span>
+    </a>
+    <span class="top__place" data-txt="place">Минск</span>
+  </div>
+</header>
+
+<nav class="menu" id="menu" aria-hidden="true">
+  <div class="menu__inner">
+    <ul class="menu__list"></ul>
+    <div class="menu__side">
+      <a class="hbtn hbtn--spark menu__cta" href="#contact" data-key="btn1"></a>
+      <div class="menu__meta">
+        <span data-txt="place">Минск</span>
+        <a data-tg href="#" target="_blank" rel="noopener"><span data-txt="tg">телеграм</span></a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main>
+<section class="hero" id="hero">
+
+  <div class="hero__grid" aria-hidden="true">
+    <div class="hero__cols"></div>
+    <div class="hero__rows"></div>
+  </div>
+
+  <div class="hero__inner">
+
+    <div class="hero__left">
+      <div class="bl bl--eyebrow">
+        <i class="bl__ph"></i>
+        <span class="bl__c"><span data-txt="role">дизайнер и разработчик</span></span>
+      </div>
+
+      <h1 class="hero__title">
+        <span class="bl bl--h1">
+          <i class="bl__ph"></i>
+          <span class="bl__c" data-txt="name">AETÉRNA</span>
+        </span>
+        <span class="bl bl--h2">
+          <i class="bl__ph"></i>
+          <span class="bl__c" data-txt="tag">Собираю сайты, боты и системы. Всё на своём коде.</span>
+        </span>
+      </h1>
+
+      <div class="bl bl--lead">
+        <i class="bl__ph"></i>
+        <p class="bl__c" data-txt="lead">Без конструкторов и шаблонов. Каждый экран — отдельная идея, а не блок из библиотеки.</p>
+      </div>
+
+      <div class="bl bl--cta">
+        <i class="bl__ph"></i>
+        <div class="bl__c">
+          <button class="hbtn hbtn--spark" type="button" data-key="btn1" data-states></button>
+          <a class="hbtn hbtn--quiet" href="#works" data-key="btn2"></a>
+        </div>
+      </div>
+
+      <div class="bl bl--meta">
+        <i class="bl__ph"></i>
+        <div class="bl__c">
+          <span><b class="num" data-num="100">0</b>% своего кода</span>
+          <span data-txt="place">Минск</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__right">
+      <div class="bl bl--art">
+        <i class="bl__ph"></i>
+        <div class="bl__c">
+          <canvas class="art__c" role="img"
+                  aria-label="Знак бесконечности, собранный из пыли: частицы текут по петле и расходятся под курсором"></canvas>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="hero__foot">
+    <div class="bl bl--foot">
+      <i class="bl__ph"></i>
+      <div class="bl__c">
+        <span class="hero__scroll"><i></i>листай</span>
+        <button class="hbtn hbtn--menu" type="button" data-key="menu" data-noarrow aria-expanded="false"></button>
+        <span class="hero__stage" data-stage>сетка</span>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- преимущества: шесть плиток, иконки вычерчиваются линиями -->
+<section class="adv" id="adv">
+  <div class="adv__head">
+    <span class="eyebrow rv" data-txt="advEyebrow">почему я</span>
+    <h2 class="adv__h rv" style="--d:60ms" data-txt="advTitle"></h2>
+    <p class="adv__lead rv" style="--d:120ms" data-txt="advLead"></p>
+  </div>
+  <div class="adv__grid"></div>
+</section>
+
+<section class="works" id="works">
+  <div class="works__head">
+    <div class="bl bl--eyebrow"><i class="bl__ph"></i>
+      <span class="bl__c"><span data-txt="worksEyebrow">работы</span></span>
+    </div>
+    <h2 class="works__h bl bl--h2b"><i class="bl__ph"></i>
+      <span class="bl__c" data-txt="worksTitle">Портфолио</span>
+    </h2>
+    <!-- описание под заголовком снято по просьбе: текст лежит в твикере (txtWorksLead) -->
+  </div>
+
+  <div class="wfilter" role="tablist" aria-label="Фильтр работ"></div>
+  <div class="wgrid"></div>
+  <div class="wmore">
+    <button class="hbtn hbtn--quiet" type="button" id="wmore" data-key="worksMore" data-noarrow></button>
+  </div>
+</section>
+
+<!-- услуги: слева форматы и допы, справа чек, который печатается сам -->
+<section class="svc" id="services">
+  <div class="svc__head">
+    <span class="eyebrow rv" data-txt="svcEyebrow">услуги</span>
+    <h2 class="svc__h rv" style="--d:60ms" data-txt="svcTitle">Что я умею делать</h2>
+    <p class="svc__lead rv" style="--d:120ms" data-txt="svcLead"></p>
+  </div>
+
+  <div class="svc__grid">
+    <div>
+      <div class="svc__fmts rv" style="--d:60ms" role="tablist" aria-label="Форматы работы"></div>
+
+      <!-- разница форматов живёт под своим рядом: её рисует скрипт
+           внутри каждой группы, здесь её нет -->
+
+      <div class="svc__adds rv" style="--d:120ms">
+        <span class="eyebrow" data-txt="svcAddsK">можно добавить к любому формату</span>
+        <div class="svc__cols"></div>
+      </div>
+
+      <div class="svc__rest neon rv" style="--d:180ms">
+        <span class="svc__rt" data-txt="svcRestT">Нужно другое?</span>
+        <span class="svc__rd" data-txt="svcRestD"></span>
+        <a class="hbtn hbtn--quiet" href="#contact" data-key="svcRestBtn" data-noarrow></a>
+      </div>
+    </div>
+
+    <aside class="till rv" style="--d:240ms">
+      <div class="till__bar">
+        <span class="eyebrow" data-txt="svcCheckK">ваш чек</span>
+        <button class="till__snd is-on" type="button" id="svcSnd">звук вкл</button>
+      </div>
+      <div class="till__slot" aria-hidden="true"></div>
+
+      <div class="check" id="svcCheck">
+        <div class="ch__mark" data-txt="mark">AETÉRNASTUDIO</div>
+        <div class="ch__sub" id="chSub"></div>
+        <div class="ch__rule"></div>
+
+        <div class="ch__k" data-txt="svcChFmt">формат</div>
+        <div id="chFmt"></div>
+
+        <div class="ch__rule"></div>
+        <div class="ch__k" data-txt="svcChInc">входит в работу</div>
+        <div id="chInc"></div>
+
+        <div class="ch__rule"></div>
+        <div class="ch__k" data-txt="svcChAdd">добавлено</div>
+        <div id="chAdd"></div>
+
+        <div class="ch__rule"></div>
+        <div class="ch__row"><span data-txt="svcChN">позиций</span><span id="chN">0</span></div>
+        <div class="ch__row" id="chOffRow" hidden><span data-txt="svcChOff">скидка за набор</span><span id="chOff">0</span></div>
+        <div class="ch__row"><span data-txt="svcChDays">срок работы</span><span id="chDays"></span></div>
+        <div class="ch__rule"></div>
+
+        <div class="ch__tot"><span class="ch__tk" data-txt="svcChTot">итого</span><span class="ch__tv" id="chSum">0</span></div>
+        <div class="ch__row" id="chMonthRow" hidden><span data-txt="svcChMonth">потом</span><span id="chMonth"></span></div>
+
+        <div class="ch__bars" id="chBars" aria-hidden="true"></div>
+        <div class="ch__bye"><span data-txt="svcChBye">спасибо, что дочитали</span> · <span id="chNo"></span></div>
+      </div>
+
+      <a class="hbtn hbtn--spark till__go" href="#contact" data-key="svcCta"></a>
+      <div class="till__hint" data-txt="svcHint"></div>
+    </aside>
+  </div>
+</section>
+
+<!-- как я работаю — «гармошка»: полосы разъезжаются под курсором -->
+<section class="flow" id="flow">
+  <div class="flow__head">
+    <span class="eyebrow rv" data-txt="flowEyebrow">как я работаю</span>
+    <h2 class="flow__h rv" style="--d:60ms" data-txt="flowTitle"></h2>
+    <p class="flow__lead rv" style="--d:120ms" data-txt="flowLead"></p>
+  </div>
+
+  <div class="flow__acc rv" style="--d:180ms"></div>
+</section>
+
+
+<!-- принципы: четыре карточки с крупными номерами -->
+<section class="pr" id="principles">
+  <div class="pr__head">
+    <span class="eyebrow rv" data-txt="prEyebrow">принципы</span>
+    <h2 class="pr__h rv" style="--d:60ms" data-txt="prTitle"></h2>
+    <p class="pr__lead rv" style="--d:120ms" data-txt="prLead"></p>
+  </div>
+  <div class="pr__grid"></div>
+</section>
+
+<!-- обо мне — одна фраза во весь экран, слова выезжают по очереди -->
+<section class="ab" id="about">
+  <span class="eyebrow ab__eyebrow" data-txt="aboutEyebrow">обо мне</span>
+  <h2 class="ab__big"></h2>
+  <div class="ab__facts"></div>
+
+  <!-- стек: список слева, зачем это нужно — справа -->
+  <div class="stk">
+    <div class="stk__head">
+      <span class="eyebrow" data-txt="stkEyebrow">чем я работаю</span>
+      <h3 class="stk__h" data-txt="stkTitle"></h3>
+    </div>
+    <div class="stk__grid">
+      <div class="stk__col"></div>
+      <div class="stk__side">
+        <div class="stk__k" data-txt="stkKey">зачем это нужно</div>
+        <div class="stk__t"></div>
+        <div class="stk__d"></div>
+      </div>
+    </div>
+    <p class="stk__note" data-txt="stkNote"></p>
+  </div>
+</section>
+
+<!-- контакты — визитка наклоняется за курсором, рядом короткая заявка -->
+<section class="ct" id="contact">
+  <div class="ct__head">
+    <span class="eyebrow rv" data-txt="ctEyebrow">контакты</span>
+    <h2 class="ct__h rv" style="--d:60ms" data-txt="ctTitle"></h2>
+    <p class="ct__lead rv" style="--d:120ms" data-txt="ctLead"></p>
+  </div>
+
+  <div class="ct__grid">
+    <div class="ct__wrap rv" style="--d:180ms">
+      <div class="ct__card">
+        <div class="ct__glyph" aria-hidden="true"></div>
+        <div class="ct__mark" data-txt="mark">AETÉRNASTUDIO</div>
+        <div class="ct__name" data-txt="ctWho">Тимофей</div>
+        <div class="ct__role" data-txt="role">дизайнер и разработчик</div>
+        <div class="ct__rows"></div>
+      </div>
+    </div>
+
+    <form class="ct__form rv" style="--d:240ms" novalidate>
+      <input class="ct__in" name="name" autocomplete="name" data-ph="ctPhName" aria-label="Имя">
+      <select class="ct__in" name="kind" aria-label="Что нужно"></select>
+      <input class="ct__in" name="contact" data-ph="ctPhContact" aria-label="Как с вами связаться">
+      <input class="ct__in" name="about" data-ph="ctPhAbout" aria-label="О задаче">
+      <button class="hbtn hbtn--spark ct__send" type="submit" data-key="ctSend" data-states></button>
+      <p class="ct__out" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="foot__row">
+    <p class="foot__note" data-txt="footNote"></p>
+    <div class="foot__right">
+      <a data-tg href="#" target="_blank" rel="noopener"><span data-txt="tg">телеграм</span></a>
+      <span data-txt="place">Минск</span>
+    </div>
+  </div>
+
+  <!-- знак во всю ширину: размер подбирает JS под ширину экрана -->
+  <a class="foot__big" href="#hero" aria-label="Наверх"><span data-txt="mark">AETÉRNASTUDIO</span></a>
+</footer>
+
+<script src="script.js?v=67" defer></script>
+<script src="dust.js?v=67" defer></script>
+
+<!-- Твикер посетителю не нужен, а весил он 33 КБ и был самым долгим
+     ресурсом на странице. Теперь подгружается по требованию: клавишей
+     «~»/«Ё» или адресом с ?tweak=1 — панель и шестерёнку он рисует сам. -->
+<script>
+(() => {
+  let asked = false;
+  function loadTweak(){
+    if (asked) return;
+    asked = true;
+    /* флаг ставим до загрузки: твикер прочтёт его на старте и откроется
+       сразу, иначе первое нажатие только скачало бы файл */
+    window.PF_TWEAK_OPEN = true;
+    const css = document.createElement('link');
+    css.rel = 'stylesheet'; css.href = 'tweak.css?v=67';
+    document.head.appendChild(css);
+    const js = document.createElement('script');
+    js.src = 'tweak.js?v=67';
+    document.body.appendChild(js);
+  }
+  addEventListener('keydown', e => {
+    if (e.target.matches('input, select, textarea')) return;
+    if (e.key === '`' || e.key === '~' || e.key === 'ё' || e.key === 'Ё'){
+      e.preventDefault();
+      loadTweak();
+    }
+  });
+  if (new URLSearchParams(location.search).has('tweak')) loadTweak();
+})();
+</script>
+</body>
+</html>

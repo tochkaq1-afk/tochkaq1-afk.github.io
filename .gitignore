@@ -8,3 +8,13 @@ desktop.ini
 
 # Временные файлы предпросмотра
 _preview.html
+
+# Установленный локально инструмент дизайн-скилла — не часть сайта
+.claude/skills/
+
+# Черновики и лаборатории портфолио — в публикацию не идут
+portfolio/proto-*
+portfolio/*.bak
+portfolio/about-me.md
+portfolio/cursor.js
+portfolio/assets/flow/
