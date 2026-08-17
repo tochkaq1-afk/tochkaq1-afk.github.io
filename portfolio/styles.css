@@ -618,9 +618,8 @@ body.is-menu .menu{ clip-path:inset(0 0 0 0); pointer-events:auto; }
 .menu__list a{
   display:block; position:relative; width:max-content;
   font-family:var(--fh); font-weight:var(--h1w);
-  /* «КАК Я РАБОТАЮ» — самый длинный пункт: на 5.6vw он ложится в строку
-     с полями, на 6.4 упирался в края экрана */
-  font-size:clamp(28px, 5.6vw, 84px); line-height:1.04;
+  /* «КАК Я РАБОТАЮ» — самый длинный пункт, на нём и подбирался размер */
+  font-size:clamp(26px, 4.9vw, 74px); line-height:1.04;
   letter-spacing:calc(var(--h1track) * 1em);
   transform:translateY(108%);
   transition:transform .75s cubic-bezier(.22,1,.36,1), color .3s ease;
