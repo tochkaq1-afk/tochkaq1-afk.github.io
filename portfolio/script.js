@@ -340,7 +340,7 @@ const DEFAULTS = {
   txtCtCard:'Город :: Минск|Telegram :: {tg}|Ответ :: в течение дня|• Сейчас :: беру проекты',
   txtTgName:'@aeternaweb',
   txtCtPhName:'Имя',
-  txtCtPhContact:'Телеграм, почта или телефон',
+  txtCtPhContact:'@username',
   txtCtPhAbout:'О задаче',
   txtCtKinds:'Сайт с нуля|Редизайн|Анимация или сцена|Каталог или магазин|Бот в телеграме|Пока не знаю',
   txtCtSend:'отправить заявку',

@@ -14,7 +14,7 @@
      Начертания урезаны до тех, что правда встречаются на странице. -->
 <link id="fontLink" rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Golos+Text:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="styles.css?v=130">
+<link rel="stylesheet" href="styles.css?v=132">
 </head>
 <!-- Класс обязан совпадать с DEFAULTS.macFrame в script.js — те же грабли,
      что с :root и палитрой. apply() ставит его уже после первой отрисовки,
@@ -359,7 +359,7 @@
     <form class="ct__form rv" style="--d:240ms" novalidate>
       <input class="ct__in" name="name" autocomplete="name" data-ph="ctPhName" aria-label="Имя">
       <select class="ct__in" name="kind" aria-label="Что нужно"></select>
-      <input class="ct__in" name="contact" data-ph="ctPhContact" aria-label="Как с вами связаться">
+      <input class="ct__in" name="contact" data-ph="ctPhContact" aria-label="Telegram">
       <input class="ct__in" name="about" data-ph="ctPhAbout" aria-label="О задаче">
       <button class="hbtn hbtn--spark ct__send" type="submit" data-key="ctSend" data-states></button>
       <p class="ct__out" role="status" aria-live="polite"></p>
@@ -382,7 +382,7 @@
   <a class="foot__big" href="#hero" aria-label="Наверх"><span data-txt="name">AETERNA</span></a>
 </footer>
 
-<script src="script.js?v=124" defer></script>
+<script src="script.js?v=136" defer></script>
 <script src="dust.js?v=99" defer></script>
 
 <!-- Твикер посетителю не нужен, а весил он 33 КБ и был самым долгим
@@ -401,7 +401,7 @@
     css.rel = 'stylesheet'; css.href = 'tweak.css?v=99';
     document.head.appendChild(css);
     const js = document.createElement('script');
-    js.src = 'tweak.js?v=130';
+    js.src = 'tweak.js?v=134';
     document.body.appendChild(js);
   }
   addEventListener('keydown', e => {
