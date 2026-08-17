@@ -80,7 +80,8 @@ const SCHEMA = [
     { k:'btnDot',   t:'range',  label:'Точка в кнопке',    min:0,  max:18,  step:1, unit:'px' },
     { k:'btnFill',  t:'range',  label:'Скорость заливки',  min:.1, max:1.6, step:.05, unit:'с' },
     { k:'btnSpeed', t:'range',  label:'Скорость раскрытия',min:.1, max:1.6, step:.05, unit:'с' },
-    { k:'radius',   t:'range',  label:'Скругление блоков', min:0, max:40, step:1, unit:'px' }
+    { k:'radius',   t:'range',  label:'Скругление блоков', min:0, max:40, step:1, unit:'px' },
+    { k:'heroCta',  t:'bool',   label:'Кнопки на первом экране' }
   ]},
 
   { title:'Пыль и знак', open:true, items:[
@@ -459,6 +460,7 @@ function set(k, v){
   if (k === 'cols' || k === 'rows' || k === 'gridKeys') PF.buildGrid();
   if (k === 'txtWorks') PF.buildTiles();
   if (k === 'txtMenuList') PF.buildMenu();
+  if (k === 'heroCta') PF.heroCtaApply();
   if (k.startsWith('txtSvc')) PF.buildSvc();
   if (k.startsWith('txtAdv')) PF.buildAdv();
   if (k.startsWith('txtPr')) PF.buildPrinciples();

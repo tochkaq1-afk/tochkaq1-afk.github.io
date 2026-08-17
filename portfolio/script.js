@@ -94,6 +94,9 @@ const DEFAULTS = {
   neon1:'#000000', neon2:'#000000', neon3:'#000000',
   neonW:1.6, neonSpin:3, neonGlow:0, neonBlur:21, neonAlways:true,
   btn:'wide', radius:12,
+  /* кнопки на первом экране: сняты — их работу делают меню внизу
+     и сам скролл. Включается обратно одним переключателем */
+  heroCta:false,
 
   cols:2, rows:2, gridop:0, gridKeys:true,
 
@@ -898,6 +901,22 @@ function gridTime(){ return cfg.gridop > .01 ? cfg.tGrid : 0; }
 
 /* считаем только блоки главного экрана: секции ниже живут на скролле,
    иначе каждая новая секция молча удлиняла бы интро */
+/* Кнопки с первого экрана можно снять из твикера. Убираем узел целиком,
+   а не прячем стилем: шкала сборки считает блоки по этому же селектору,
+   и спрятанный блок всё равно занимал бы свой слот во времени —
+   интро молча удлинялось бы на пустое место. */
+function heroCtaApply(){
+  const box = document.querySelector('.bl--cta');
+  if (cfg.heroCta === false && box){ box.remove(); return; }
+  if (cfg.heroCta !== false && !box && heroCtaHTML){
+    const meta = document.querySelector('.bl--meta');
+    if (meta) meta.insertAdjacentHTML('beforebegin', heroCtaHTML);
+    buildHButtons(); drawText();
+  }
+}
+/* запоминаем разметку до удаления — иначе вернуть кнопки будет неоткуда */
+const heroCtaHTML = (document.querySelector('.bl--cta') || {}).outerHTML || '';
+
 const HERO_BL = '.hero .bl, .tile';
 
 function total(){
@@ -2271,7 +2290,7 @@ if ('IntersectionObserver' in window){
 const PF = window.PF = {
   cfg, DEFAULTS, FONTS, PALETTES, CURSORS, BTNS, EASE,
   apply, save, reset, usePalette, replay, seek, buildGrid, buildTiles, buildMenu,
-  runHBtn, buildWorks, buildSvc, buildFlow, buildAbout, buildContact, fitFootMark,
+  runHBtn, heroCtaApply, buildWorks, buildSvc, buildFlow, buildAbout, buildContact, fitFootMark,
   buildAdv, buildPrinciples, buildStack,
   progress:0
 };
@@ -2292,6 +2311,9 @@ fitFootMark();
 heroParallax();
 buildHButtons();
 wireHButtons();
+/* снимаем кнопки первого экрана до первого счёта времени: иначе шкала
+   сборки успеет заложить под них слот */
+heroCtaApply();
 /* размеры МЕНЮ известны только после сборки её разметки */
 menuFit();
 requestAnimationFrame(menuFrame);
