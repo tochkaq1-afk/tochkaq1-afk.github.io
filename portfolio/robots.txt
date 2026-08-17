@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# черновики вариантов в поиске не нужны — они и так не в репозитории,
+# но правило страхует от случайной публикации
+Disallow: /portfolio/proto-
+
+Sitemap: https://tochkaq1-afk.github.io/portfolio/sitemap.xml

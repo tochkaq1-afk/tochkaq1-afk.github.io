@@ -6,6 +6,30 @@
 <title>AETERNA — дизайнер и разработчик</title>
 <meta name="description" content="Собираю сайты, боты и системы на своём коде: дизайн и разработка. Портфолио и услуги. Минск.">
 <meta name="theme-color" content="#f2f0ea">
+
+<!-- Защита. GitHub Pages не даёт настраивать HTTP-заголовки, поэтому всё,
+     что можно, задаём через meta. CSP разрешает ровно то, чем сайт правда
+     пользуется: свои файлы, шрифты Google и картинки. 'unsafe-inline'
+     для стилей обязателен — скрипт пишет инлайновые стили и переменные
+     на элементы; для скриптов он нужен из-за встроенного загрузчика
+     твикера внизу страницы. object-src 'none' и base-uri 'self' закрывают
+     два классических вектора: подмену <base> и вставку плагинов.
+     frame-ancestors здесь не работает (только как HTTP-заголовок),
+     от кликджекинга страховка ниже, в script.js. -->
+<meta http-equiv="Content-Security-Policy" content="
+  default-src 'self';
+  script-src 'self' 'unsafe-inline';
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+  font-src 'self' https://fonts.gstatic.com;
+  img-src 'self' data:;
+  connect-src 'self';
+  form-action 'self';
+  base-uri 'self';
+  object-src 'none'">
+<!-- Чужим сайтам уходит только домен, без пути и параметров -->
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://tochkaq1-afk.github.io/portfolio/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- Пара здесь обязана совпадать с DEFAULTS.font в script.js. Раньше тут
@@ -14,7 +38,7 @@
      Начертания урезаны до тех, что правда встречаются на странице. -->
 <link id="fontLink" rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Golos+Text:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="styles.css?v=133">
+<link rel="stylesheet" href="styles.css?v=135">
 </head>
 <!-- Класс обязан совпадать с DEFAULTS.macFrame в script.js — те же грабли,
      что с :root и палитрой. apply() ставит его уже после первой отрисовки,
@@ -359,18 +383,21 @@
     <form class="ct__form rv" style="--d:240ms" novalidate>
       <input class="ct__in" name="name" autocomplete="name" data-ph="ctPhName" aria-label="Имя">
       <select class="ct__in" name="kind" aria-label="Что нужно"></select>
-      <!-- Значок телеграма слева говорит, что нужен именно телеграм, без
-           слов рядом — плейсхолдер «@username» один это чтение не тянул,
-           мог сойти и за инстаграм. Иконка в поле, а не подпись над ним:
-           подпись мы уже пробовали и убрали, здесь то же самое сообщение
-           весит меньше. -->
-      <div class="ct__ico" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none"><path
-          d="M21.5 3.5 2.5 11l6 2.2M21.5 3.5 15 20.5l-6.5-7.3M21.5 3.5 8.5 13.2"
-          stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <!-- Слово «Телеграм» вшито в поле слева, вместо значка — так проще
+           прочитать, чем иконку, и не требует подписи над полем -->
+      <div class="ct__pfx">
+        <span class="ct__pfx__w" aria-hidden="true">Телеграм</span>
         <input class="ct__in" name="contact" data-ph="ctPhContact" aria-label="Telegram username">
       </div>
       <input class="ct__in" name="about" data-ph="ctPhAbout" aria-label="О задаче">
+      <!-- Согласие на обработку — не для галочки: форма собирает имя и телеграм,
+           а это персональные данные (Закон РБ № 99-З). Галочка снята по умолчанию
+           намеренно: предустановленная не считается согласием. -->
+      <label class="ct__agree">
+        <input type="checkbox" name="agree" required>
+        <span>Согласен на обработку данных для ответа на заявку —
+          <a href="privacy.html" target="_blank" rel="noopener">политика</a></span>
+      </label>
       <button class="hbtn hbtn--spark ct__send" type="submit" data-key="ctSend" data-states></button>
       <p class="ct__out" role="status" aria-live="polite"></p>
     </form>
@@ -384,6 +411,7 @@
     <p class="foot__note" data-txt="footNote"></p>
     <div class="foot__right">
       <a data-tg href="#" target="_blank" rel="noopener"><span data-txt="tg">телеграм</span></a>
+      <a href="privacy.html">политика</a>
       <span data-txt="place">Минск</span>
     </div>
   </div>
@@ -392,7 +420,7 @@
   <a class="foot__big" href="#hero" aria-label="Наверх"><span data-txt="name">AETERNA</span></a>
 </footer>
 
-<script src="script.js?v=137" defer></script>
+<script src="script.js?v=138" defer></script>
 <script src="dust.js?v=99" defer></script>
 
 <!-- Твикер посетителю не нужен, а весил он 33 КБ и был самым долгим

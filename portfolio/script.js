@@ -6,6 +6,19 @@
 (() => {
 'use strict';
 
+/* Защита от кликджекинга: если страницу вставили в чужой фрейм — выбираемся
+   наружу. Обычно это делают заголовком frame-ancestors, но GitHub Pages
+   не позволяет задавать HTTP-заголовки, а через <meta> этот параметр
+   браузеры игнорируют — остаётся проверка в коде.
+   try/catch обязателен: у чужого фрейма другой источник, и одно чтение
+   top.location бросает исключение — этого достаточно, чтобы понять,
+   что нас встроили. */
+try {
+  if (window.top !== window.self) window.top.location = window.self.location;
+} catch (e) {
+  window.top.location = window.self.location;
+}
+
 /* ---------------------------------------------- шрифты (все с кириллицей) */
 const FONTS = {
   unbOnest:   { name:'Unbounded + Onest',            h:'Unbounded',        b:'Onest',        w:'300;400;600;800' },
@@ -130,7 +143,12 @@ const DEFAULTS = {
   txtRole:'дизайнер и разработчик',
   /* статус в нижней строке на телефоне. От первого лица — как в
      карточке контактов; «берёт» звучало бы как рассказ о ком-то третьем */
+  /* Статус зависит от часов: с 10:00 до 22:00 по Москве — беру, иначе нет.
+     Два текста, между ними переключает isOpenNow() */
   txtStatus:'беру проекты',
+  txtStatusOff:'отвечу утром',
+  txtOpenFrom:10,
+  txtOpenTo:22,
   /* метка на углу крышки. Пишем измеримое: «Lighthouse 95+» можно
      проверить за минуту, «быстрый сайт» — нельзя */
   txtMacTagL:'Lighthouse',
@@ -339,7 +357,7 @@ const DEFAULTS = {
   txtCtTitle:'',   /* то же: надзаголовок уже говорит «КОНТАКТЫ» */
   txtCtWho:'Тимофей',
   txtCtLead:'Отвечаю в телеграме, обычно в тот же день. Если проект не мой — так и скажу и подскажу, к кому идти.',
-  txtCtCard:'Город :: Минск|Telegram :: {tg}|Ответ :: в течение дня|• Сейчас :: беру проекты',
+  txtCtCard:'Город :: Минск|Telegram :: {tg}|Ответ :: в течение дня|• Сейчас :: {status}',
   txtTgName:'@aeternaweb',
   txtCtPhName:'Имя',
   txtCtPhContact:'@username',
@@ -347,6 +365,7 @@ const DEFAULTS = {
   txtCtKinds:'Сайт с нуля|Редизайн|Анимация или сцена|Каталог или магазин|Бот в телеграме|Пока не знаю',
   txtCtSend:'отправить заявку',
   txtCtErr:'Поля «имя» и «связь» — обязательные.',
+  txtCtErrAgree:'Нужно согласие на обработку данных — иначе я не смогу ответить.',
   txtCtOk:'Заявка ушла. Отвечу в течение дня.',
   txtCtOffline:'Текст заявки скопирован — открываю телеграм, осталось вставить его в чат.',
   txtCtGo:'Телеграм не открылся сам — вот ссылка:',
@@ -480,6 +499,28 @@ document.addEventListener('click', e => {
   history.replaceState(null, '', '#' + id);
 });
 
+/* ---------------------------------------------- рабочие часы
+   Час считаем по Москве, а не по часам посетителя: «беру проекты» — это
+   про то, отвечу ли я сейчас, а я в своём часовом поясе. Через Intl,
+   а не сдвигом на +3: так переход на летнее время и прочие правила
+   лежат на браузере, а не на нашей арифметике. */
+function mskHour(){
+  try {
+    return +new Intl.DateTimeFormat('ru-RU', {
+      timeZone:'Europe/Moscow', hour:'numeric', hour12:false
+    }).format(new Date());
+  } catch (e) {
+    /* экзотический браузер без базы часовых поясов — считаем, что открыто:
+       лучше показать «беру», чем соврать отказом */
+    return cfg.txtOpenFrom;
+  }
+}
+
+function isOpenNow(){
+  const h = mskHour();
+  return h >= cfg.txtOpenFrom && h < cfg.txtOpenTo;
+}
+
 /* ---------------------------------------------- тексты */
 /* Имя секции берётся из пункта меню, а не пишется рядом второй раз: иначе
    они разъезжаются при первой же правке — в меню «РАБОТЫ», а над секцией
@@ -511,7 +552,8 @@ function drawText(){
     name:cfg.txtName, mark:cfg.txtMark, role:cfg.txtRole,
     tag:cfg.txtTag, tagDim:cfg.txtTagDim,
     btn1:cfg.txtBtn1, btn2:cfg.txtBtn2, btnLoad:cfg.txtBtnLoad, btnDone:cfg.txtBtnDone,
-    place:cfg.txtPlace, tg:cfg.txtTg, status:cfg.txtStatus,
+    place:cfg.txtPlace, tg:cfg.txtTg,
+    status:isOpenNow() ? cfg.txtStatus : cfg.txtStatusOff,
     tgCta:cfg.txtTgCta, tgName:cfg.txtTgName, macTagL:cfg.txtMacTagL, macTagBL:cfg.txtMacTagBL,
     worksTitle:cfg.txtWorksTitle,
     worksLead:cfg.txtWorksLead, worksHint:cfg.txtWorksHint, worksMore:cfg.txtWorksMore,
@@ -563,6 +605,11 @@ function drawText(){
     if (url){ a.href = url; a.removeAttribute('data-empty'); a.removeAttribute('aria-disabled'); }
     else { a.href = '#'; a.setAttribute('data-empty', ''); a.setAttribute('aria-disabled', 'true'); }
   });
+
+  /* Класс на body: огоньки в шапке, на бейдже и в визитке гаснут все разом.
+     Держим одним классом, а не тремя проверками по месту — иначе они
+     разъедутся при первой же правке одного из мест */
+  document.body.classList.toggle('is-closed', !isOpenNow());
 }
 
 /* ---------------------------------------------- кнопки
@@ -1859,7 +1906,11 @@ function buildContact(){
       /* строка, начатая с точки, получает живой огонёк вместо неё */
       const live = k.startsWith('•');
       if (live) k = k.slice(1).trim();
-      const v = (p[1] || '').replace('{tg}', cfg.txtTgName);
+      /* {tg} — адрес телеграма, {status} — беру или нет прямо сейчас:
+         так строка визитки не разъезжается с бейджем на первом экране */
+      const v = (p[1] || '')
+        .replace('{tg}', cfg.txtTgName)
+        .replace('{status}', isOpenNow() ? cfg.txtStatus : cfg.txtStatusOff);
       return `<div class="ct__row">
                 <span>${live ? '<i class="ct__live"></i>' : ''}${k}</span><b>${v}</b>
               </div>`;
@@ -1888,6 +1939,16 @@ async function sendLead(){
   if (!g('name') || !g('contact')){
     out.textContent = cfg.txtCtErr;
     (g('name') ? ctForm.querySelector('[name="contact"]') : ctForm.querySelector('[name="name"]')).focus();
+    return;
+  }
+
+  /* Согласие проверяем здесь, а не полагаемся на required: у формы стоит
+     novalidate, значит браузер сам ничего не проверит, и галочка без этой
+     проверки была бы просто картинкой */
+  const agree = ctForm.querySelector('[name="agree"]');
+  if (agree && !agree.checked){
+    out.textContent = cfg.txtCtErrAgree;
+    agree.focus();
     return;
   }
   if (btn.dataset.state !== 'idle') return;
