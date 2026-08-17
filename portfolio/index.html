@@ -38,7 +38,7 @@
      Начертания урезаны до тех, что правда встречаются на странице. -->
 <link id="fontLink" rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Golos+Text:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="styles.css?v=136">
+<link rel="stylesheet" href="styles.css?v=137">
 </head>
 <!-- Класс обязан совпадать с DEFAULTS.macFrame в script.js — те же грабли,
      что с :root и палитрой. apply() ставит его уже после первой отрисовки,
@@ -156,9 +156,11 @@
                  и любая правка текста в твикере стирала бы живое число
                  обратно на дефолт. -->
             <span class="mac__tag"><i class="dot"></i><b><span
-                  data-txt="macTagL">Lighthouse</span> <span class="mac__tag__v" id="tagV">95+</span></b></span>
+                  data-txt="macTagL">Скорость</span> <span class="mac__tag__v" id="tagV">95</span><span
+                  class="mac__tag__of">/100</span></b></span>
             <span class="mac__tag mac__tag--b"><i class="dot"></i><b><span
-                  data-txt="macTagBL">SEO</span> <span class="mac__tag__v" id="tagVB">100</span></b></span>
+                  data-txt="macTagBL">SEO</span> <span class="mac__tag__v" id="tagVB">100</span><span
+                  class="mac__tag__of">/100</span></b></span>
           <div class="shw" id="shw">
             <div class="shw__bar" aria-hidden="true">
               <i></i><i></i><i></i>
@@ -424,7 +426,7 @@
   <a class="foot__big" href="#hero" aria-label="Наверх"><span data-txt="name">AETERNA</span></a>
 </footer>
 
-<script src="script.js?v=139" defer></script>
+<script src="script.js?v=140" defer></script>
 <script src="dust.js?v=99" defer></script>
 
 <!-- Твикер посетителю не нужен, а весил он 33 КБ и был самым долгим

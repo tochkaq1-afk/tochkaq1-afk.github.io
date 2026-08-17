@@ -290,6 +290,9 @@ body.is-closed .top__live{
 /* короткая вспышка на смене цифры — иначе число подменяется незаметно,
    мимо внимания, и весь смысл живой метки теряется */
 .mac__tag__v{ display:inline-block; }
+/* «/100» приглушено: балл читается сразу, а шкала — только если вглядеться.
+   Без неё «Скорость 96» можно принять за проценты или за секунды */
+.mac__tag__of{ color:var(--dim); font-weight:400; }
 .mac__tag__v.is-swap{ animation:tagSwap .5s ease; }
 @keyframes tagSwap{ 0%{ opacity:0; transform:translateY(3px) } 100%{ opacity:1; transform:none } }
 .mac__tag .dot{ animation:pulse 2.4s ease-in-out infinite, glow 2.4s ease-in-out infinite; }
