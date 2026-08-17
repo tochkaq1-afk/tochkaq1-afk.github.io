@@ -81,7 +81,8 @@ const SCHEMA = [
     { k:'btnFill',  t:'range',  label:'Скорость заливки',  min:.1, max:1.6, step:.05, unit:'с' },
     { k:'btnSpeed', t:'range',  label:'Скорость раскрытия',min:.1, max:1.6, step:.05, unit:'с' },
     { k:'radius',   t:'range',  label:'Скругление блоков', min:0, max:40, step:1, unit:'px' },
-    { k:'heroCta',  t:'bool',   label:'Кнопки на первом экране' }
+    { k:'heroCta',  t:'bool',   label:'Кнопки на первом экране' },
+    { k:'macFrame', t:'bool',   label:'Корпус макбука у витрины' }
   ]},
 
   { title:'Пыль и знак', open:true, items:[
@@ -135,6 +136,7 @@ const SCHEMA = [
     { k:'txtPlace', t:'text', label:'Город' },
     { k:'txtRole',  t:'text', label:'Кто ты' },
     { k:'txtStatus', t:'text', label:'Статус на телефоне' },
+    { k:'txtMacTag', t:'text', label:'Метка на углу витрины' },
     { k:'txtTag',    t:'text', label:'Фраза под именем' },
     { k:'txtTagDim', t:'text', label:'Фраза: приглушённый хвост' },
     { k:'txtBtn1',  t:'text', label:'Кнопка 1' },

@@ -225,6 +225,83 @@ a{ color:inherit; text-decoration:none; }
 .bl--art{ width:100%; }
 .bl--art .bl__c{ display:block; }
 
+/* ============================================================
+   КОРПУС МАКБУКА вокруг витрины. Только крышка: ни клавиатуры, ни
+   перспективы. Раскрывающийся ноутбук с декой стоит на тысячах портфолио
+   разработчиков, а одна крышка читается как «это сайт на экране»
+   и не тащит за собой чужой рекламный кадр.
+
+   Серебро узнаётся по трём вещам, и все три здесь: светлая фаска по краю
+   от фрезеровки, разный тон сверху и снизу (свет потолка против отражения
+   стола) и тень внутрь у основания. Без них металл — просто серая заливка.
+   ============================================================ */
+.mac{
+  --s-hi:#f4f4f6; --s-1:#dedee1; --s-2:#c9c9ce; --s-3:#aeaeb4;
+  position:relative;
+  border-radius:16px 16px 5px 5px;
+  padding:10px 10px 13px;
+  background:linear-gradient(178deg, var(--s-1) 0%, var(--s-2) 58%, var(--s-3) 100%);
+  box-shadow:
+    inset 0 1px 0 var(--s-hi),
+    inset 1px 0 0 rgba(255,255,255,.6),
+    inset -1px 0 0 rgba(255,255,255,.6),
+    inset 0 -14px 18px -14px rgba(0,0,0,.35),
+    0 1px 0 rgba(0,0,0,.14);
+}
+/* Метка на верхнем углу крышки. Садится наполовину за корпус — так она
+   читается как наклейка на железе, а не как ещё один блок вёрстки рядом.
+   Живой огонёк тот же, что у статуса «беру проекты»: одна деталь, повторённая
+   в двух местах, связывает экран лучше, чем две разные. */
+.mac__tag{
+  position:absolute; top:-11px; right:14px; z-index:4;
+  display:inline-flex; align-items:center; gap:7px;
+  padding:6px 12px; border-radius:999px;
+  background:var(--bg); border:1px solid var(--line);
+  font-size:.66rem; letter-spacing:.06em; color:var(--dim);
+  white-space:nowrap;
+  box-shadow:0 6px 14px -8px color-mix(in srgb, var(--ink) 45%, transparent);
+}
+.mac__tag b{ font-family:var(--fh); font-weight:600; color:var(--ink); letter-spacing:.02em; }
+.mac__tag .dot{ animation:pulse 2.4s ease-in-out infinite; }
+/* на узком экране метка налезала на угол витрины — уводим её внутрь */
+@media (max-width:900px){
+  .mac__tag{ top:-10px; right:10px; font-size:.6rem; padding:5px 10px; }
+}
+/* без корпуса метка садится прямо на угол окна браузера */
+.is-nomac .mac__tag{ top:-13px; right:16px; }
+
+/* петля и торец деки: две тонкие полосы, которые дают понять, что крышка
+   на чём-то стоит, — без них она висит в воздухе */
+.mac__hinge{ height:4px; margin:0 7%; border-radius:0 0 3px 3px;
+  background:linear-gradient(#b9b9bf, #d3d3d8); }
+.mac__base{
+  position:relative; height:7px; margin:0 -3.2%;
+  border-radius:0 0 9px 9px;
+  background:linear-gradient(180deg, #ececee 0 1px, #cfcfd4 1px 55%, #a8a8ae 100%);
+}
+.mac__base:after{                    /* выемка, которой поддевают крышку */
+  content:''; position:absolute; top:0; left:50%; translate:-50% 0;
+  width:13%; height:3px; border-radius:0 0 5px 5px;
+  background:linear-gradient(#93939a, #b7b7bc);
+}
+.mac__sh{
+  height:24px; margin:0 5%;
+  background:
+    radial-gradient(28% 60% at 50% 0%, rgba(0,0,0,.2), transparent 70%),
+    radial-gradient(62% 100% at 50% 0%, rgba(0,0,0,.11), transparent 74%);
+}
+/* Внутри корпуса витрине не нужны своя тень и толстое скругление — их работу
+   делает сам корпус. Правило навешиваем через :not(), а не отменяем потом
+   обратно в .is-nomac: отменённая тень возвращалась пустым значением и
+   спорила с переходом, прописанным на .shw */
+body:not(.is-nomac) .mac .shw{ border-radius:6px; box-shadow:none; border-color:#0b0b0c; }
+
+/* переключатель в твикере снимает корпус, оставляя голое окно браузера */
+.is-nomac .mac{ padding:0; background:none; box-shadow:none; }
+.is-nomac .mac__hinge,
+.is-nomac .mac__base,
+.is-nomac .mac__sh{ display:none; }
+
 /* Реакция на курсор — вариант «сдвиг» (В из proto-shw-tilt.html): окно едет
    за курсором, не поворачиваясь. Из восьми проб самая тихая: заметна боковым
    зрением и не перетягивает внимание с заголовка слева.
@@ -517,7 +594,9 @@ body.is-menu .menu{ clip-path:inset(0 0 0 0); pointer-events:auto; }
 .menu__list a{
   display:block; position:relative; width:max-content;
   font-family:var(--fh); font-weight:var(--h1w);
-  font-size:clamp(30px, 6.4vw, 96px); line-height:1.04;
+  /* «КАК Я РАБОТАЮ» — самый длинный пункт: на 5.6vw он ложится в строку
+     с полями, на 6.4 упирался в края экрана */
+  font-size:clamp(28px, 5.6vw, 84px); line-height:1.04;
   letter-spacing:calc(var(--h1track) * 1em);
   transform:translateY(108%);
   transition:transform .75s cubic-bezier(.22,1,.36,1), color .3s ease;

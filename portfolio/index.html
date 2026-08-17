@@ -14,9 +14,13 @@
      Начертания урезаны до тех, что правда встречаются на странице. -->
 <link id="fontLink" rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Golos+Text:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="styles.css?v=115">
+<link rel="stylesheet" href="styles.css?v=120">
 </head>
-<body>
+<!-- Класс обязан совпадать с DEFAULTS.macFrame в script.js — те же грабли,
+     что с :root и палитрой. apply() ставит его уже после первой отрисовки,
+     и если стартовое состояние другое, витрина успевает моргнуть корпусом
+     и запустить переход тени с нуля. -->
+<body class="is-nomac">
 
 
 <!-- полоса прочитанного: тонкая линия сверху, растёт по мере прокрутки -->
@@ -114,8 +118,13 @@
       <div class="bl bl--art">
         <i class="bl__ph"></i>
         <div class="bl__c">
-          <!-- Витрина работ: голая рамка браузера без ноутбука и без стола.
-               Первый кадр грузится сразу, остальные лениво — он и есть LCP. -->
+          <!-- Витрина работ. Первый кадр грузится сразу, остальные лениво —
+               он и есть LCP. Вокруг — корпус макбука: только крышка,
+               без клавиатуры и перспективы. Снимается в твикере. -->
+          <div class="mac" id="mac">
+            <!-- Метка на углу крышки: не «сайт быстрый», а конкретная цифра
+                 из измеримого теста — её можно проверить, и это другой разговор -->
+            <span class="mac__tag"><i class="dot"></i><b data-txt="macTag">Lighthouse 95+</b></span>
           <div class="shw" id="shw">
             <div class="shw__bar" aria-hidden="true">
               <i></i><i></i><i></i>
@@ -127,6 +136,10 @@
               <span class="shw__d">ресторан · меню и бронирование</span>
               <div class="shw__dots" role="tablist" aria-label="Работы"></div>
             </div>
+          </div>
+            <div class="mac__hinge" aria-hidden="true"></div>
+            <div class="mac__base" aria-hidden="true"></div>
+            <div class="mac__sh" aria-hidden="true"></div>
           </div>
         </div>
       </div>
@@ -357,7 +370,7 @@
   <a class="foot__big" href="#hero" aria-label="Наверх"><span data-txt="name">AETERNA</span></a>
 </footer>
 
-<script src="script.js?v=115" defer></script>
+<script src="script.js?v=118" defer></script>
 <script src="dust.js?v=99" defer></script>
 
 <!-- Твикер посетителю не нужен, а весил он 33 КБ и был самым долгим
@@ -376,7 +389,7 @@
     css.rel = 'stylesheet'; css.href = 'tweak.css?v=99';
     document.head.appendChild(css);
     const js = document.createElement('script');
-    js.src = 'tweak.js?v=115';
+    js.src = 'tweak.js?v=117';
     document.body.appendChild(js);
   }
   addEventListener('keydown', e => {

@@ -97,6 +97,11 @@ const DEFAULTS = {
   /* кнопки на первом экране: сняты — их работу делают меню внизу
      и сам скролл. Включается обратно одним переключателем */
   heroCta:false,
+  /* Корпус макбука снят: витрина стоит голым окном браузера, а метка
+     с результатом теста садится ему на угол. Крышка перетягивала
+     внимание на себя, а показывать надо работы. Включается обратно
+     переключателем «Корпус макбука у витрины» */
+  macFrame:false,
 
   cols:2, rows:2, gridop:0, gridKeys:true,
 
@@ -126,6 +131,9 @@ const DEFAULTS = {
   /* статус в нижней строке на телефоне. От первого лица — как в
      карточке контактов; «берёт» звучало бы как рассказ о ком-то третьем */
   txtStatus:'беру проекты',
+  /* метка на углу крышки. Пишем измеримое: «Lighthouse 95+» можно
+     проверить за минуту, «быстрый сайт» — нельзя */
+  txtMacTag:'Lighthouse 95+',
   /* Первый экран говорит одной крупной фразой: хвост про свой код идёт
      приглушённым и живёт отдельным ключом — тексты подставляются через
      textContent, разметку внутри строки браузер бы не получил */
@@ -417,6 +425,7 @@ function apply(){
   setVar('--neonGlow', cfg.neonGlow, DEFAULTS.neonGlow);
   setVar('--neonBlur', cfg.neonBlur + 'px', DEFAULTS.neonBlur + 'px');
   document.body.classList.toggle('is-neon-always', !!cfg.neonAlways);
+  document.body.classList.toggle('is-nomac', cfg.macFrame === false);
 
   root.dataset.cursor = cfg.cursor;
   root.dataset.btn = cfg.btn;
@@ -486,7 +495,7 @@ function drawText(){
     tag:cfg.txtTag, tagDim:cfg.txtTagDim,
     btn1:cfg.txtBtn1, btn2:cfg.txtBtn2, btnLoad:cfg.txtBtnLoad, btnDone:cfg.txtBtnDone,
     place:cfg.txtPlace, tg:cfg.txtTg, status:cfg.txtStatus,
-    tgCta:cfg.txtTgCta, tgName:cfg.txtTgName,
+    tgCta:cfg.txtTgCta, tgName:cfg.txtTgName, macTag:cfg.txtMacTag,
     worksTitle:cfg.txtWorksTitle,
     worksLead:cfg.txtWorksLead, worksHint:cfg.txtWorksHint, worksMore:cfg.txtWorksMore,
     svcTitle:cfg.txtSvcTitle, svcLead:cfg.txtSvcLead,
