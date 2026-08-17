@@ -1703,6 +1703,11 @@ select.ct__in{ cursor:pointer; }
 .ct__agree input:focus-visible{ outline:2px solid var(--ink); outline-offset:2px; }
 .ct__agree a{ color:var(--ink); }
 .ct__send{ justify-self:start; margin-top:6px; }
+/* Строка про нерабочее время — только когда оно правда нерабочее.
+   Форма при этом не блокируется: гаснет огонёк, а отправить можно всегда */
+.ct__late{ display:none; margin:6px 0 0; font-size:.78rem; color:var(--dim); }
+body.is-closed .ct__late{ display:block; }
+
 .ct__out{ margin:2px 0 0; font-size:.84rem; color:var(--dim); min-height:2.6em; }
 .ct__out b{ color:var(--ink); font-weight:500; }
 

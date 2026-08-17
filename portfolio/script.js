@@ -147,6 +147,7 @@ const DEFAULTS = {
      Два текста, между ними переключает isOpenNow() */
   txtStatus:'беру проекты',
   txtStatusOff:'отвечу утром',
+  txtCtLate:'Сейчас нерабочее время — заявку можно отправить, посмотрю с утра.',
   txtOpenFrom:10,
   txtOpenTo:22,
   /* метка на углу крышки. Пишем измеримое: «Lighthouse 95+» можно
@@ -576,6 +577,7 @@ function drawText(){
     ctTitle:cfg.txtCtTitle, ctLead:cfg.txtCtLead,
     ctGo:cfg.txtCtGo,
     ctWho:cfg.txtCtWho, ctSend:cfg.txtCtSend, footNote:cfg.txtFootNote,
+    ctLate:cfg.txtCtLate,
     menu:menuOpen ? cfg.txtMenuOpen : cfg.txtMenu
   };
 
