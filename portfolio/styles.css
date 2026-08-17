@@ -305,22 +305,31 @@ body:not(.is-nomac) .mac .shw{ border-radius:6px; box-shadow:none; border-color:
 /* Реакция на курсор — вариант «сдвиг» (В из proto-shw-tilt.html): окно едет
    за курсором, не поворачиваясь. Из восьми проб самая тихая: заметна боковым
    зрением и не перетягивает внимание с заголовка слева.
+
+   Двигаем обёртку, а не саму витрину: метка «Lighthouse» приклеена к её углу
+   и обязана ехать вместе с ней. Была бы на витрине — метка осталась бы
+   висеть на месте, и стало бы видно, что она к окну не относится.
    JS пишет сюда только --tx/--ty (курсор от центра, −0.5…0.5) и класс
    is-live — что с ними делать, решает CSS. */
+.mac{
+  will-change:transform;
+  transform:translate3d(calc(var(--tx,0) * 22px), calc(var(--ty,0) * 22px), 0);
+  /* возврат в исходное — долгий и мягкий; пока курсор внутри, переход
+     короткий, иначе окно тащится следом с полусекундным опозданием */
+  transition:transform .9s cubic-bezier(.22,1,.36,1);
+}
+.mac.is-live{ transition:transform .16s ease-out; }
+
 .shw{
   position:relative; display:flex; flex-direction:column;
   border-radius:16px; overflow:hidden; background:var(--bg);
   border:1px solid var(--line);
   box-shadow:0 26px 60px -34px color-mix(in srgb, var(--ink) 55%, transparent);
-  will-change:transform;
-  transform:translate3d(calc(var(--tx,0) * 22px), calc(var(--ty,0) * 22px), 0);
-  /* возврат в исходное — долгий и мягкий; пока курсор внутри, переход
-     короткий, иначе окно тащится следом с полусекундным опозданием */
-  transition:transform .9s cubic-bezier(.22,1,.36,1),
-             box-shadow .9s cubic-bezier(.22,1,.36,1);
+  transition:box-shadow .9s cubic-bezier(.22,1,.36,1);
 }
-.shw.is-live{
-  transition:transform .16s ease-out, box-shadow .3s ease;
+/* тень густеет под курсором — но уже от состояния обёртки */
+.mac.is-live .shw{
+  transition:box-shadow .3s ease;
   box-shadow:0 40px 80px -38px color-mix(in srgb, var(--ink) 62%, transparent);
 }
 .shw__bar{

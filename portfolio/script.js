@@ -825,25 +825,29 @@ if (shw){
      «наводится», и окно застревало бы сдвинутым после тапа. */
   if (matchMedia('(hover:hover)').matches &&
       !matchMedia('(prefers-reduced-motion:reduce)').matches){
+    /* Двигаем обёртку: вместе с витриной едет и метка «Lighthouse»,
+       приклеенная к её углу. Ловим курсор тоже по обёртке — иначе метка
+       торчала бы из области, которая на него отзывается */
+    const box = shw.closest('.mac') || shw;
     let tx = 0, ty = 0, tRaf = 0;
 
     const tiltDraw = () => {
       tRaf = 0;
-      shw.style.setProperty('--tx', tx.toFixed(3));
-      shw.style.setProperty('--ty', ty.toFixed(3));
+      box.style.setProperty('--tx', tx.toFixed(3));
+      box.style.setProperty('--ty', ty.toFixed(3));
     };
 
-    shw.addEventListener('pointermove', e => {
-      const r = shw.getBoundingClientRect();
+    box.addEventListener('pointermove', e => {
+      const r = box.getBoundingClientRect();
       tx = (e.clientX - r.left) / r.width - .5;
       ty = (e.clientY - r.top) / r.height - .5;
-      shw.classList.add('is-live');
+      box.classList.add('is-live');
       if (!tRaf) tRaf = requestAnimationFrame(tiltDraw);
     }, { passive:true });
 
-    shw.addEventListener('pointerleave', () => {
+    box.addEventListener('pointerleave', () => {
       if (tRaf){ cancelAnimationFrame(tRaf); tRaf = 0; }
-      shw.classList.remove('is-live');
+      box.classList.remove('is-live');
       tx = ty = 0;
       tiltDraw();                      /* в ноль — назад вернёт долгий переход из CSS */
     });
