@@ -14,7 +14,7 @@
      Начертания урезаны до тех, что правда встречаются на странице. -->
 <link id="fontLink" rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Golos+Text:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="styles.css?v=127">
+<link rel="stylesheet" href="styles.css?v=129">
 </head>
 <!-- Класс обязан совпадать с DEFAULTS.macFrame в script.js — те же грабли,
      что с :root и палитрой. apply() ставит его уже после первой отрисовки,
@@ -303,10 +303,13 @@
     <div class="war__foot">
       <span data-txt="prWarFoot">действует с первого дня работы</span>
       <span class="war__sig" data-txt="name">AETÉRNA</span>
+      <!-- Печать пришлёпывается, когда талон доехал до экрана. Живёт внутри
+           подвала, а не поверх условий: подвал стоит на фиксированной высоте
+           независимо от того, в одну строку легло обещание или в две
+           (на телефоне «Поддержка» переносится) — штамп больше не может
+           наехать на текст условия, где бы он ни закончился. -->
+      <span class="war__stamp" data-txt="prWarStamp" aria-hidden="true">выдан</span>
     </div>
-    <!-- Печать пришлёпывается, когда талон доехал до экрана. Она и есть смысл
-         секции: обещание не написано, а заверено -->
-    <span class="war__stamp" data-txt="prWarStamp" aria-hidden="true">выдан</span>
   </div>
   </div>
 </section>
