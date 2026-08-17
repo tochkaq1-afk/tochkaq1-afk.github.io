@@ -289,7 +289,6 @@ const DEFAULTS = {
   txtStkEyebrow:'чем я работаю',
   txtStkTitle:'Инструменты и зачем они вам',
   txtStkKey:'зачем это нужно',
-  txtStkNote:'Контур — знаю, но без своих примеров.',
   txtStkList:[
     'HTML :: Каркас страницы. Семантика даёт поиску понять, о чём сайт.',
     'CSS :: Внешний вид и вся анимация без тяжёлых библиотек.',
@@ -521,7 +520,7 @@ function drawText(){
     prWarK:cfg.txtPrWarK, prWarNo:cfg.txtPrWarNo, prWarFoot:cfg.txtPrWarFoot,
     prWarStamp:cfg.txtPrWarStamp,
     stkEyebrow:cfg.txtStkEyebrow, stkTitle:cfg.txtStkTitle,
-    stkKey:cfg.txtStkKey, stkNote:cfg.txtStkNote,
+    stkKey:cfg.txtStkKey,
     aboutEyebrow:cfg.txtAboutEyebrow,
     ctTitle:cfg.txtCtTitle, ctLead:cfg.txtCtLead,
     ctGo:cfg.txtCtGo,

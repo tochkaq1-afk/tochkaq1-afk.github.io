@@ -170,7 +170,6 @@ const SCHEMA = [
     { k:'txtStkEyebrow', t:'text', label:'Надзаголовок' },
     { k:'txtStkTitle',   t:'text', label:'Заголовок' },
     { k:'txtStkKey',     t:'text', label:'Подпись справа' },
-    { k:'txtStkNote',    t:'text', label:'Сноска' },
     { k:'txtStkList',    t:'text', label:'Строки: имя :: зачем, через | (звёздочка — «пока не делал»)' }
   ]},
 
