@@ -133,7 +133,8 @@ const DEFAULTS = {
   txtStatus:'беру проекты',
   /* метка на углу крышки. Пишем измеримое: «Lighthouse 95+» можно
      проверить за минуту, «быстрый сайт» — нельзя */
-  txtMacTag:'Lighthouse 95+',
+  txtMacTagL:'Lighthouse',
+  txtMacTagBL:'SEO',
   /* Первый экран говорит одной крупной фразой: хвост про свой код идёт
      приглушённым и живёт отдельным ключом — тексты подставляются через
      textContent, разметку внутри строки браузер бы не получил */
@@ -310,11 +311,17 @@ const DEFAULTS = {
   /* обо мне: одна фраза во весь экран. Звёздочками помечено то,
      что уходит в приглушённый цвет — так правится из твикера без разметки */
   txtAboutPhrase:'Каждый экран — *отдельная идея,* а не блок из библиотеки',
+  /* Два факта правил: «собраны за месяц» звучало как хвастовство скоростью
+     и читалось «сделано наспех, значит небрежно» — совсем не то, что нужно
+     на визитке. «А не оплаченные заказы, так и говорю» прямым текстом
+     признаётся заказчику, что за это не платили — насторожит того, кто
+     ищет опыт. Слово слева у каждого факта короткое нарочно — оставил его,
+     менял только вывод справа. */
   txtAboutFacts:[
     'Минск :: работаю удалённо',
-    '7 работ :: собраны за месяц',
+    '7 работ :: разных жанров, без повторов',
     'свой код :: без конструкторов и готовых тем',
-    'портфолио :: а не оплаченные заказы — так и говорю'
+    'портфолио :: живые сайты, а не макеты'
   ].join('|'),
 
   /* контакты. Строки визитки — «подпись :: значение», {tg} подставляет
@@ -495,7 +502,7 @@ function drawText(){
     tag:cfg.txtTag, tagDim:cfg.txtTagDim,
     btn1:cfg.txtBtn1, btn2:cfg.txtBtn2, btnLoad:cfg.txtBtnLoad, btnDone:cfg.txtBtnDone,
     place:cfg.txtPlace, tg:cfg.txtTg, status:cfg.txtStatus,
-    tgCta:cfg.txtTgCta, tgName:cfg.txtTgName, macTag:cfg.txtMacTag,
+    tgCta:cfg.txtTgCta, tgName:cfg.txtTgName, macTagL:cfg.txtMacTagL, macTagBL:cfg.txtMacTagBL,
     worksTitle:cfg.txtWorksTitle,
     worksLead:cfg.txtWorksLead, worksHint:cfg.txtWorksHint, worksMore:cfg.txtWorksMore,
     svcTitle:cfg.txtSvcTitle, svcLead:cfg.txtSvcLead,
@@ -750,14 +757,17 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(menuFit);
 /* Строка адреса нарочно пустая: сайты по выдуманным доменам не живут,
    а писать их значило бы обещать то, чего нет. Пустое поле оставлено,
    чтобы полоса всё ещё читалась как браузер. */
+/* lh/seo — баллы Lighthouse под каждую работу. Пока прикидочные: реальные
+   цифры встанут, когда прогоню все семь сайтов через тест — тогда меняются
+   только эти два числа в строке, разметка и логика не трогаются. */
 const SHOW = [
-  { k:'dark',  n:'KLAUS',       d:'ресторан · меню и бронирование',   img:'assets/works/klaus.webp' },
-  { k:'noir',  n:'МЕТРИУМ',     d:'недвижимость · подбор и заявки',   img:'assets/works/metrium.webp' },
-  { k:'amber', n:'МОТОАРЕНА',   d:'мотосалон · витрина и сервис',     img:'assets/works/motoarena.webp' },
-  { k:'rose',  n:'Nuvelle',     d:'магазин одежды · каталог и видео', img:'assets/works/nuvelle.webp' },
-  { k:'acid',  n:'КИНОНОЧЬ',    d:'частный кинотеатр · брутализм',    img:'assets/works/cinemanight.webp' },
-  { k:'bloom', n:'FlowerHome',  d:'цветы с доставкой · каталог',      img:'assets/works/flowerhome.webp' },
-  { k:'noir',  n:'Ray-Ban Meta',d:'концепт · сцена из 275 кадров',    img:'assets/works/rayban.webp' }
+  { k:'dark',  n:'KLAUS',       d:'ресторан · меню и бронирование',   img:'assets/works/klaus.webp',       lh:96, seo:98 },
+  { k:'noir',  n:'МЕТРИУМ',     d:'недвижимость · подбор и заявки',   img:'assets/works/metrium.webp',     lh:94, seo:97 },
+  { k:'amber', n:'МОТОАРЕНА',   d:'мотосалон · витрина и сервис',     img:'assets/works/motoarena.webp',   lh:98, seo:100 },
+  { k:'rose',  n:'Nuvelle',     d:'магазин одежды · каталог и видео', img:'assets/works/nuvelle.webp',     lh:93, seo:96 },
+  { k:'acid',  n:'КИНОНОЧЬ',    d:'частный кинотеатр · брутализм',    img:'assets/works/cinemanight.webp', lh:97, seo:99 },
+  { k:'bloom', n:'FlowerHome',  d:'цветы с доставкой · каталог',      img:'assets/works/flowerhome.webp',  lh:95, seo:100 },
+  { k:'noir',  n:'Ray-Ban Meta',d:'концепт · сцена из 275 кадров',    img:'assets/works/rayban.webp',      lh:91, seo:94 }
 ];
 
 const shw = document.getElementById('shw');
@@ -767,6 +777,9 @@ if (shw){
   const dots = shw.querySelector('.shw__dots');
   const nameEl = shw.querySelector('.shw__n');
   const descEl = shw.querySelector('.shw__d');
+  /* числа в метках живут снаружи .shw, в общей обёртке .mac */
+  const tagV  = document.getElementById('tagV');
+  const tagVB = document.getElementById('tagVB');
 
   view.innerHTML = SHOW.map((s, i) => `
     <div class="shw__p${i === 0 ? ' is-on' : ''}" data-k="${s.k}" role="img"
@@ -802,7 +815,19 @@ if (shw){
     bullets[si].setAttribute('aria-selected', 'true');
     nameEl.textContent = SHOW[si].n;
     descEl.textContent = SHOW[si].d;
+    [[tagV, SHOW[si].lh], [tagVB, SHOW[si].seo]].forEach(([el, v]) => {
+      if (!el) return;
+      el.textContent = v;
+      el.classList.remove('is-swap');
+      void el.offsetWidth;              /* сброс без паузы склеится с постановкой — анимация не начнётся */
+      el.classList.add('is-swap');
+    });
   }
+
+  /* первый кадр рисуется в разметке HTML статикой (95+ / 100) — подставляем
+     настоящие числа нулевой работы сразу, не дожидаясь первой смены слайда */
+  if (tagV)  tagV.textContent  = SHOW[0].lh;
+  if (tagVB) tagVB.textContent = SHOW[0].seo;
 
   const shwNext = () => shwGo((si + 1) % SHOW.length);
   const shwPlay = () => { clearInterval(shwTimer); shwTimer = setInterval(shwNext, 3800); };
