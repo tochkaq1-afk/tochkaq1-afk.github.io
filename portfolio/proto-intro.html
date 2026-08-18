@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Интро загрузки — варианты</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Golos+Text:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#f2f0ea; --ink:#111113; --dim:#6c6a64; --wire:#dbd7cc; --line:#d2cfc5;
+  --fh:'Unbounded',system-ui,sans-serif; --fb:'Golos Text',system-ui,sans-serif;
+}
+*{ box-sizing:border-box; }
+html,body{ margin:0; }
+body{
+  background:#e7e4dc; color:var(--ink); font-family:var(--fb);
+  padding:40px clamp(14px,3vw,56px) 140px;
+}
+h1{ font-family:var(--fh); font-weight:800; letter-spacing:-.04em;
+  font-size:clamp(23px,3.4vw,38px); margin:0 0 10px; }
+.sub{ color:var(--dim); max-width:78ch; margin:0 0 12px; font-size:.9rem; line-height:1.6; }
+.sub b{ color:var(--ink); font-weight:600; }
+.bar{ display:flex; flex-wrap:wrap; gap:10px; margin:22px 0 34px; }
+.bar button{
+  font:inherit; font-size:.74rem; letter-spacing:.08em; text-transform:uppercase;
+  border:1px solid var(--ink); background:none; color:var(--ink);
+  border-radius:100px; padding:11px 18px; cursor:pointer;
+  transition:background .25s ease, color .25s ease;
+}
+.bar button:hover{ background:var(--ink); color:var(--bg); }
+
+.grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(min(430px,100%),1fr)); gap:44px 30px; }
+.item{ min-width:0; }
+.hd{ display:flex; align-items:center; gap:10px; margin-bottom:8px; flex-wrap:wrap; }
+.let{ font-family:var(--fh); font-weight:800; font-size:.82rem;
+  width:30px; height:30px; flex:none; border-radius:9px; background:var(--ink); color:var(--bg);
+  display:grid; place-items:center; }
+.nm{ font-family:var(--fh); font-weight:600; font-size:.98rem; letter-spacing:-.02em; }
+.ds{ color:var(--dim); font-size:.79rem; line-height:1.55; margin:13px 0 0; }
+.ds em{ color:var(--ink); font-style:normal; font-weight:500; }
+
+/* сцена: интро проигрывается внутри неё, как в окне телефона/монитора */
+.stage{
+  position:relative; aspect-ratio:16/10; border-radius:16px; overflow:hidden;
+  border:1px solid var(--line); background:var(--bg); cursor:pointer;
+  container-type:size;
+}
+.stage__site{
+  position:absolute; inset:0; display:flex; flex-direction:column;
+  justify-content:flex-end; padding:7% 7% 8%; background:var(--bg);
+}
+.stage__site h2{
+  margin:0; font-family:var(--fh); font-weight:600; letter-spacing:-.045em;
+  font-size:15cqw; line-height:.94;
+}
+.stage__site p{ margin:3% 0 0; color:var(--dim); font-size:3.1cqw; }
+.stage__site i{
+  position:absolute; left:0; right:0; top:0; height:1px; background:var(--line);
+  top:12%;
+}
+.replay{
+  position:absolute; right:10px; bottom:10px; z-index:60;
+  font:inherit; font-size:.6rem; letter-spacing:.1em; text-transform:uppercase;
+  border:1px solid var(--line); background:color-mix(in srgb,var(--bg) 88%,transparent);
+  color:var(--dim); border-radius:100px; padding:6px 12px; cursor:pointer;
+  opacity:0; transition:opacity .3s ease;
+}
+.stage:hover .replay{ opacity:1; }
+
+/* ---------- общий слой интро ---------- */
+.iv{ position:absolute; inset:0; z-index:20; overflow:hidden; }
+.iv.is-gone{ pointer-events:none; }
+
+/* ============ A. счётчик и сетка ============ */
+.a__grid{ position:absolute; inset:0; background:var(--bg); }
+.a__grid i{ position:absolute; background:var(--line); opacity:0; }
+.a__grid i.v{ top:0; bottom:0; width:1px; }
+.a__grid i.h{ left:0; right:0; height:1px; }
+.a__n{
+  position:absolute; left:6%; bottom:6%; margin:0;
+  font-family:var(--fh); font-weight:800; letter-spacing:-.05em;
+  font-size:20cqw; line-height:.8; font-variant-numeric:tabular-nums;
+}
+.a__n sup{ font-size:.3em; vertical-align:top; font-weight:400; opacity:.4; }
+.a__k{
+  position:absolute; right:6%; bottom:8%; margin:0; color:var(--dim);
+  font-size:2.6cqw; letter-spacing:.24em; text-transform:uppercase;
+}
+.a__sheet{ position:absolute; inset:0; background:var(--bg); }
+
+/* ============ B. штамп чертежа ============ */
+.b__sheet{ position:absolute; inset:0; background:var(--bg); }
+.b__svg{ position:absolute; inset:0; width:100%; height:100%; }
+.b__svg path,.b__svg line,.b__svg rect{
+  fill:none; stroke:var(--ink); stroke-width:1;
+  stroke-dasharray:var(--L,600); stroke-dashoffset:var(--L,600);
+}
+.b__t{
+  position:absolute; left:11%; top:44%; margin:0;
+  font-family:var(--fh); font-weight:600; letter-spacing:-.04em;
+  font-size:9cqw; opacity:0;
+}
+.b__s{
+  position:absolute; left:11%; top:59%; margin:0; color:var(--dim);
+  font-size:2.5cqw; letter-spacing:.22em; text-transform:uppercase; opacity:0;
+}
+
+/* ============ C. плоттер пишет имя ============ */
+.c__sheet{ position:absolute; inset:0; background:var(--bg); }
+.c__wrap{ position:absolute; inset:0; display:grid; place-items:center; }
+.c__n{
+  margin:0; font-family:var(--fh); font-weight:600; letter-spacing:-.045em;
+  font-size:13cqw; display:flex;
+}
+.c__n span{ opacity:0; transform:translateY(.22em); }
+.c__pen{
+  position:absolute; top:0; bottom:0; width:1px; background:var(--ink);
+  opacity:0;
+}
+.c__pen:after{
+  content:''; position:absolute; left:-3px; top:calc(50% - 3.5px);
+  width:7px; height:7px; border-radius:50%; background:var(--ink);
+}
+
+/* ============ D. шторка колоннами ============ */
+.d__wrap{ position:absolute; inset:0; display:flex; }
+.d__wrap i{ flex:1; background:var(--ink); transform-origin:50% 100%; }
+.d__t{
+  position:absolute; inset:0; display:grid; place-items:center; z-index:2;
+  margin:0; font-family:var(--fh); font-weight:800; letter-spacing:.42em;
+  font-size:4cqw; color:var(--bg); text-indent:.42em;
+}
+
+/* ============ E. линейка меряет экран ============ */
+.e__sheet{ position:absolute; inset:0; background:var(--bg); }
+.e__rule{
+  position:absolute; left:8%; right:8%; top:50%; height:1px; background:var(--ink);
+  transform:scaleX(0); transform-origin:0 50%;
+}
+.e__rule b{
+  position:absolute; top:-7px; width:1px; height:15px; background:var(--ink);
+}
+.e__rule b:first-child{ left:0; }
+.e__rule b:last-child{ right:0; }
+.e__v{
+  position:absolute; left:50%; top:calc(50% - 6cqw); translate:-50% 0; margin:0;
+  font-family:var(--fh); font-weight:600; font-size:4.4cqw; letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums; opacity:0;
+}
+.e__k{
+  position:absolute; left:50%; top:calc(50% + 3cqw); translate:-50% 0; margin:0;
+  color:var(--dim); font-size:2.4cqw; letter-spacing:.24em; text-transform:uppercase; opacity:0;
+}
+
+/* ============ F. проявка знака из пыли ============ */
+.f__sheet{ position:absolute; inset:0; background:var(--ink); }
+.f__cv{ position:absolute; inset:0; width:100%; height:100%; }
+
+.note{
+  margin:52px auto 0; max-width:80ch; border-top:1px solid var(--line); padding-top:20px;
+  color:var(--dim); font-size:.8rem; line-height:1.6;
+}
+.note b{ color:var(--ink); font-weight:600; }
+</style>
+</head>
+<body>
+
+<h1>Интро загрузки: шесть вариантов</h1>
+<p class="sub">
+  У сайта уже есть своя завязка — «конструктор»: сетка, каркас, контент, цвет.
+  Интро не должно с ней спорить, оно должно в неё <b>передавать эстафету</b>:
+  закончилось интро — начал собираться первый экран. Поэтому все шесть держатся
+  бумаги, графита и чертёжной линии, ни одно не цветное и ни одно не длиннее двух секунд.
+</p>
+<p class="sub">
+  Жми на любое окно — интро проиграется заново. Внизу того, что показывается
+  после интро, — упрощённый первый экран, чтобы видеть саму передачу.
+  Ответь буквой (можно две: «F, но счётчик из A»).
+</p>
+
+<div class="bar">
+  <button id="all">Проиграть все разом</button>
+  <button id="slow">Замедлить вдвое</button>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<p class="note">
+  <b>По весу.</b> Ни один вариант не грузит ни картинок, ни шрифтов сверх тех,
+  что уже есть на сайте: всё рисуется вёрсткой и одним canvas в варианте F.
+  Интро снимается для тех, кто просил меньше движения (<em>prefers-reduced-motion</em>),
+  и не показывается второй раз за сессию — на телефоне это раздражает сильнее всего.
+</p>
+
+<script>
+let SLOW = 1;
+
+/* ------------------------------------------------------------------ каркас */
+const V = [
+  ['A','Счётчик и сетка',
+   `Пока сетка чертёжника расчерчивает лист линия за линией, в углу набегает счётчик.
+    На ста лист уходит вверх — и ровно с этого места сайт начинает собирать первый экран
+    той же сеткой. <em>Самая прямая передача эстафеты: интро не заканчивается, оно продолжается.</em>`,
+   buildA],
+
+  ['B','Штамп чертежа',
+   `Пустой лист. По нему пером обводится рамка с угловым штампом — как на настоящем чертеже,
+    линия за линией. В штамп вписывается имя, лист уезжает. Отсылка к тому же чертёжному языку,
+    что и курсор-перекрестие, но приём другой — не сетка, а рамка.`,
+   buildB],
+
+  ['C','Плоттер пишет имя',
+   `Вертикальная линия-перо идёт слева направо, и там, где она прошла, из-под неё проявляются
+    буквы AETÉRNA — по одной, как их выводит плоттер. Дошло до края — экран открылся.
+    Имя запоминается, потому что его пишут при тебе, а не показывают готовым.`,
+   buildC],
+
+  ['D','Шторка колоннами',
+   `Экран закрыт графитом, на нём разрядкой стоит имя. Затем полотно распадается на колонки
+    и они уходят вверх одна за другой — теми же долями, что и колонки сетки сайта.
+    Самое короткое из шести и самое спокойное.`,
+   buildD],
+
+  ['E','Линейка меряет экран',
+   `Через середину протягивается мерная линия с засечками, а над ней бежит число — она буквально
+    измеряет ширину твоего экрана и пишет её. Дошла до края — сайт открывается.
+    Приём подходит под «сайт делается по размеру», и он честно разный на телефоне и на мониторе.`,
+   buildE],
+
+  ['F','Знак собирается из пыли',
+   `Тёмный экран, по нему рассыпаны точки. Они стягиваются в знак AETÉRNA, держат его мгновение
+    и разлетаются, открывая сайт. <em>Это тот же приём, что уже живёт на главной в блоке со знаком</em>
+    — интро и первый экран говорят одним языком.`,
+   buildF]
+];
+
+document.getElementById('grid').innerHTML = V.map(([k,nm,ds]) => `
+  <div class="item">
+    <div class="hd"><span class="let">${k}</span><span class="nm">${nm}</span></div>
+    <div class="stage" data-k="${k}">
+      <div class="stage__site">
+        <i></i>
+        <h2>Конструктор</h2>
+        <p>сайты, боты и системы — Минск</p>
+      </div>
+      <button class="replay" type="button">ещё раз</button>
+    </div>
+    <p class="ds">${ds}</p>
+  </div>`).join('');
+
+const stages = [...document.querySelectorAll('.stage')];
+const runners = {};
+V.forEach(([k,,,fn]) => { runners[k] = fn; });
+
+function play(stage){
+  stage.querySelectorAll('.iv').forEach(n => n.remove());
+  const layer = document.createElement('div');
+  layer.className = 'iv';
+  stage.appendChild(layer);
+  const finish = () => {
+    if (layer.dataset.done) return;
+    layer.dataset.done = '1';
+    layer.classList.add('is-gone');
+    setTimeout(() => layer.remove(), 500);
+  };
+  /* страховка на боевом: во вкладке, которую свернули, ни rAF, ни анимации
+     не идут — без будильника интро осталось бы висеть поверх сайта навсегда */
+  setTimeout(finish, 4200 * SLOW);
+  runners[stage.dataset.k](layer, finish);
+}
+
+stages.forEach(s => {
+  s.addEventListener('click', () => play(s));
+  play(s);
+});
+document.getElementById('all').addEventListener('click', () => stages.forEach(play));
+document.getElementById('slow').addEventListener('click', e => {
+  SLOW = SLOW === 1 ? 2 : 1;
+  e.target.textContent = SLOW === 1 ? 'Замедлить вдвое' : 'Вернуть скорость';
+  stages.forEach(play);
+});
+
+/* маленький помощник: анимация без библиотек, всегда с учётом SLOW */
+function anim(el, frames, opt){
+  const o = Object.assign({ duration:600, easing:'cubic-bezier(.76,0,.24,1)', fill:'forwards' }, opt);
+  o.duration *= SLOW; if (o.delay) o.delay *= SLOW;
+  return el.animate(frames, o);
+}
+/* объявлением, а не const: интро стартуют раньше этой строки,
+   а объявление функции поднимается наверх */
+function wait(ms){ return new Promise(r => setTimeout(r, ms * SLOW)); }
+
+/* ============================================================== A */
+function buildA(L, done){
+  L.innerHTML = `
+    <div class="a__grid"></div>
+    <p class="a__n">0<sup>%</sup></p>
+    <p class="a__k">черчу сетку</p>
+    <div class="a__sheet" hidden></div>`;
+  const g = L.querySelector('.a__grid');
+  const N = 9;
+  for (let i = 1; i < N; i++){
+    const v = document.createElement('i'); v.className = 'v';
+    v.style.left = (i / N * 100) + '%'; g.appendChild(v);
+  }
+  for (let i = 1; i < 6; i++){
+    const h = document.createElement('i'); h.className = 'h';
+    h.style.top = (i / 6 * 100) + '%'; g.appendChild(h);
+  }
+  const lines = [...g.children];
+  lines.forEach((n, i) => anim(n, [{ opacity:0 }, { opacity:1 }],
+    { duration:260, delay:i * 34 }));
+
+  const num = L.querySelector('.a__n');
+  const t0 = performance.now();
+  const dur = 1250 * SLOW;
+  (function step(now){
+    const p = Math.min(1, (now - t0) / dur);
+    num.firstChild.textContent = Math.round(p * 100);
+    if (p < 1) requestAnimationFrame(step);
+    else {
+      L.querySelector('.a__k').textContent = 'готово';
+      anim(L, [{ transform:'translateY(0)' }, { transform:'translateY(-100%)' }],
+        { duration:560 }).finished.then(done);
+    }
+  })(t0);
+}
+
+/* ============================================================== B */
+function buildB(L, done){
+  L.innerHTML = `
+    <div class="b__sheet"></div>
+    <svg class="b__svg" viewBox="0 0 160 100" preserveAspectRatio="none">
+      <rect x="6" y="6" width="148" height="88"></rect>
+      <line x1="96" y1="72" x2="154" y2="72"></line>
+      <line x1="96" y1="72" x2="96" y2="94"></line>
+      <line x1="96" y1="83" x2="154" y2="83"></line>
+    </svg>
+    <p class="b__t">AETÉRNA</p>
+    <p class="b__s">лист 1 из 1</p>`;
+  const shapes = [...L.querySelectorAll('.b__svg *')];
+  shapes.forEach((n, i) => {
+    const len = n.getTotalLength ? n.getTotalLength() : 480;
+    n.style.setProperty('--L', len);
+    n.style.strokeDasharray = len;
+    n.style.strokeDashoffset = len;
+    anim(n, [{ strokeDashoffset:len }, { strokeDashoffset:0 }],
+      { duration:i === 0 ? 780 : 300, delay:i === 0 ? 0 : 700 + i * 90 });
+  });
+  anim(L.querySelector('.b__t'), [{ opacity:0, transform:'translateY(8px)' },
+    { opacity:1, transform:'none' }], { duration:420, delay:1000 });
+  anim(L.querySelector('.b__s'), [{ opacity:0 }, { opacity:1 }],
+    { duration:420, delay:1180 });
+  wait(1700).then(() =>
+    anim(L, [{ transform:'translateY(0)' }, { transform:'translateY(-100%)' }],
+      { duration:560 }).finished.then(done));
+}
+
+/* ============================================================== C */
+function buildC(L, done){
+  const word = 'AETÉRNA';
+  L.innerHTML = `
+    <div class="c__sheet"></div>
+    <div class="c__wrap"><p class="c__n">${[...word].map(c => `<span>${c}</span>`).join('')}</p></div>
+    <i class="c__pen"></i>`;
+  const pen = L.querySelector('.c__pen');
+  anim(pen, [{ opacity:0, left:'8%' }, { opacity:1, offset:.06 },
+    { opacity:1, offset:.9 }, { opacity:0, left:'92%' }],
+    { duration:1300, easing:'cubic-bezier(.5,0,.2,1)' });
+  [...L.querySelectorAll('.c__n span')].forEach((s, i) =>
+    anim(s, [{ opacity:0, transform:'translateY(.22em)' }, { opacity:1, transform:'none' }],
+      { duration:320, delay:330 + i * 105 }));
+  wait(1620).then(() =>
+    anim(L, [{ clipPath:'inset(0 0 0 0)' }, { clipPath:'inset(0 0 100% 0)' }],
+      { duration:560 }).finished.then(done));
+}
+
+/* ============================================================== D */
+function buildD(L, done){
+  const N = 7;
+  L.innerHTML = `<div class="d__wrap">${'<i></i>'.repeat(N)}</div>
+    <p class="d__t">AETÉRNA</p>`;
+  anim(L.querySelector('.d__t'), [{ opacity:0, letterSpacing:'.7em' },
+    { opacity:1, letterSpacing:'.42em' }], { duration:640 });
+  wait(760).then(() => {
+    anim(L.querySelector('.d__t'), [{ opacity:1 }, { opacity:0 }], { duration:280 });
+    [...L.querySelectorAll('.d__wrap i')].forEach((n, i) =>
+      anim(n, [{ transform:'translateY(0)' }, { transform:'translateY(-101%)' }],
+        { duration:620, delay:180 + i * 62 }));
+    wait(180 + N * 62 + 620).then(done);
+  });
+}
+
+/* ============================================================== E */
+function buildE(L, done){
+  L.innerHTML = `
+    <div class="e__sheet"></div>
+    <div class="e__rule"><b></b><b></b></div>
+    <p class="e__v">0</p>
+    <p class="e__k">ширина экрана</p>`;
+  const rule = L.querySelector('.e__rule');
+  const val  = L.querySelector('.e__v');
+  anim(rule, [{ transform:'scaleX(0)' }, { transform:'scaleX(1)' }], { duration:1100 });
+  anim(val, [{ opacity:0 }, { opacity:1 }], { duration:300, delay:180 });
+  anim(L.querySelector('.e__k'), [{ opacity:0 }, { opacity:1 }], { duration:300, delay:320 });
+  const target = Math.round(L.getBoundingClientRect().width);
+  const t0 = performance.now(), dur = 1100 * SLOW;
+  (function step(now){
+    const p = Math.min(1, (now - t0) / dur);
+    const e = 1 - Math.pow(1 - p, 4);
+    val.textContent = Math.round(target * e) + ' px';
+    if (p < 1) requestAnimationFrame(step);
+    else wait(320).then(() =>
+      anim(L, [{ transform:'translateY(0)' }, { transform:'translateY(-100%)' }],
+        { duration:560 }).finished.then(done));
+  })(t0);
+}
+
+/* ============================================================== F */
+function buildF(L, done){
+  L.innerHTML = `<div class="f__sheet"></div><canvas class="f__cv"></canvas>`;
+  const cv = L.querySelector('.f__cv');
+  const r  = L.getBoundingClientRect();
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  cv.width = r.width * dpr; cv.height = r.height * dpr;
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const W = r.width, H = r.height;
+
+  /* цели — точки по контуру слова, снятые с самого шрифта сайта */
+  const off = document.createElement('canvas');
+  off.width = W; off.height = H;
+  const o = off.getContext('2d');
+  o.fillStyle = '#fff';
+  o.textAlign = 'center'; o.textBaseline = 'middle';
+  o.font = `600 ${Math.round(W * .13)}px Unbounded, sans-serif`;
+  o.fillText('AETÉRNA', W / 2, H / 2);
+  const data = o.getImageData(0, 0, W, H).data;
+
+  const targets = [];
+  const step = Math.max(2, Math.round(W / 210));
+  for (let y = 0; y < H; y += step)
+    for (let x = 0; x < W; x += step)
+      if (data[(y * W + x) * 4 + 3] > 128) targets.push([x, y]);
+
+  const P = targets.map(([tx, ty]) => ({
+    x:Math.random() * W, y:Math.random() * H, tx, ty,
+    sx:Math.random() * W, sy:Math.random() * H
+  }));
+
+  const t0 = performance.now();
+  const IN = 900 * SLOW, HOLD = 420 * SLOW, OUT = 620 * SLOW;
+  (function frame(now){
+    const t = now - t0;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#f2f0ea';
+    let p;
+    if (t < IN)               p = 1 - Math.pow(1 - t / IN, 3);
+    else if (t < IN + HOLD)   p = 1;
+    else                      p = 1 + Math.pow((t - IN - HOLD) / OUT, 2) * 1.6;
+
+    P.forEach(q => {
+      const k = Math.min(1, p);
+      let x = q.sx + (q.tx - q.sx) * k;
+      let y = q.sy + (q.ty - q.sy) * k;
+      if (p > 1){
+        const f = p - 1;
+        x += (q.tx - W / 2) * f * .9;
+        y += (q.ty - H / 2) * f * .9;
+      }
+      ctx.globalAlpha = p > 1 ? Math.max(0, 1 - (p - 1) * 1.4) : Math.min(1, k * 1.5);
+      ctx.fillRect(x, y, 1.6, 1.6);
+    });
+    ctx.globalAlpha = 1;
+
+    if (t < IN + HOLD + OUT) requestAnimationFrame(frame);
+    else anim(L, [{ opacity:1 }, { opacity:0 }], { duration:340 }).finished.then(done);
+  })(t0);
+}
+</script>
+</body>
+</html>
