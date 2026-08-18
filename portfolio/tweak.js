@@ -176,7 +176,10 @@ const SCHEMA = [
   { title:'Второй экран — работы', items:[
     { k:'txtWorksTitle',   t:'text', label:'Заголовок' },
     { k:'txtWorksLead',    t:'text', label:'Описание' },
-    { k:'txtWorksHint',    t:'text', label:'Подпись в заглушке' }
+    { k:'txtWorksHint',    t:'text', label:'Подпись в заглушке' },
+    { k:'txtWorkLive',     t:'text', label:'Метка выложенной работы' },
+    { k:'txtWorkLand',     t:'text', label:'Метка лендинга' },
+    { k:'txtWorkOpen',     t:'text', label:'Кнопка в раскрытой полосе' }
   ]},
 
   { title:'Третий экран — услуги', open:true, items:[

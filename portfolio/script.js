@@ -166,13 +166,19 @@ const DEFAULTS = {
   txtBtn2:'смотреть работы',
   txtBtnLoad:'отправляю…',
   txtBtnDone:'готово',
-  txtWorks:'KLAUS|КИНОНОЧЬ|FlowerHome|Nuvelle|МОТОАРЕНА|Метриум|Ray-Ban Meta',
+  txtWorks:'КИНОНОЧЬ|МОТОАРЕНА|FlowerHome|KLAUS|Метриум|Nuvelle|Ray-Ban Meta',
   /* пусто: имя секции теперь несёт надзаголовок из меню («РАБОТЫ»),
      а «Портфолио» рядом было тем же самым словом другими буквами */
   txtWorksTitle:'',
   txtWorksLead:'Разные жанры нарочно: магазин, каталог, кинотеатр, концепт. Чтобы не застрять в одном приёме.',
   txtWorksHint:'обложка появится позже',
   txtWorksMore:'показать ещё',
+  /* метки на обложке: у одних работ есть адрес, куда можно зайти,
+     у других — только сама вёрстка. Разница честная, поэтому вынесена
+     на карточку, а не спрятана в подпись */
+  txtWorkLive:'живой сайт',
+  txtWorkLand:'лендинг',
+  txtWorkOpen:'Открыть сайт',
 
   /* услуги. Состав форматов живёт в коде (FMT, ADD), а деньги и сроки —
      здесь: строка на позицию. Так их правит твикер, а не приходится
@@ -561,6 +567,8 @@ function drawText(){
     tgCta:cfg.txtTgCta, tgName:cfg.txtTgName, macTagL:cfg.txtMacTagL, macTagBL:cfg.txtMacTagBL,
     worksTitle:cfg.txtWorksTitle,
     worksLead:cfg.txtWorksLead, worksHint:cfg.txtWorksHint, worksMore:cfg.txtWorksMore,
+    workLive:cfg.txtWorkLive, workLand:cfg.txtWorkLand,
+    workOpen:cfg.txtWorkOpen,
     svcTitle:cfg.txtSvcTitle, svcLead:cfg.txtSvcLead,
     svcCta:cfg.txtSvcCta, svcReset:cfg.txtSvcReset, svcAddsK:cfg.txtSvcAddsK, svcHint:cfg.txtSvcHint,
     svcRestBtn:cfg.txtSvcRestBtn,
@@ -1141,13 +1149,19 @@ let rw = cfg.curRing, rh = cfg.curRing;
 /* Семь работ. МЧС и Лекало сняты с показа по его просьбе — не пойдут в портфолио.
    Категорий нарочно четыре: с семью работами шесть чипов превратили бы фильтр
    в подписи к одиночным карточкам */
+/* url — адрес выложенной работы. Он же делит витрину на «живые сайты»
+   и «лендинги»: если адреса нет, обещать нечего и метка честно говорит,
+   что это обложка. Пути от корня сайта, а не относительные: портфолио
+   лежит в /portfolio/, работы — рядом в корне */
 const WORKS = [
+  /* ---- выложенные: их можно открыть и потыкать, поэтому идут первыми */
+  { n:'КИНОНОЧЬ',      c:'сайты компаний', t:'частный кинотеатр',d:'брутализм с кислотным акцентом',    s:'10 секций',        img:'assets/works/cinemanight.webp',  url:'/cinemanight/' },
+  { n:'МОТОАРЕНА',     c:'каталоги',       t:'мототехника',     d:'фильтры, гео-блок, галерея',         s:'JSON-каталог',     img:'assets/works/motoarena.webp',    url:'/motoarena/' },
+  { n:'FlowerHome',    c:'магазины',       t:'цветы с доставкой',d:'каталог с 3D-анимацией',            s:'CSS 3D',           img:'assets/works/flowerhome.webp',   url:'/flowerhome/' },
+  /* ---- лендинги: показываю обложкой, открывать нечего */
   { n:'KLAUS',         c:'сайты компаний', t:'ресторан',        d:'меню, галерея, бронирование',        s:'12 секций',        img:'assets/works/klaus.webp' },
-  { n:'КИНОНОЧЬ',      c:'сайты компаний', t:'частный кинотеатр',d:'брутализм с кислотным акцентом',    s:'10 секций',        img:'assets/works/cinemanight.webp' },
-  { n:'FlowerHome',    c:'магазины',       t:'цветы с доставкой',d:'каталог с 3D-анимацией',            s:'CSS 3D',           img:'assets/works/flowerhome.webp' },
-  { n:'Nuvelle',       c:'магазины',       t:'магазин одежды',  d:'34 товара, видео в карточках',       s:'каталог, SEO',     img:'assets/works/nuvelle.webp' },
-  { n:'МОТОАРЕНА',     c:'каталоги',       t:'мототехника',     d:'фильтры, гео-блок, галерея',         s:'JSON-каталог',     img:'assets/works/motoarena.webp' },
   { n:'Метриум',       c:'каталоги',       t:'недвижимость',    d:'пролёт камеры по дому на скролле',   s:'скролл-секвенция', img:'assets/works/metrium.webp' },
+  { n:'Nuvelle',       c:'магазины',       t:'магазин одежды',  d:'34 товара, видео в карточках',       s:'каталог, SEO',     img:'assets/works/nuvelle.webp' },
   { n:'Ray-Ban Meta',  c:'концепты',       t:'концепт',         d:'прокручиваемая сцена из 275 кадров', s:'canvas, ffmpeg',   img:'assets/works/rayban.webp' }
 ];
 
@@ -1155,7 +1169,7 @@ const wgrid = document.querySelector('.wgrid');
 const wfilter = document.querySelector('.wfilter');
 const wmoreBtn = document.getElementById('wmore');
 const PER = 6;                 /* столько же карточек за раз, сколько у образца */
-let activeCat = 'все', shown = PER;
+let activeCat = 'все', shown = PER, worksBound = false;
 
 /* счётчики в чипах берём из самих работ: вобьёшь руками — разъедутся
    при первом же добавленном проекте */
@@ -1171,6 +1185,12 @@ function visibleCards(){
 }
 
 function applyWorks(){
+  /* смена фильтра или «показать ещё» закрывает раскрытое: оставить открытой
+     карточку, которая только что уехала из выборки, — значит показать пустоту */
+  wgrid.querySelectorAll('.wrow.is-open').forEach(r => {
+    r.classList.remove('is-open');
+    r.querySelector('.wcard').setAttribute('aria-expanded', 'false');
+  });
   [...wgrid.children].forEach(c => { c.hidden = true; });
   const vis = visibleCards();
   vis.slice(0, shown).forEach(c => { c.hidden = false; });
@@ -1186,24 +1206,68 @@ function buildWorks(){
     <div class="wrow bl" style="--d:${i * 70}ms">
       <i class="bl__ph"></i>
       <div class="bl__c">
-        <div class="wcard" data-cat="${w.c}">
+        <div class="wcard${w.url ? ' is-open-able' : ''}" data-cat="${w.c}"
+             ${w.url ? `role="button" tabindex="0" aria-expanded="false" aria-controls="wp${i}"` : ''}>
           ${w.img
             ? `<img class="wcard__shot" src="${w.img}" alt="${w.n}" loading="lazy">`
             : `<div class="wcard__empty" data-txt="worksHint"></div>`}
           <div class="wcard__shade"></div>
           <span class="wcard__badge">${w.c}</span>
+          <span class="wcard__live${w.url ? ' is-live' : ''}">
+            <i class="dot"></i><span data-txt="${w.url ? 'workLive' : 'workLand'}"></span>
+          </span>
           <div class="wcard__meta">
             <div class="t">${w.n}</div>
             <div class="s">${w.t} · ${w.d}</div>
           </div>
         </div>
+        ${w.url ? `
+        <div class="wpanel" id="wp${i}">
+          <div class="wpanel__in">
+            <div class="wpanel__b">
+              <div class="wpanel__tags"><span>${w.t}</span><span>${w.s}</span></div>
+              <p class="wpanel__d">${w.d}</p>
+              <a class="wpanel__go" href="${w.url}" target="_blank" rel="noopener"
+                 ><span data-txt="workOpen"></span><i aria-hidden="true">&#8599;</i></a>
+            </div>
+          </div>
+        </div>` : ''}
       </div>
     </div>`).join('');
 
-  const chips = [['все', WORKS.length]].concat([...catCounts().entries()]);
-  wfilter.innerHTML = chips.map(([c, n], i) =>
-    `<button class="wchip${i === 0 ? ' is-on' : ''}" type="button" data-c="${c}" role="tab"
-             aria-selected="${i === 0}">${c}<b>${n}</b></button>`).join('');
+  /* Слушатели вешаем один раз на сетку и на фильтр: сами они при пересборке
+     не заменяются, а вот .innerHTML внутри — да. Без флага второй вызов
+     buildWorks (его дёргает твикер) навесил бы вторую пару, и клик по
+     карточке открывал бы и тут же закрывал её */
+  if (!worksBound){
+  worksBound = true;
+
+  /* Раскрытие на месте: карточка не уводит со страницы и не открывает окно
+     поверх — под обложкой разъезжается полоса с подробностями. Открыта
+     всегда одна, иначе сетка скачет под пальцем */
+  const toggleWork = row => {
+    const open = !row.classList.contains('is-open');
+    wgrid.querySelectorAll('.wrow.is-open').forEach(r => {
+      r.classList.remove('is-open');
+      r.querySelector('.wcard').setAttribute('aria-expanded', 'false');
+    });
+    row.classList.toggle('is-open', open);
+    row.querySelector('.wcard').setAttribute('aria-expanded', String(open));
+  };
+
+  wgrid.addEventListener('click', e => {
+    const card = e.target.closest('.wcard.is-open-able');
+    if (card) toggleWork(card.closest('.wrow'));
+  });
+  /* с клавиатуры карточка — тот же переключатель: role="button" сам
+     по себе Enter и пробел не обрабатывает */
+  wgrid.addEventListener('keydown', e => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const card = e.target.closest('.wcard.is-open-able');
+    if (!card) return;
+    e.preventDefault();
+    toggleWork(card.closest('.wrow'));
+  });
 
   wfilter.addEventListener('click', e => {
     const chip = e.target.closest('.wchip');
@@ -1219,7 +1283,17 @@ function buildWorks(){
   });
 
   if (wmoreBtn) wmoreBtn.addEventListener('click', () => { shown += PER; applyWorks(); });
+  }
 
+  /* чипы фильтра пересобираются вместе с сеткой: счётчики берутся из самих
+     работ, добавится проект — цифра сойдётся сама */
+  const chips = [['все', WORKS.length]].concat([...catCounts().entries()]);
+  wfilter.innerHTML = chips.map(([c, n], i) =>
+    `<button class="wchip${i === 0 ? ' is-on' : ''}" type="button" data-c="${c}" role="tab"
+             aria-selected="${i === 0}">${c}<b>${n}</b></button>`).join('');
+
+  activeCat = 'все';
+  shown = PER;
   applyWorks();
   drawText();
 }

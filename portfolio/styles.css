@@ -846,8 +846,10 @@ body.is-cursor-custom .cursor{ display:block; }
 .wcard{
   position:relative; aspect-ratio:16/9; border-radius:18px; overflow:hidden;
   border:1px solid var(--line); background:var(--wire);
-  display:flex; align-items:flex-end; padding:20px; cursor:pointer;
+  display:flex; align-items:flex-end; padding:20px; cursor:default;
 }
+/* палец только там, где есть что открыть: у лендинга под обложкой пусто */
+.wcard.is-open-able{ cursor:pointer; }
 .wcard[hidden]{ display:none; }
 
 /* пока нет снятых обложек — миллиметровка вместо картинки */
@@ -895,6 +897,63 @@ body.is-cursor-custom .cursor{ display:block; }
   .works.is-in .wcard:after{ animation:wscan 1s cubic-bezier(.4,0,.2,1) var(--d,0ms); }
 }
 
+/* Метка в правом верхнем углу: у части работ есть адрес в сети, у части —
+   только вёрстка. Обещать одинаково нечестно, поэтому разница видна прямо
+   на обложке. Точка — та же, что у статуса в шапке, с тем же свечением */
+.wcard__live{
+  position:absolute; top:14px; right:14px; z-index:2;
+  display:inline-flex; align-items:center; gap:7px;
+  font-family:var(--fb); font-size:.58rem; letter-spacing:.1em; text-transform:uppercase;
+  color:color-mix(in srgb, var(--bg) 72%, transparent);
+  border:1px solid color-mix(in srgb, var(--bg) 22%, transparent);
+  background:color-mix(in srgb, var(--ink) 55%, transparent);
+  border-radius:100px; padding:5px 11px 5px 9px;
+}
+.wcard__live .dot{ background:color-mix(in srgb, var(--bg) 45%, transparent); box-shadow:none; }
+.wcard__live.is-live{ color:var(--bg); border-color:color-mix(in srgb, var(--bg) 42%, transparent); }
+.wcard__live.is-live .dot{
+  background:var(--accent);
+  box-shadow:0 0 6px 1px color-mix(in srgb, var(--accent) 65%, transparent);
+}
+
+/* Подробности разъезжаются под обложкой, а не открываются окном поверх:
+   grid-template-rows 0fr→1fr — единственный способ анимировать высоту,
+   не зная её заранее и не считая её скриптом на каждый ресайз */
+.wpanel{
+  display:grid; grid-template-rows:0fr;
+  transition:grid-template-rows .45s cubic-bezier(.22,1,.36,1);
+}
+.wrow.is-open .wpanel{ grid-template-rows:1fr; }
+.wpanel__in{
+  overflow:hidden; visibility:hidden;
+  transition:visibility 0s .45s;
+}
+.wrow.is-open .wpanel__in{ visibility:visible; transition-delay:0s; }
+.wpanel__b{
+  border:1px solid var(--line); border-top:0;
+  border-radius:0 0 18px 18px; margin:-18px 12px 0; padding:28px 18px 18px;
+  background:var(--wire);
+}
+.wpanel__tags{ display:flex; flex-wrap:wrap; gap:8px; }
+.wpanel__tags span{
+  border:1px solid var(--line); border-radius:100px; padding:4px 11px;
+  font-size:.58rem; letter-spacing:.1em; text-transform:uppercase; color:var(--dim);
+}
+.wpanel__d{ margin:12px 0 0; color:var(--dim); font-size:.84rem; line-height:1.5; }
+.wpanel__go{
+  display:inline-flex; align-items:center; gap:9px; margin-top:16px;
+  border:1px solid var(--ink); border-radius:100px; padding:11px 18px;
+  font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink);
+  transition:background .3s ease, color .3s ease;
+}
+.wpanel__go i{ font-style:normal; transition:transform .3s cubic-bezier(.22,1,.36,1); }
+.wpanel__go:hover{ background:var(--ink); color:var(--bg); }
+.wpanel__go:hover i{ transform:translate(2px,-2px); }
+
+/* раскрытая карточка перестаёт быть скруглённой снизу — обложка и полоса
+   становятся одним предметом */
+.wrow.is-open .wcard{ border-radius:18px 18px 0 0; }
+
 .wcard__meta{ position:relative; z-index:2; color:var(--bg); }
 .wcard__meta .t{ font-family:var(--fh); font-weight:600; font-size:clamp(14px,1.5vw,19px); line-height:1.1; }
 .wcard__meta .s{
@@ -921,6 +980,18 @@ body.is-cursor-custom .cursor{ display:block; }
 @media (max-width:900px){
     .wgrid{ grid-template-columns:1fr; gap:10px; }
     .wcard{ aspect-ratio:16/10; padding:16px; }
+    /* .58rem на телефоне даёт 9px — подписи на обложке становятся узором */
+    .wcard__badge,.wcard__live{ font-size:11px; letter-spacing:.06em; }
+    .wcard__badge{ top:12px; left:12px; }
+    .wcard__live{ top:12px; right:12px; }
+    .wpanel__b{ margin-inline:8px; padding:26px 15px 16px; }
+    .wpanel__tags span{ font-size:10.5px; }
+}
+/* уже 360px «сайты компаний» и «живой сайт» сходятся вплотную. Категория
+   тут лишняя: она же стоит в фильтре прямо над сеткой и в раскрытой полосе,
+   а метка «живой сайт / лендинг» больше нигде не повторяется */
+@media (max-width:359px){
+    .wcard__badge{ display:none; }
 }
 
 @media (prefers-reduced-motion:reduce){
