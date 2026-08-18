@@ -128,6 +128,7 @@ const DEFAULTS = {
 
   tGrid:0.8, tWire:1.1, tFill:1.0, tColor:0.6, stagger:0.075,
   ease:'outQuint', autoplay:true, showStage:true,
+  intro:true, introOnce:true,
 
   txtName:'AETÉRNA',
   txtMark:'AETERNAWEBSTUDIO',
@@ -2477,7 +2478,7 @@ if ('IntersectionObserver' in window){
 /* ---------------------------------------------- запуск */
 const PF = window.PF = {
   cfg, DEFAULTS, FONTS, PALETTES, CURSORS, BTNS, EASE,
-  apply, save, reset, usePalette, replay, seek, buildGrid, buildTiles, buildMenu,
+  apply, save, reset, usePalette, replay, seek, playIntro, buildGrid, buildTiles, buildMenu,
   runHBtn, heroCtaApply, buildWorks, buildSvc, buildFlow, buildAbout, buildContact, fitFootMark,
   buildAdv, buildPrinciples, buildStack,
   progress:0
@@ -2508,6 +2509,65 @@ requestAnimationFrame(menuFrame);
 apply();
 setTime(0);
 requestAnimationFrame(tick);
-if (cfg.autoplay) replay(); else seek(1);
+/* ---------------------------------------------- интро загрузки */
+/* Плоттер пишет имя, затем лист уезжает вверх и конструктор начинает
+   собирать первый экран прямо под ним. Разметка интро лежит в index.html,
+   здесь только решение «играть или нет» и передача эстафеты. */
+const INTRO_SEEN = 'pf-intro-seen';
+
+function introSkip(){
+  if (!cfg.intro || !cfg.autoplay) return true;
+  if (matchMedia('(prefers-reduced-motion:reduce)').matches) return true;
+  /* второй раз за сессию интро только мешает: человек уже видел имя
+     и пришёл за делом. Ключ сессионный — завтра покажем снова */
+  if (cfg.introOnce){
+    try { if (sessionStorage.getItem(INTRO_SEEN)) return true; } catch(e){}
+  }
+  return false;
+}
+
+function playIntro(force){
+  const box = document.getElementById('intro');
+  if (!box) { replay(); return; }
+  if (!force && introSkip()){ replay(); return; }
+
+  try { sessionStorage.setItem(INTRO_SEEN, '1'); } catch(e){}
+
+  /* задержку каждой буквы держим переменной, а не семью правилами:
+     имя правится в твикере и может стать длиннее или короче */
+  const chars = [...box.querySelectorAll('.intro__name span')];
+  chars.forEach((n, i) => n.style.setProperty('--i', i));
+
+  const body = document.body;
+  body.classList.remove('is-intro-out', 'is-intro-done');
+  body.classList.add('is-intro');
+  /* перезапуск: без сброса анимаций второй показ не проиграется */
+  void box.offsetWidth;
+
+  let closed = false;
+  const close = () => {
+    if (closed) return;
+    closed = true;
+    body.classList.add('is-intro-out');
+    /* конструктор запускаем ровно в момент подъёма листа: пока лист уезжает,
+       сетка уже чертится — шва между интро и первым экраном не видно */
+    replay();
+    setTimeout(() => {
+      body.classList.remove('is-intro', 'is-intro-out');
+      body.classList.add('is-intro-done');
+    }, 620);
+  };
+
+  const HOLD = 1450;
+  setTimeout(close, HOLD);
+  /* страховка: во вкладке, которую свернули, ни rAF, ни CSS-анимации не идут,
+     а setTimeout в фоне растягивают. Клик и любая клавиша тоже снимают лист —
+     ждать чужую заставку никто не обязан */
+  setTimeout(close, HOLD + 2500);
+  box.addEventListener('click', close);
+  addEventListener('keydown', close, { once:true });
+}
+
+if (cfg.autoplay) playIntro(); else seek(1);
 
 })();

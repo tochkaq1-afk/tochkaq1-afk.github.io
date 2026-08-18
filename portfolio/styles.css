@@ -2282,3 +2282,60 @@ html.js-reveal main > section.is-full > *{
 @media (prefers-reduced-motion:reduce){
   .prog i{ transition:none; }
 }
+
+/* ============================================================
+   ИНТРО ЗАГРУЗКИ — «плоттер пишет имя»
+   Линия-перо идёт слева направо, из-под неё по одной проявляются буквы,
+   затем лист уезжает вверх и первый экран начинает собираться конструктором.
+   Слой лежит в разметке с самого начала, но по умолчанию невидим: класс
+   is-intro ставит скрипт, и только если интро вообще будет проиграно.
+   Так страница без JS (и повторный заход) не встречает пустым листом.
+   ============================================================ */
+.intro{
+  position:fixed; inset:0; z-index:400; display:none;
+  background:var(--bg); overflow:hidden;
+  will-change:clip-path;
+}
+body.is-intro .intro{ display:grid; place-items:center; }
+/* уводим лист вверх обрезкой, а не сдвигом: сдвиг на телефоне тянет за собой
+   адресную строку и высоту вьюпорта */
+body.is-intro-out .intro{ clip-path:inset(0 0 100% 0); transition:clip-path .56s cubic-bezier(.76,0,.24,1); }
+body.is-intro-done .intro{ display:none; }
+
+.intro__name{
+  display:flex; margin:0;
+  font-family:var(--fh); font-weight:600; letter-spacing:-.045em;
+  font-size:clamp(38px, 13vw, 170px); line-height:1; color:var(--ink);
+}
+.intro__name span{ opacity:0; transform:translateY(.22em); }
+body.is-intro .intro__name span{
+  animation:introChar .32s cubic-bezier(.22,1,.36,1) forwards;
+  animation-delay:calc(.33s + var(--i) * .105s);
+}
+@keyframes introChar{ to{ opacity:1; transform:none } }
+
+/* перо: тонкая линия во всю высоту с утолщением-кончиком посередине */
+.intro__pen{
+  position:absolute; top:0; bottom:0; left:8%; width:1px; background:var(--ink);
+  opacity:0;
+}
+.intro__pen:after{
+  content:''; position:absolute; left:-3.5px; top:calc(50% - 4px);
+  width:8px; height:8px; border-radius:50%; background:var(--ink);
+}
+body.is-intro .intro__pen{
+  animation:introPen 1.3s cubic-bezier(.5,0,.2,1) forwards;
+}
+@keyframes introPen{
+  0%{ opacity:0; left:8% }
+  6%{ opacity:1 }
+  90%{ opacity:1 }
+  100%{ opacity:0; left:92% }
+}
+
+/* Кому движения хватает и без нас — интро не показываем совсем.
+   Правило дублирует проверку в скрипте нарочно: если скрипт почему-то
+   не дойдёт до этой ветки, лист всё равно не встанет поперёк сайта */
+@media (prefers-reduced-motion:reduce){
+  body.is-intro .intro{ display:none; }
+}

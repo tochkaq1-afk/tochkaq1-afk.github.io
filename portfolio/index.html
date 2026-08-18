@@ -38,7 +38,7 @@
      Начертания урезаны до тех, что правда встречаются на странице. -->
 <link id="fontLink" rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Golos+Text:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="styles.css?v=143">
+<link rel="stylesheet" href="styles.css?v=144">
 </head>
 <!-- Класс обязан совпадать с DEFAULTS.macFrame в script.js — те же грабли,
      что с :root и палитрой. apply() ставит его уже после первой отрисовки,
@@ -46,6 +46,19 @@
      и запустить переход тени с нуля. -->
 <body class="is-nomac">
 
+<!-- Интро: линия-перо идёт слева направо, из-под неё по одной проявляются
+     буквы имени, потом лист уезжает вверх и первый экран начинает собираться
+     конструктором. Разметка лежит прямо здесь, а не собирается скриптом:
+     иначе между первой отрисовкой и запуском script.js успел бы мелькнуть
+     голый сайт — ровно то, что интро и должно закрыть. Скрипт его только
+     проигрывает и снимает; если он не дошёл, класс is-intro никто не поставит
+     и слой останется невидимым. -->
+<div class="intro" id="intro" aria-hidden="true">
+  <div class="intro__name">
+    <span>A</span><span>E</span><span>T</span><span>É</span><span>R</span><span>N</span><span>A</span>
+  </div>
+  <i class="intro__pen"></i>
+</div>
 
 <!-- полоса прочитанного: тонкая линия сверху, растёт по мере прокрутки -->
 <div class="prog" aria-hidden="true"><i></i></div>
@@ -426,7 +439,7 @@
   <a class="foot__big" href="#hero" aria-label="Наверх"><span data-txt="name">AETERNA</span></a>
 </footer>
 
-<script src="script.js?v=144" defer></script>
+<script src="script.js?v=145" defer></script>
 <script src="dust.js?v=99" defer></script>
 
 <!-- Твикер посетителю не нужен, а весил он 33 КБ и был самым долгим
@@ -445,7 +458,7 @@
     css.rel = 'stylesheet'; css.href = 'tweak.css?v=99';
     document.head.appendChild(css);
     const js = document.createElement('script');
-    js.src = 'tweak.js?v=135';
+    js.src = 'tweak.js?v=136';
     document.body.appendChild(js);
   }
   addEventListener('keydown', e => {

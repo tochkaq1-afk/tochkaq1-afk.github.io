@@ -127,7 +127,10 @@ const SCHEMA = [
     { k:'stagger', t:'range', label:'Разбег блоков',  min:0,  max:.4, step:.005, unit:'с' },
     { k:'ease',    t:'select', label:'Характер', opts:Object.keys(PF.EASE), names:EASE_NAMES },
     { k:'autoplay',  t:'bool', label:'Играть при загрузке' },
-    { k:'showStage', t:'bool', label:'Показывать название фазы' }
+    { k:'showStage', t:'bool', label:'Показывать название фазы' },
+    { k:'intro',     t:'bool', label:'Интро загрузки (плоттер пишет имя)' },
+    { k:'introOnce', t:'bool', label:'Интро — один раз за сессию' },
+    { k:'introPlay', t:'intro', label:'Показать интро' }
   ]},
 
   { title:'Тексты', items:[
@@ -383,6 +386,12 @@ function buildRow(it){
 
   if (it.t === 'player'){ row.appendChild(buildPlayer()); return row; }
 
+  if (it.t === 'intro'){
+    const b = el('button', 'tw__btn tw__btn--wide', '↻ ' + it.label);
+    b.addEventListener('click', () => PF.playIntro(true));
+    row.appendChild(b);
+    return row;
+  }
   if (it.t === 'replay'){
     const b = el('button', 'tw__btn tw__btn--wide', '↻ Проиграть сборку заново');
     b.addEventListener('click', () => { playing = false; syncPlayBtn(); PF.replay(); });
