@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="ru" data-cursor="dot" data-btn="wide">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ЧЕРНОВИК · AETERNA — дизайнер и разработчик</title>
+<meta name="description" content="Собираю сайты, боты и системы на своём коде: дизайн и разработка. Портфолио и услуги. Минск.">
+<meta name="theme-color" content="#f2f0ea">
+
+<!-- Защита. GitHub Pages не даёт настраивать HTTP-заголовки, поэтому всё,
+     что можно, задаём через meta. CSP разрешает ровно то, чем сайт правда
+     пользуется: свои файлы, шрифты Google и картинки. 'unsafe-inline'
+     для стилей обязателен — скрипт пишет инлайновые стили и переменные
+     на элементы; для скриптов он нужен из-за встроенного загрузчика
+     твикера внизу страницы. object-src 'none' и base-uri 'self' закрывают
+     два классических вектора: подмену <base> и вставку плагинов.
+     frame-ancestors здесь не работает (только как HTTP-заголовок),
+     от кликджекинга страховка ниже, в script.js. -->
+<meta http-equiv="Content-Security-Policy" content="
+  default-src 'self';
+  script-src 'self' 'unsafe-inline';
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+  font-src 'self' https://fonts.gstatic.com;
+  img-src 'self' data:;
+  connect-src 'self';
+  form-action 'self';
+  base-uri 'self';
+  object-src 'none'">
+<!-- Чужим сайтам уходит только домен, без пути и параметров -->
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<!-- ЧЕРНОВИК. Копия боевого сайта для проверки правок. В поиск не пускаем:
+     иначе Гугл увидит две одинаковые страницы и сам решит, какую показывать. -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="canonical" href="https://tochkaq1-afk.github.io/portfolio/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Пара здесь обязана совпадать с DEFAULTS.font в script.js. Раньше тут
+     стоял Onest, а по умолчанию включён Golos Text — из-за этого шрифты
+     качались дважды: сначала ненужный набор, потом нужный поверх него.
+     Начертания урезаны до тех, что правда встречаются на странице. -->
+<link id="fontLink" rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Golos+Text:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="styles.css?v=200">
+</head>
+<!-- Класс обязан совпадать с DEFAULTS.macFrame в script.js — те же грабли,
+     что с :root и палитрой. apply() ставит его уже после первой отрисовки,
+     и если стартовое состояние другое, витрина успевает моргнуть корпусом
+     и запустить переход тени с нуля. -->
+<body class="is-nomac">
+
+<!-- Интро: линия-перо идёт слева направо, из-под неё по одной проявляются
+     буквы имени, потом лист уезжает вверх и первый экран начинает собираться
+     конструктором. Разметка лежит прямо здесь, а не собирается скриптом:
+     иначе между первой отрисовкой и запуском script.js успел бы мелькнуть
+     голый сайт — ровно то, что интро и должно закрыть. Скрипт его только
+     проигрывает и снимает; если он не дошёл, класс is-intro никто не поставит
+     и слой останется невидимым. -->
+<div class="intro" id="intro" aria-hidden="true">
+  <div class="intro__name">
+    <span>A</span><span>E</span><span>T</span><span>É</span><span>R</span><span>N</span><span>A</span>
+  </div>
+  <i class="intro__pen"></i>
+</div>
+
+<!-- полоса прочитанного: тонкая линия сверху, растёт по мере прокрутки -->
+<div class="prog" aria-hidden="true"><i></i></div>
+
+<div class="lamp" aria-hidden="true"></div>
+
+<div class="cursor" aria-hidden="true">
+  <div class="cursor__cross"><i class="cursor__cx"></i><i class="cursor__cy"></i></div>
+  <div class="cursor__dot"></div>
+  <div class="cursor__ring"></div>
+  <div class="cursor__frame"><i></i><i></i><i></i><i></i></div>
+  <div class="cursor__lens"></div>
+  <div class="cursor__read"><span class="cursor__x">0</span><span class="cursor__y">0</span></div>
+</div>
+
+<header class="top">
+  <a class="top__mark" href="#"><span class="mark" data-txt="mark">AETERNAWEBSTUDIO</span></a>
+  <div class="top__right">
+    <a class="top__tg" data-tg href="#" target="_blank" rel="noopener">
+      <i class="top__live" aria-hidden="true"></i><span data-txt="tg">телеграм</span>
+    </a>
+    <span class="top__place" data-txt="place">Минск</span>
+  </div>
+</header>
+
+<nav class="menu" id="menu" aria-hidden="true">
+  <div class="menu__inner">
+    <ul class="menu__list"></ul>
+    <div class="menu__side">
+      <a class="hbtn hbtn--spark menu__cta" href="#contact" data-key="btn1"></a>
+      <div class="menu__meta">
+        <span data-txt="place">Минск</span>
+        <a data-tg href="#" target="_blank" rel="noopener"><span data-txt="tg">телеграм</span></a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main>
+<section class="hero" id="hero">
+
+  <div class="hero__grid" aria-hidden="true">
+    <div class="hero__cols"></div>
+    <div class="hero__rows"></div>
+  </div>
+
+  <div class="hero__inner">
+
+    <div class="hero__left">
+      <!-- Город в надстрочнике показывается только на телефоне: на мониторе
+           он и так стоит в шапке справа, и вышло бы два «Минска» на экране -->
+      <div class="bl bl--eyebrow">
+        <i class="bl__ph"></i>
+        <span class="bl__c"><span data-txt="role">дизайнер и разработчик</span><span
+              class="eyebrow__place"> · <span data-txt="place">Минск</span></span></span>
+      </div>
+
+      <h1 class="hero__title">
+        <span class="bl bl--h1">
+          <i class="bl__ph"></i>
+          <span class="bl__c" data-txt="name">AETÉRNA</span>
+        </span>
+        <!-- Одна крупная мысль вместо фразы и описания. Приглушённый хвост —
+             отдельный узел, а не <em> внутри строки: тексты подставляются
+             через textContent, разметка внутри них не выживет -->
+        <span class="bl bl--h2">
+          <i class="bl__ph"></i>
+          <span class="bl__c"><span data-txt="tag">Сайты, боты и системы</span> <em
+                data-txt="tagDim">на своём коде</em></span>
+        </span>
+      </h1>
+
+      <!-- Строка под именем: крупная фраза говорит, ЧТО я делаю, эта —
+           что человек с этого получит. Отдельным блоком, чтобы прилетела
+           тем же конструктором, что и всё остальное на первом экране -->
+      <div class="bl bl--sub">
+        <i class="bl__ph"></i>
+        <p class="bl__c hero__sub" data-txt="heroSub"></p>
+      </div>
+
+      <div class="bl bl--cta">
+        <i class="bl__ph"></i>
+        <div class="bl__c">
+          <button class="hbtn hbtn--spark" type="button" data-key="btn1" data-states></button>
+          <a class="hbtn hbtn--quiet" href="#works" data-key="btn2"></a>
+        </div>
+      </div>
+
+      <!-- Нижняя строка говорит разное на разных экранах: на мониторе процент
+           своего кода, на телефоне — живой статус. Города нет ни там, ни там:
+           он уже стоит в шапке, а на узком экране в надстрочнике -->
+      <div class="bl bl--meta">
+        <i class="bl__ph"></i>
+        <div class="bl__c">
+          <span class="meta__stat"><b class="num" data-num="100">0</b>% своего кода</span>
+          <span class="meta__badge is-lit"><i class="dot"></i><span data-txt="status">беру проекты</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__right">
+      <div class="bl bl--art">
+        <i class="bl__ph"></i>
+        <div class="bl__c">
+          <!-- Витрина работ. Первый кадр грузится сразу, остальные лениво —
+               он и есть LCP. Вокруг — корпус макбука: только крышка,
+               без клавиатуры и перспективы. Снимается в твикере. -->
+          <div class="mac" id="mac">
+            <!-- Две метки — не «сайт быстрый», а конкретные цифры из
+                 измеримого теста, их можно проверить самостоятельно. Обе из
+                 одного отчёта Lighthouse. Число меняется вместе с обложкой —
+                 у каждой работы свой балл, а не общая цифра на все семь.
+                 Подпись и число — разные узлы: подпись живёт в твикере
+                 (data-txt, её же трогает общий drawText()), а число пишет
+                 только витрина при смене слайда. Держи их в одном узле —
+                 и любая правка текста в твикере стирала бы живое число
+                 обратно на дефолт. -->
+            <span class="mac__tag"><i class="dot"></i><b><span
+                  data-txt="macTagL">PageSpeed</span> <span class="mac__tag__v" id="tagV">95</span><span
+                  class="mac__tag__of">/100</span></b></span>
+            <span class="mac__tag mac__tag--b"><i class="dot"></i><b><span
+                  data-txt="macTagBL">SEO</span> <span class="mac__tag__v" id="tagVB">100</span><span
+                  class="mac__tag__of">/100</span></b></span>
+          <div class="shw" id="shw">
+            <div class="shw__bar" aria-hidden="true">
+              <i></i><i></i><i></i>
+              <span class="shw__url" aria-hidden="true"></span>
+            </div>
+            <div class="shw__view"></div>
+            <div class="shw__foot">
+              <span class="shw__n">KLAUS</span>
+              <span class="shw__d">ресторан · меню и бронирование</span>
+              <div class="shw__dots" role="tablist" aria-label="Работы"></div>
+            </div>
+          </div>
+            <div class="mac__hinge" aria-hidden="true"></div>
+            <div class="mac__base" aria-hidden="true"></div>
+            <div class="mac__sh" aria-hidden="true"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="hero__foot">
+    <div class="bl bl--foot">
+      <i class="bl__ph"></i>
+      <div class="bl__c">
+        <span class="hero__scroll"><i></i>листай</span>
+        <button class="hbtn hbtn--menu" type="button" data-key="menu" data-noarrow aria-expanded="false"></button>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- преимущества: шесть плиток, иконки вычерчиваются линиями -->
+<section class="adv" id="adv">
+  <div class="adv__head">
+    <span class="eyebrow rv" data-txt="advEyebrow">почему я</span>
+    <h2 class="adv__h rv" style="--d:60ms" data-txt="advTitle"></h2>
+    <p class="adv__lead rv" style="--d:120ms" data-txt="advLead"></p>
+  </div>
+  <div class="adv__grid"></div>
+</section>
+
+<section class="works" id="works">
+  <div class="works__head">
+    <div class="bl bl--eyebrow"><i class="bl__ph"></i>
+      <span class="bl__c"><span data-txt="worksEyebrow">работы</span></span>
+    </div>
+    <h2 class="works__h bl bl--h2b"><i class="bl__ph"></i>
+      <span class="bl__c" data-txt="worksTitle">Портфолио</span>
+    </h2>
+    <!-- описание под заголовком снято по просьбе: текст лежит в твикере (txtWorksLead) -->
+  </div>
+
+  <div class="wfilter" role="tablist" aria-label="Фильтр работ"></div>
+  <div class="wgrid"></div>
+  <div class="wmore">
+    <button class="hbtn hbtn--quiet" type="button" id="wmore" data-key="worksMore" data-noarrow></button>
+  </div>
+</section>
+
+<!-- услуги: слева форматы и допы, справа чек, который печатается сам -->
+<section class="svc" id="services">
+  <div class="svc__head">
+    <span class="eyebrow rv" data-txt="svcEyebrow">услуги</span>
+    <h2 class="svc__h rv" style="--d:60ms" data-txt="svcTitle">Что я умею делать</h2>
+    <p class="svc__lead rv" style="--d:120ms" data-txt="svcLead"></p>
+  </div>
+
+  <div class="svc__grid">
+    <div>
+      <div class="svc__fmts rv" style="--d:60ms" role="tablist" aria-label="Форматы работы"></div>
+
+      <!-- разница форматов живёт под своим рядом: её рисует скрипт
+           внутри каждой группы, здесь её нет -->
+
+      <div class="svc__adds rv" style="--d:120ms">
+        <span class="eyebrow" data-txt="svcAddsK">можно добавить к любому формату</span>
+        <div class="svc__cols"></div>
+      </div>
+
+      <div class="svc__rest rv" style="--d:180ms">
+        <span class="svc__rt" data-txt="svcRestT">Нужно другое?</span>
+        <span class="svc__rd" data-txt="svcRestD"></span>
+        <a class="hbtn hbtn--quiet" href="#contact" data-key="svcRestBtn" data-noarrow></a>
+      </div>
+    </div>
+
+    <aside class="till rv" style="--d:240ms">
+      <div class="till__bar">
+        <span class="eyebrow" data-txt="svcCheckK">ваш чек</span>
+      </div>
+      <div class="till__slot" aria-hidden="true"></div>
+
+      <div class="check" id="svcCheck">
+        <div class="ch__mark" data-txt="mark">AETERNAWEBSTUDIO</div>
+        <div class="ch__sub" id="chSub"></div>
+        <div class="ch__rule"></div>
+
+        <div class="ch__k" data-txt="svcChFmt">формат</div>
+        <div id="chFmt"></div>
+
+        <div class="ch__rule"></div>
+        <div class="ch__k" data-txt="svcChInc">входит в работу</div>
+        <div id="chInc"></div>
+
+        <div class="ch__rule"></div>
+        <div class="ch__k" data-txt="svcChAdd">добавлено</div>
+        <div id="chAdd"></div>
+
+        <div class="ch__rule"></div>
+        <div class="ch__row"><span data-txt="svcChN">позиций</span><span id="chN">0</span></div>
+        <div class="ch__row" id="chOffRow" hidden><span data-txt="svcChOff">скидка за набор</span><span id="chOff">0</span></div>
+        <div class="ch__row"><span data-txt="svcChDays">срок работы</span><span id="chDays"></span></div>
+        <div class="ch__rule"></div>
+
+        <div class="ch__tot"><span class="ch__tk" data-txt="svcChTot">итого</span><span class="ch__tv" id="chSum">0</span></div>
+        <div class="ch__row" id="chMonthRow" hidden><span data-txt="svcChMonth">потом</span><span id="chMonth"></span></div>
+
+        <div class="ch__bars" id="chBars" aria-hidden="true"></div>
+        <div class="ch__bye"><span data-txt="svcChBye">спасибо, что дочитали</span> · <span id="chNo"></span></div>
+      </div>
+
+      <a class="hbtn hbtn--spark till__go" href="#contact" data-key="svcCta"></a>
+      <!-- Сброс живёт под главной кнопкой и появляется только когда есть
+           что сбрасывать: пустая кнопка рядом с пустым чеком сбивает с толку -->
+      <button class="till__reset" type="button" id="svcReset" hidden data-txt="svcReset">собрать заново</button>
+      <div class="till__hint" data-txt="svcHint"></div>
+    </aside>
+  </div>
+</section>
+
+<!-- Возражения. Стоят сразу после цен, потому что спорят именно с ними:
+     человек, увидевший сумму, дальше листает уже с готовым «дорого» в голове,
+     и отвечать надо здесь, а не ждать, пока он напишет. Он не напишет. -->
+<section class="obj" id="objections">
+  <div class="obj__head">
+    <span class="eyebrow rv" data-txt="objEyebrow">о чём обычно спрашивают</span>
+    <h2 class="obj__h rv" style="--d:60ms" data-txt="objTitle"></h2>
+    <p class="obj__lead rv" style="--d:120ms" data-txt="objLead"></p>
+  </div>
+  <div class="obj__list"></div>
+</section>
+
+<!-- как я работаю — «гармошка»: полосы разъезжаются под курсором -->
+<section class="flow" id="flow">
+  <div class="flow__head">
+    <span class="eyebrow rv" data-txt="flowEyebrow">как я работаю</span>
+    <h2 class="flow__h rv" style="--d:60ms" data-txt="flowTitle"></h2>
+    <p class="flow__lead rv" style="--d:120ms" data-txt="flowLead"></p>
+  </div>
+
+  <div class="flow__acc rv" style="--d:180ms"></div>
+</section>
+
+
+<!-- Принципы оформлены гарантийным талоном: номер, четыре условия, подпись.
+     Были четыре плитки с крупными 01–04 — приём с половины студийных сайтов,
+     да ещё и с нумерацией, которой на этом сайте быть не должно. -->
+<section class="pr" id="principles">
+  <!-- Шапка слева, талон справа: талон в одиночку занимал шестьдесят
+       процентов ширины, а остальное оставалось пустым полем -->
+  <div class="pr__grid">
+  <div class="pr__head">
+    <span class="eyebrow rv" data-txt="prEyebrow">принципы</span>
+    <h2 class="pr__h rv" style="--d:60ms" data-txt="prTitle"></h2>
+    <p class="pr__lead rv" style="--d:120ms" data-txt="prLead"></p>
+  </div>
+
+  <div class="war rv" style="--d:180ms">
+    <div class="war__top">
+      <span class="war__k" data-txt="prWarK">условия работы</span>
+      <span class="war__no" data-txt="prWarNo">№ 0001 · бессрочно</span>
+    </div>
+    <div class="war__body"></div>
+    <div class="war__foot">
+      <span data-txt="prWarFoot">действует с первого дня работы</span>
+      <span class="war__sig" data-txt="name">AETÉRNA</span>
+      <!-- Печать пришлёпывается, когда талон доехал до экрана. Живёт внутри
+           подвала, а не поверх условий: подвал стоит на фиксированной высоте
+           независимо от того, в одну строку легло обещание или в две
+           (на телефоне «Поддержка» переносится) — штамп больше не может
+           наехать на текст условия, где бы он ни закончился. -->
+      <span class="war__stamp" data-txt="prWarStamp" aria-hidden="true">выдан</span>
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- обо мне — одна фраза во весь экран, слова выезжают по очереди -->
+<section class="ab" id="about">
+  <span class="eyebrow ab__eyebrow" data-txt="aboutEyebrow">обо мне</span>
+  <h2 class="ab__big"></h2>
+  <div class="ab__facts"></div>
+
+  <!-- Кто я: слева слот под фото, справа рассказ. Слот — не заглушка ради
+       заглушки: пустое место на его месте выглядело бы как недогруженная
+       картинка, а подписанная рамка честно говорит, что фото будет. -->
+  <div class="me">
+    <div class="me__ph">
+      <span class="me__ph__t" data-txt="mePhoto"></span>
+      <span class="me__ph__s" data-txt="mePhotoSub"></span>
+    </div>
+    <div class="me__txt">
+      <p class="me__lead" data-txt="meLead"></p>
+      <div class="me__body"></div>
+    </div>
+  </div>
+
+  <!-- стек: список слева, зачем это нужно — справа -->
+  <div class="stk">
+    <div class="stk__head">
+      <span class="eyebrow" data-txt="stkEyebrow">чем я работаю</span>
+      <h3 class="stk__h" data-txt="stkTitle"></h3>
+    </div>
+    <div class="stk__grid">
+      <div class="stk__col"></div>
+      <div class="stk__side">
+        <div class="stk__k" data-txt="stkKey">зачем это нужно</div>
+        <div class="stk__t"></div>
+        <div class="stk__d"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- контакты — визитка наклоняется за курсором, рядом короткая заявка -->
+<section class="ct" id="contact">
+  <div class="ct__head">
+    <span class="eyebrow rv" data-txt="ctEyebrow">контакты</span>
+    <h2 class="ct__h rv" style="--d:60ms" data-txt="ctTitle"></h2>
+    <p class="ct__lead rv" style="--d:120ms" data-txt="ctLead"></p>
+  </div>
+
+  <div class="ct__grid">
+    <div class="ct__wrap rv" style="--d:180ms">
+      <div class="ct__card">
+        <div class="ct__glyph" aria-hidden="true"></div>
+        <div class="ct__mark" data-txt="mark">AETERNAWEBSTUDIO</div>
+        <div class="ct__name" data-txt="ctWho">Тимофей</div>
+        <div class="ct__role" data-txt="role">дизайнер и разработчик</div>
+        <div class="ct__rows"></div>
+      </div>
+    </div>
+
+    <form class="ct__form rv" style="--d:240ms" novalidate>
+      <input class="ct__in" name="name" autocomplete="name" data-ph="ctPhName" aria-label="Имя">
+      <select class="ct__in" name="kind" aria-label="Что нужно"></select>
+      <!-- Слово «Телеграм» вшито в поле слева, вместо значка — так проще
+           прочитать, чем иконку, и не требует подписи над полем -->
+      <div class="ct__pfx">
+        <span class="ct__pfx__w" aria-hidden="true">Телеграм</span>
+        <input class="ct__in" name="contact" data-ph="ctPhContact" aria-label="Telegram username">
+      </div>
+      <input class="ct__in" name="about" data-ph="ctPhAbout" aria-label="О задаче">
+      <!-- Согласие на обработку — не для галочки: форма собирает имя и телеграм,
+           а это персональные данные (Закон РБ № 99-З). Галочка снята по умолчанию
+           намеренно: предустановленная не считается согласием. -->
+      <label class="ct__agree">
+        <input type="checkbox" name="agree" required>
+        <span>Согласен на обработку данных для ответа на заявку —
+          <a href="privacy.html" target="_blank" rel="noopener">политика</a></span>
+      </label>
+      <button class="hbtn hbtn--spark ct__send" type="submit" data-key="ctSend" data-states></button>
+      <!-- Видна только вне рабочих часов. Форма при этом работает как обычно:
+           статус гасит огонёк, но ничего не запрещает — иначе человек,
+           зашедший ночью, ушёл бы ни с чем -->
+      <p class="ct__late" data-txt="ctLate">Сейчас нерабочее время — заявку можно отправить, посмотрю с утра.</p>
+      <p class="ct__out" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="foot__row">
+    <p class="foot__note" data-txt="footNote"></p>
+    <div class="foot__right">
+      <a data-tg href="#" target="_blank" rel="noopener"><span data-txt="tg">телеграм</span></a>
+      <a href="privacy.html">политика</a>
+      <span data-txt="place">Минск</span>
+    </div>
+  </div>
+
+  <!-- знак во всю ширину: размер подбирает JS под ширину экрана -->
+  <a class="foot__big" href="#hero" aria-label="Наверх"><span data-txt="name">AETERNA</span></a>
+</footer>
+
+<script src="script.js?v=200" defer></script>
+<script src="dust.js?v=99" defer></script>
+
+<!-- Твикер посетителю не нужен, а весил он 33 КБ и был самым долгим
+     ресурсом на странице. Теперь подгружается по требованию: клавишей
+     «~»/«Ё» или адресом с ?tweak=1 — панель и шестерёнку он рисует сам. -->
+<script>
+(() => {
+  let asked = false;
+  function loadTweak(){
+    if (asked) return;
+    asked = true;
+    /* флаг ставим до загрузки: твикер прочтёт его на старте и откроется
+       сразу, иначе первое нажатие только скачало бы файл */
+    window.PF_TWEAK_OPEN = true;
+    const css = document.createElement('link');
+    css.rel = 'stylesheet'; css.href = 'tweak.css?v=99';
+    document.head.appendChild(css);
+    const js = document.createElement('script');
+    js.src = 'tweak.js?v=200';
+    document.body.appendChild(js);
+  }
+  addEventListener('keydown', e => {
+    if (e.target.matches('input, select, textarea')) return;
+    if (e.key === '`' || e.key === '~' || e.key === 'ё' || e.key === 'Ё'){
+      e.preventDefault();
+      loadTweak();
+    }
+  });
+  if (new URLSearchParams(location.search).has('tweak')) loadTweak();
+})();
+</script>
+</body>
+</html>
