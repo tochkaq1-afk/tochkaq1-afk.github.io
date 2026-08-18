@@ -909,11 +909,23 @@ body.is-cursor-custom .cursor{ display:block; }
   background:color-mix(in srgb, var(--ink) 55%, transparent);
   border-radius:100px; padding:5px 11px 5px 9px;
 }
-.wcard__live .dot{ background:color-mix(in srgb, var(--bg) 45%, transparent); box-shadow:none; }
-.wcard__live.is-live{ color:var(--bg); border-color:color-mix(in srgb, var(--bg) 42%, transparent); }
-.wcard__live.is-live .dot{
-  background:var(--accent);
-  box-shadow:0 0 6px 1px color-mix(in srgb, var(--accent) 65%, transparent);
+/* у лендинга огонёк гасим совсем: пульс и свечение задаёт .is-lit .dot
+   ключевыми кадрами, а они перебивают обычное box-shadow — тушить надо
+   саму анимацию, иначе «мёртвая» метка продолжает мигать как живая */
+.wcard__live .dot{
+  background:color-mix(in srgb, var(--bg) 45%, transparent);
+  box-shadow:none; animation:none !important;
+}
+/* «живой сайт» — заливка бумагой поверх кадра: на любой обложке это самое
+   светлое пятно, и метку видно раньше названия. «Лендинг» остаётся
+   полупрозрачным контуром, чтобы разница читалась издалека, а не по буквам */
+.wcard__live.is-live{
+  color:var(--ink); background:var(--bg); border-color:var(--bg); font-weight:500;
+}
+/* а у живой — возвращаем ровно тот же пульс, что у статуса в шапке */
+.wcard__live.is-live .dot{ background:var(--accent); }
+.is-lit .wcard__live.is-live .dot{
+  animation:pulse 2.4s ease-in-out infinite, glow 2.4s ease-in-out infinite !important;
 }
 
 /* Подробности разъезжаются под обложкой, а не открываются окном поверх:
@@ -929,9 +941,11 @@ body.is-cursor-custom .cursor{ display:block; }
   transition:visibility 0s .45s;
 }
 .wrow.is-open .wpanel__in{ visibility:visible; transition-delay:0s; }
+/* полоса повторяет карточку один в один: та же ширина, то же поле в 20px,
+   что и у подписи на обложке — иначе текст под кадром едет вбок */
 .wpanel__b{
   border:1px solid var(--line); border-top:0;
-  border-radius:0 0 18px 18px; margin:-18px 12px 0; padding:28px 18px 18px;
+  border-radius:0 0 18px 18px; margin:-18px 0 0; padding:38px 20px 20px;
   background:var(--wire);
 }
 .wpanel__tags{ display:flex; flex-wrap:wrap; gap:8px; }
@@ -984,7 +998,7 @@ body.is-cursor-custom .cursor{ display:block; }
     .wcard__badge,.wcard__live{ font-size:11px; letter-spacing:.06em; }
     .wcard__badge{ top:12px; left:12px; }
     .wcard__live{ top:12px; right:12px; }
-    .wpanel__b{ margin-inline:8px; padding:26px 15px 16px; }
+    .wpanel__b{ margin-inline:0; padding:34px 16px 16px; }
     .wpanel__tags span{ font-size:10.5px; }
 }
 /* уже 360px «сайты компаний» и «живой сайт» сходятся вплотную. Категория
