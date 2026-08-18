@@ -38,7 +38,7 @@
      Начертания урезаны до тех, что правда встречаются на странице. -->
 <link id="fontLink" rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Golos+Text:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="styles.css?v=144">
+<link rel="stylesheet" href="styles.css?v=150">
 </head>
 <!-- Класс обязан совпадать с DEFAULTS.macFrame в script.js — те же грабли,
      что с :root и палитрой. apply() ставит его уже после первой отрисовки,
@@ -308,6 +308,18 @@
   </div>
 </section>
 
+<!-- Возражения. Стоят сразу после цен, потому что спорят именно с ними:
+     человек, увидевший сумму, дальше листает уже с готовым «дорого» в голове,
+     и отвечать надо здесь, а не ждать, пока он напишет. Он не напишет. -->
+<section class="obj" id="objections">
+  <div class="obj__head">
+    <span class="eyebrow rv" data-txt="objEyebrow">о чём обычно спрашивают</span>
+    <h2 class="obj__h rv" style="--d:60ms" data-txt="objTitle"></h2>
+    <p class="obj__lead rv" style="--d:120ms" data-txt="objLead"></p>
+  </div>
+  <div class="obj__list"></div>
+</section>
+
 <!-- как я работаю — «гармошка»: полосы разъезжаются под курсором -->
 <section class="flow" id="flow">
   <div class="flow__head">
@@ -358,6 +370,20 @@
   <span class="eyebrow ab__eyebrow" data-txt="aboutEyebrow">обо мне</span>
   <h2 class="ab__big"></h2>
   <div class="ab__facts"></div>
+
+  <!-- Кто я: слева слот под фото, справа рассказ. Слот — не заглушка ради
+       заглушки: пустое место на его месте выглядело бы как недогруженная
+       картинка, а подписанная рамка честно говорит, что фото будет. -->
+  <div class="me">
+    <div class="me__ph">
+      <span class="me__ph__t" data-txt="mePhoto"></span>
+      <span class="me__ph__s" data-txt="mePhotoSub"></span>
+    </div>
+    <div class="me__txt">
+      <p class="me__lead" data-txt="meLead"></p>
+      <div class="me__body"></div>
+    </div>
+  </div>
 
   <!-- стек: список слева, зачем это нужно — справа -->
   <div class="stk">
@@ -439,7 +465,7 @@
   <a class="foot__big" href="#hero" aria-label="Наверх"><span data-txt="name">AETERNA</span></a>
 </footer>
 
-<script src="script.js?v=145" defer></script>
+<script src="script.js?v=150" defer></script>
 <script src="dust.js?v=99" defer></script>
 
 <!-- Твикер посетителю не нужен, а весил он 33 КБ и был самым долгим
@@ -458,7 +484,7 @@
     css.rel = 'stylesheet'; css.href = 'tweak.css?v=99';
     document.head.appendChild(css);
     const js = document.createElement('script');
-    js.src = 'tweak.js?v=136';
+    js.src = 'tweak.js?v=150';
     document.body.appendChild(js);
   }
   addEventListener('keydown', e => {

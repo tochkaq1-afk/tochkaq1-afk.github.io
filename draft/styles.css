@@ -215,13 +215,6 @@ body.is-closed .top__live{
 }
 .bl--h2 em{ font-style:normal; color:var(--dim); }
 
-/* Строка под крупной мыслью: обычным шрифтом и приглушённая — она поясняет,
-   а не спорит с заголовком за внимание. Ширину держим в 46 знаков, иначе
-   на мониторе она растянется через весь экран и перестанет читаться */
-.hero__sub{
-  margin:clamp(10px,1.6vh,18px) 0 0;
-  color:var(--dim); font-size:clamp(13px,1.05vw,16px); line-height:1.5; max-width:46ch;
-}
 
 /* город в надстрочнике — только там, где его нет в шапке (см. .top__place) */
 .eyebrow__place{ display:none; }

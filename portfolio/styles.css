@@ -215,6 +215,7 @@ body.is-closed .top__live{
 }
 .bl--h2 em{ font-style:normal; color:var(--dim); }
 
+
 /* город в надстрочнике — только там, где его нет в шапке (см. .top__place) */
 .eyebrow__place{ display:none; }
 
@@ -954,6 +955,11 @@ body.is-cursor-custom .cursor{ display:block; }
   font-size:.58rem; letter-spacing:.1em; text-transform:uppercase; color:var(--dim);
 }
 .wpanel__d{ margin:12px 0 0; color:var(--dim); font-size:.84rem; line-height:1.5; }
+/* у лендинга кнопки нет — вместо неё строка, почему её нет */
+.wpanel__note{
+  margin:14px 0 0; color:var(--dim); font-size:.72rem;
+  letter-spacing:.06em; text-transform:uppercase;
+}
 .wpanel__go{
   display:inline-flex; align-items:center; gap:9px; margin-top:16px;
   border:1px solid var(--ink); border-radius:100px; padding:11px 18px;
@@ -1211,6 +1217,16 @@ body.is-neon-always .aopt:after{ opacity:calc(var(--neonGlow) * .6); animation:n
 /* колонки подбираются под ширину: в рядах разное число карточек,
    жёсткая сетка растянула бы ряд из двух на всю строку */
 .fgrp__row{ display:grid; grid-template-columns:repeat(auto-fill,minmax(196px,1fr)); gap:10px; }
+/* «Кому подходит»: абзац про выбранный формат под его же рядом.
+   Отбит слева линией, а не рамкой: рамок в этом экране и так шесть */
+.fgrp__why{
+  margin:18px 0 0; padding-left:16px; border-left:2px solid var(--accent);
+  color:var(--dim); font-size:.86rem; line-height:1.6; max-width:70ch;
+}
+.fgrp__why b{
+  display:block; color:var(--ink); font-family:var(--fh); font-weight:600;
+  font-size:.9rem; letter-spacing:-.02em; margin-bottom:5px;
+}
 .fmt{
   position:relative; text-align:left; display:flex; flex-direction:column;
   padding:18px 16px 16px; border:1px solid var(--line); border-radius:18px; background:var(--wire);
@@ -1314,6 +1330,18 @@ button[aria-expanded="true"]:hover > .tgl:after{ transform:translateX(15px); }
   background:var(--bg); color:inherit; font:inherit; cursor:pointer;
   transition:border-color .25s ease, transform .3s cubic-bezier(.22,1,.36,1);
 }
+/* Метка допа. Абсолютом, а не ячейкой сетки: у .aopt три колонки под
+   галочку, текст и цену, и четвёртый ребёнок сломал бы раскладку.
+   Справа, а не слева, как у форматов: слева стоит галочка выбора */
+.aopt__mark{
+  position:absolute; top:-8px; right:12px; z-index:3;
+  font-size:.5rem; letter-spacing:.14em; text-transform:uppercase; font-weight:600;
+  padding:2px 8px; border-radius:999px;
+  background:var(--neon1); color:#fff; white-space:nowrap;
+  box-shadow:0 2px 8px -3px color-mix(in srgb, var(--neon1) 70%, transparent);
+}
+/* ряду с меткой нужен воздух сверху, иначе она наезжает на соседа */
+.aopt:has(.aopt__mark){ margin-top:12px; }
 .aopt:hover{ transform:translateY(-2px); border-color:var(--ink); }
 .aopt.is-on{ border-color:var(--accent); }
 /* включение рисуем заливкой: круг расходится из центра коробки и только
@@ -1478,6 +1506,58 @@ button[aria-expanded="true"]:hover > .tgl:after{ transform:translateX(15px); }
    и показывает чертёж шага, соседние сжимаются. Весь процесс
    держится в одном экране — листать за ним ничего не надо.
    ============================================================ */
+/* ============================================================
+   ВОЗРАЖЕНИЯ
+   Четыре вопроса раскрывающимися строками. Все ответы разом — стена
+   текста сразу после плотного экрана цен, поэтому открыт всегда один.
+   Высоту гоним grid-template-rows 0fr→1fr: она единственная умеет
+   анимировать «сколько получится», не зная числа заранее.
+   ============================================================ */
+.obj{
+  position:relative; border-top:1px solid var(--line);
+  padding:clamp(52px,7vh,92px) var(--pad) clamp(52px,7vh,92px);
+}
+.obj__head{ display:flex; flex-direction:column; gap:8px; align-items:flex-start;
+  margin-bottom:clamp(20px,3vh,38px); }
+.obj__h{
+  margin:0; font-family:var(--fh); font-weight:var(--h1w);
+  font-size:clamp(23px,3.3vw,46px); line-height:1.04; letter-spacing:calc(var(--h1track) * 1em);
+}
+.obj__lead{ margin:0; color:var(--dim); max-width:60ch; }
+
+.obj__list{ display:grid; gap:10px; max-width:var(--maxw); }
+.obj__i{
+  border:1px solid var(--line); border-radius:18px; background:var(--wire);
+  transition:border-color .3s ease, background .3s ease;
+}
+.obj__i.is-open{ border-color:var(--ink); background:var(--bg); }
+.obj__q{
+  width:100%; display:flex; align-items:center; justify-content:space-between; gap:18px;
+  padding:clamp(16px,2.2vw,22px) clamp(16px,2.2vw,24px);
+  background:none; border:0; color:inherit; font:inherit; text-align:left; cursor:pointer;
+}
+.obj__qt{
+  font-family:var(--fh); font-weight:600; letter-spacing:-.02em;
+  font-size:clamp(15px,1.5vw,19px); line-height:1.25;
+}
+/* плюс, который становится минусом: рисуем двумя полосками, а не знаком —
+   шрифтовой «+» пляшет по высоте от гарнитуры к гарнитуре */
+.obj__sign{ position:relative; width:15px; height:15px; flex:none; }
+.obj__sign:before,.obj__sign:after{
+  content:''; position:absolute; inset:50% 0 auto 0; height:1.5px; background:var(--ink);
+  transition:transform .38s cubic-bezier(.22,1,.36,1);
+}
+.obj__sign:after{ transform:rotate(90deg); }
+.obj__i.is-open .obj__sign:after{ transform:rotate(0deg); }
+
+.obj__a{ display:grid; grid-template-rows:0fr; transition:grid-template-rows .42s cubic-bezier(.22,1,.36,1); }
+.obj__i.is-open .obj__a{ grid-template-rows:1fr; }
+.obj__a__in{ overflow:hidden; }
+.obj__a p{
+  margin:0; padding:0 clamp(16px,2.2vw,24px) clamp(18px,2.4vw,24px);
+  color:var(--dim); line-height:1.62; max-width:74ch;
+}
+
 .flow{
   position:relative; border-top:1px solid var(--line);
   min-height:100svh; display:flex; flex-direction:column;
@@ -1603,6 +1683,54 @@ button[aria-expanded="true"]:hover > .tgl:after{ transform:translateX(15px); }
 }
 .ab.is-in .ab__big w b{ transform:none; }
 .ab__big em{ font-style:normal; color:var(--dim); }
+
+/* ============================================================
+   КТО Я: фото слева, рассказ справа
+   Пропорция 4:5 — вертикальный портрет: он ставится рядом с колонкой
+   текста, а горизонтальный кадр заставил бы текст уехать вниз.
+   Пока фото нет, слот подписан и разлинован миллиметровкой — так видно,
+   что это место занято нарочно, а не картинка не догрузилась.
+   ============================================================ */
+.me{
+  display:grid; grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);
+  gap:clamp(22px,3.4vw,52px); align-items:start;
+  margin-top:clamp(44px,7vh,86px);
+  padding-top:clamp(34px,5vh,58px); border-top:1px solid var(--line);
+}
+.me__ph{
+  position:relative; aspect-ratio:4/5; border-radius:20px; overflow:hidden;
+  border:1px dashed var(--line); background:var(--wire);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:8px; text-align:center; padding:24px;
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--ink) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--ink) 5%, transparent) 1px, transparent 1px);
+  background-size:30px 30px;
+}
+.me__ph__t{ font-family:var(--fh); font-weight:600; font-size:1.05rem; letter-spacing:-.02em; }
+.me__ph__s{ font-size:.6rem; letter-spacing:.16em; text-transform:uppercase; color:var(--dim); }
+
+.me__lead{
+  margin:0 0 clamp(16px,2.4vh,24px);
+  font-family:var(--fh); font-weight:600; letter-spacing:-.035em; line-height:1.14;
+  font-size:clamp(19px,2.5vw,34px);
+}
+.me__body p{
+  margin:0 0 14px; color:var(--dim); line-height:1.62; max-width:62ch;
+  opacity:0; transform:translateY(14px);
+}
+.ab.is-in .me__body p{
+  opacity:1; transform:none;
+  transition:opacity .6s ease var(--d,0ms), transform .6s cubic-bezier(.22,1,.36,1) var(--d,0ms);
+}
+.me__body p:last-child{ margin-bottom:0; }
+
+@media (max-width:860px){
+  /* на телефоне портрет во всю ширину съедал бы экран целиком: режем
+     пропорцию до 3:2 и ставим его над текстом */
+  .me{ grid-template-columns:1fr; }
+  .me__ph{ aspect-ratio:3/2; }
+}
 
 .ab__facts{
   display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
