@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Каталог — МОТОАРЕНА</title>
+<meta name="description" content="Каталог Мотоарены: мотоциклы, шлемы, экипировка, обувь, тюнинг, запчасти, мотохимия и сувениры. Минск, ТЦ «Арена-сити».">
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="catalog.css">
+</head>
+<body class="page-catalog">
+
+<header class="hdr is-stuck" id="hdr">
+  <a class="hdr__logo" href="index.html" data-magnet>
+    <svg viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="15.5"/><path d="M17 2.5v29M2.5 17h29"/><circle cx="17" cy="17" r="5.5"/></svg>
+    <span>МОТОАРЕНА</span>
+  </a>
+  <nav class="hdr__nav" aria-label="Основная навигация">
+    <a href="index.html#arena">Арена</a>
+    <a href="catalog.html" aria-current="page">Каталог</a>
+    <a href="index.html#uslugi">Услуги</a>
+    <a href="index.html#brendy">Бренды</a>
+    <a href="index.html#kontakty">Контакты</a>
+  </nav>
+  <div class="hdr__side">
+    <a class="hdr__tel" href="tel:+375297004466">+375 29 700 44 66</a>
+    <button class="burger" id="burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="menu"><i></i><i></i><i></i></button>
+  </div>
+</header>
+
+<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Меню" hidden>
+  <div class="menu__bg"></div>
+  <div class="menu__inner">
+    <ul class="menu__list">
+      <li><a href="index.html"><em>Главная</em><span>Обложка</span></a></li>
+      <li><a href="catalog.html"><em>Каталог</em><span>405 позиций</span></a></li>
+      <li><a href="catalog.html#c=moto"><em>Мотоциклы</em><span>98 в наличии</span></a></li>
+      <li><a href="index.html#uslugi"><em>Услуги</em><span>Сервис · Комиссия · США</span></a></li>
+      <li><a href="index.html#brendy"><em>Бренды</em><span>17 марок</span></a></li>
+      <li><a href="index.html#kontakty"><em>Контакты</em><span>Арена-сити</span></a></li>
+    </ul>
+    <div class="menu__meta">
+      <div><span class="lbl">Адрес</span><p>г. Минск, пр-т Победителей, 84<br>ТЦ «Арена-сити»</p></div>
+      <div><span class="lbl">Связь</span><p><a href="tel:+375297004466">+375 29 700 44 66</a><br><a href="mailto:info@amcompany.by">info@amcompany.by</a></p></div>
+      <div><span class="lbl">Часы</span><p>Пн–Вс: 10:00 — 20:00</p></div>
+    </div>
+  </div>
+</div>
+
+<main class="cat-page">
+
+  <section class="cat-hero">
+    <div class="cat-hero__glow" aria-hidden="true"></div>
+    <div class="wrap">
+      <p class="eyebrow">Каталог</p>
+      <h1 class="cat-hero__title"><span class="ln"><b>В</b><b>С</b><b>Ё</b></span> <span class="ln ln--out"><b>С</b><b>Р</b><b>А</b><b>З</b><b>У</b></span></h1>
+      <p class="cat-hero__lede">Мотоциклы, экипировка, тюнинг и химия — <b id="totalCount">405</b> позиций из наличия магазина на пр-те Победителей, 84.</p>
+    </div>
+  </section>
+
+  <div class="cat-bar" id="catBar">
+    <div class="wrap cat-bar__in">
+      <div class="chips" id="catChips" role="tablist" aria-label="Категории"></div>
+      <div class="cat-bar__tools">
+        <label class="search">
+          <span class="visually-hidden">Поиск по каталогу</span>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="9" cy="9" r="6"/><path d="M13.5 13.5 18 18"/></svg>
+          <input type="search" id="q" placeholder="Найти: shoei, 450mt, перчатки…" autocomplete="off">
+        </label>
+        <label class="sortsel">
+          <span class="visually-hidden">Сортировка</span>
+          <select id="sort">
+            <option value="pop">По умолчанию</option>
+            <option value="asc">Сначала дешевле</option>
+            <option value="desc">Сначала дороже</option>
+            <option value="sale">Сначала со скидкой</option>
+            <option value="az">По названию</option>
+          </select>
+        </label>
+      </div>
+    </div>
+    <div class="wrap"><div class="brands-row" id="brandChips" aria-label="Бренды"></div></div>
+  </div>
+
+  <section class="cat-grid-wrap">
+    <div class="wrap">
+      <div class="cat-meta">
+        <p class="lbl" id="shown">— товаров</p>
+        <button class="reset" id="reset" hidden>Сбросить фильтры</button>
+      </div>
+      <div class="cat-grid" id="grid"></div>
+      <p class="cat-empty" id="empty" hidden>Ничего не нашли. Попробуйте другой запрос или сбросьте фильтры.</p>
+      <div class="cat-more"><button class="btn btn--ghost" id="more" data-magnet><span>Показать ещё</span><i class="btn__arw"></i></button></div>
+    </div>
+  </section>
+
+  <section class="cat-cta">
+    <div class="wrap cat-cta__in">
+      <div>
+        <p class="eyebrow">Не нашли</p>
+        <h2 class="sec-title">Подберём <em>под вас</em></h2>
+        <p class="cat-cta__note">Позвоните или оставьте заявку на главной — проверим наличие, подскажем по размеру и привезём под заказ.</p>
+      </div>
+      <div class="cat-cta__btns">
+        <a class="btn btn--flare" href="tel:+375297004466" data-magnet><span>+375 29 700 44 66</span><i class="btn__arw"></i></a>
+        <a class="btn btn--ghost" href="index.html#lead" data-magnet><span>Оставить заявку</span></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot" id="kontakty">
+  <div class="wrap">
+    <div class="foot__top">
+      <div class="foot__col">
+        <span class="lbl">Адрес</span>
+        <p>г. Минск, пр-т Победителей, 84<br>ТЦ «Арена-сити», пом. 6</p>
+      </div>
+      <div class="foot__col">
+        <span class="lbl">Связь</span>
+        <p><a href="tel:+375297004466">+375 29 700 44 66</a><br><a href="mailto:info@amcompany.by">info@amcompany.by</a></p>
+        <p class="foot__hours">Пн–Вс: 10:00 — 20:00</p>
+      </div>
+      <div class="foot__col">
+        <span class="lbl">Разделы</span>
+        <ul class="foot__links">
+          <li><a href="catalog.html#c=moto">Мотоциклы</a></li>
+          <li><a href="catalog.html#c=helmets">Шлемы и аксессуары</a></li>
+          <li><a href="catalog.html#c=clothes">Одежда</a></li>
+          <li><a href="catalog.html#c=tuning">Тюнинг</a></li>
+        </ul>
+      </div>
+      <div class="foot__col">
+        <span class="lbl">Услуги</span>
+        <ul class="foot__links">
+          <li><a href="index.html#uslugi">Сервис</a></li>
+          <li><a href="index.html#uslugi">Комиссия и выкуп</a></li>
+          <li><a href="index.html#uslugi">Мотоциклы из США</a></li>
+          <li><a href="index.html#brendy">Бренды</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot__bottom">
+      <p>ООО «Автомото компани» · УНП 193511944 · Торговый реестр РБ № 552186</p>
+      <p>© 2026 Мотоарена</p>
+    </div>
+  </div>
+</footer>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="cur" id="cur" aria-hidden="true"><i class="cur__dot"></i><span class="cur__ring"></span></div>
+
+<script src="js/vendor/gsap.min.js"></script>
+<script src="js/vendor/ScrollTrigger.min.js"></script>
+<script src="js/vendor/lenis.min.js"></script>
+<script src="data/catalog.js"></script>
+<script src="catalog.js"></script>
+</body>
+</html>

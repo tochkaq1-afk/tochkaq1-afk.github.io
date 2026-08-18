@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>КИНОНОЧЬ — антикинотеатр в Москва-Сити</title>
+<meta name="description" content="Приватный кинозал 80 м² на Пресненской набережной. Панорамные окна, проектор 3 метра, любые фильмы, своя еда. От 3 часов. Свидания, предложения, дни рождения, корпоративы.">
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ============ ПРЕЛОАДЕР ============ -->
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader__inner">
+    <div class="loader__word"><span>К</span><span>И</span><span>Н</span><span>О</span><span>Н</span><span>О</span><span>Ч</span><span>Ь</span></div>
+    <div class="loader__bar"><i id="loaderBar"></i></div>
+    <div class="loader__num"><span id="loaderNum">0</span>%</div>
+  </div>
+  <div class="loader__wipe"></div>
+</div>
+
+<div class="cursor" id="cursor" aria-hidden="true"><span class="cursor__dot"></span><span class="cursor__ring"></span></div>
+
+<!-- ============ ШАПКА ============ -->
+<header class="nav" id="nav">
+  <a class="nav__logo" href="#top" data-magnet>
+    <span class="nav__logo-mark" aria-hidden="true"></span>
+    <span>КИНО<b>НОЧЬ</b></span>
+  </a>
+  <nav class="nav__links" aria-label="Основная навигация">
+    <a href="#about">Зал</a>
+    <a href="#gallery">Галерея</a>
+    <a href="#occasions">Поводы</a>
+    <a href="#pricing">Цены</a>
+    <a href="#faq">Вопросы</a>
+  </nav>
+  <div class="nav__right">
+    <a class="nav__tel" href="tel:+79672348447">+7 967 234 84 47</a>
+    <a class="btn btn--sm" href="#contact" data-magnet><span>Забронировать</span></a>
+    <button class="burger" id="burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="menu">
+      <span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ============ МОБИЛЬНОЕ МЕНЮ ============ -->
+<div class="menu" id="menu" hidden>
+  <nav class="menu__links" aria-label="Мобильная навигация">
+    <a href="#about">Зал</a>
+    <a href="#gallery">Галерея</a>
+    <a href="#occasions">Поводы</a>
+    <a href="#pricing">Цены</a>
+    <a href="#faq">Вопросы</a>
+    <a href="#contact">Контакты</a>
+  </nav>
+  <div class="menu__foot">
+    <a href="tel:+79672348447">+7 967 234 84 47</a>
+    <a href="tel:+79037098811">+7 903 709 88 11</a>
+    <span>Пресненская наб. 12</span>
+  </div>
+</div>
+
+<main id="top">
+
+<!-- ============ ГЕРОЙ ============ -->
+<section class="hero" data-theme="dark" data-spotlight>
+  <span class="hero__light" aria-hidden="true"></span>
+
+  <div class="hero__top">
+    <span class="tag">Пресненская наб. 12 — Москва-Сити</span>
+    <span class="tag tag--acid">Работаем с 2013</span>
+  </div>
+
+  <div class="hero__grid">
+    <div class="hero__left">
+      <h1 class="hero__title">
+        <span class="line" data-split>КИНО</span>
+        <span class="line line--out" data-split>НОЧЬ</span>
+      </h1>
+      <p class="hero__lead" data-reveal>
+        Антикинотеатр в небоскрёбе. Свой зал <b>80 м²</b>, панорамные окна
+        в полстены и экран три метра. Никакого расписания — вы решаете,
+        что смотреть и до которого часа.
+      </p>
+      <div class="hero__cta">
+        <a class="btn btn--acid" href="#pricing" data-magnet><span>Смотреть тарифы</span></a>
+        <a class="btn btn--ghost" href="#gallery" data-magnet><span>Как выглядит зал</span></a>
+      </div>
+    </div>
+
+    <figure class="hero__shot" data-tilt>
+      <div class="hero__shot-inner">
+        <img src="img/hero-home.jpg"
+             srcset="img/hero-home-900.jpg 900w, img/hero-home.jpg 1800w"
+             sizes="(max-width:900px) 100vw, 55vw"
+             fetchpriority="high"
+             alt="Приватный кинозал: звёздный потолок, огромный экран с подборкой фильмов, мягкие диваны, свечи и попкорн"
+             data-parallax="5">
+        <span class="hero__shot-shine" aria-hidden="true"></span>
+        <figcaption>Ваш вечер начинается здесь</figcaption>
+      </div>
+    </figure>
+  </div>
+
+  <a class="hero__scroll" href="#about" aria-label="Листайте вниз">
+    <span>Листайте</span>
+    <svg viewBox="0 0 12 30" aria-hidden="true"><path d="M6 0v24M1 19l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+  </a>
+</section>
+
+<!-- ============ БЕГУЩАЯ СТРОКА ============ -->
+<div class="ticker" data-theme="acid" aria-hidden="true">
+  <div class="ticker__track" data-ticker>
+    <span>Приватный зал</span><em>✳</em><span>Любые фильмы</span><em>✳</em><span>Своя еда и напитки</span><em>✳</em>
+    <span>Вид на Москву</span><em>✳</em><span>От 3 часов</span><em>✳</em><span>Без расписания</span><em>✳</em>
+  </div>
+</div>
+
+<!-- ============ СТАТИСТИКА ============ -->
+<section class="stats" data-theme="dark">
+  <div class="stat" data-reveal>
+    <b class="stat__num" data-count="80">0</b><span class="stat__unit">м²</span>
+    <p>площадь зала — хватит всем, и никому не тесно</p>
+  </div>
+  <div class="stat" data-reveal>
+    <b class="stat__num" data-count="5">0</b><span class="stat__unit">окон</span>
+    <p>панорамные, от пола — город лежит перед вами</p>
+  </div>
+  <div class="stat" data-reveal>
+    <b class="stat__num" data-count="3">0</b><span class="stat__unit">метра</span>
+    <p>диагональ экрана — ни одной упущенной сцены</p>
+  </div>
+  <div class="stat" data-reveal>
+    <b class="stat__num" data-count="3">0</b><span class="stat__unit">часа+</span>
+    <p>минимальная аренда — дальше сколько захотите</p>
+  </div>
+</section>
+
+<!-- ============ О ЗАЛЕ ============ -->
+<section class="about" id="about" data-theme="cream">
+  <header class="sec-head">
+    <span class="sec-label">Что это за место</span>
+  </header>
+
+  <h2 class="about__claim" data-reveal-lines>
+    Это не кинотеатр. Это <em>ваш</em> зал на вечер —
+    с проектором, диваном и целой Москвой за стеклом.
+  </h2>
+
+  <ol class="facts">
+    <li class="fact" data-reveal>
+      <h3>Зал целиком ваш</h3>
+      <p>80 м² только для вашей компании. Никаких соседей по ряду, чужого попкорна и шёпота за спиной.</p>
+    </li>
+    <li class="fact" data-reveal>
+      <h3>Пять панорамных окон</h3>
+      <p>Вид на ночную Москву во всю стену. Половина гостей первые полчаса смотрит не на экран.</p>
+    </li>
+    <li class="fact" data-reveal>
+      <h3>Экран три метра</h3>
+      <p>Проектор с диагональю 3 м. Картинка такая, что мелкие детали видно лучше, чем в мультиплексе.</p>
+    </li>
+    <li class="fact" data-reveal>
+      <h3>Любые фильмы, сколько успеете</h3>
+      <p>Своя подборка или наша — в неограниченном количестве и в лучшем качестве. Можно нон-стоп.</p>
+    </li>
+    <li class="fact" data-reveal>
+      <h3>Еда и напитки — свои</h3>
+      <p>Приносите что любите или заказывайте доставку из любимого места. Ограничений у нас нет.</p>
+    </li>
+    <li class="fact" data-reveal>
+      <h3>Время не поджимает</h3>
+      <p>Аренда от 3 часов, и никто не выключит свет на титрах. Хотите до утра — значит до утра.</p>
+    </li>
+  </ol>
+</section>
+
+<!-- ============ ГАЛЕРЕЯ (горизонтальный скролл) ============ -->
+<section class="gallery" id="gallery" data-theme="dark">
+  <div class="gallery__pin">
+    <header class="sec-head sec-head--abs">
+      <span class="sec-label">Зал вживую</span>
+    </header>
+
+    <div class="gallery__track" data-hscroll>
+      <figure class="gslide gslide--intro">
+        <h2 class="gslide__title">ЗАЛ<br>ВЖИВУЮ</h2>
+        <p>Ни одного рендера — только реальные вечера наших гостей.</p>
+        <span class="gslide__hint">Крутите дальше <svg viewBox="0 0 30 12" aria-hidden="true"><path d="M0 6h24M19 1l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></span>
+      </figure>
+      <figure class="gslide gslide--wide"><img src="img/hall-02.jpg" alt="Зал с экраном, кожаным диваном и пуфами, панорамные окна на Москва-Сити, золотые шары" loading="lazy"><figcaption>Зал и экран</figcaption></figure>
+      <figure class="gslide gslide--tall"><img src="img/hall-04.jpg" alt="Стол на двоих со свечами, светящиеся буквы LOVE и панорама зимней Москвы за окном" loading="lazy"><figcaption>Предложение</figcaption></figure>
+      <figure class="gslide"><img src="img/hall-11.jpg" alt="Зал перед праздником: белые шары, гирлянды, диван и вид на подсвеченные башни" loading="lazy"><figcaption>Зал перед вечером</figcaption></figure>
+      <figure class="gslide gslide--wide"><img src="img/hall-05.jpg" alt="Сервировка на двоих с красными шарами-сердцами и розами у панорамного окна" loading="lazy"><figcaption>Свидание на двоих</figcaption></figure>
+      <figure class="gslide"><img src="img/hall-07.jpg" alt="Девушка отдыхает в пуфе-мешке у панорамного окна с огнями ночного города" loading="lazy"><figcaption>Пуф у окна</figcaption></figure>
+      <figure class="gslide gslide--tall"><img src="img/hall-06.jpg" alt="Накрытый стол, свечи и светящиеся буквы LOVE в затемнённом зале" loading="lazy"><figcaption>Романтика при свечах</figcaption></figure>
+      <figure class="gslide"><img src="img/hall-03.jpg" alt="Две девушки с подарком у нарядной ёлки на фоне панорамных окон" loading="lazy"><figcaption>Новый год у окон</figcaption></figure>
+      <figure class="gslide gslide--wide"><img src="img/hall-12.jpg" alt="Вечеринка в зале: гости с шарами в неоновой подсветке" loading="lazy"><figcaption>Вечеринка</figcaption></figure>
+      <figure class="gslide"><img src="img/hall-08.jpg" alt="Семья с детьми на кожаном диване в зале антикинотеатра" loading="lazy"><figcaption>Семейный вечер</figcaption></figure>
+      <figure class="gslide"><img src="img/hall-01.jpg" alt="Гости смотрят фильм на большом экране, на переднем плане ведро попкорна" loading="lazy"><figcaption>Показ и попкорн</figcaption></figure>
+      <figure class="gslide gslide--outro">
+        <h3>Свободные даты<br>разбирают заранее</h3>
+        <a class="btn btn--acid" href="#contact" data-magnet><span>Узнать свободные даты</span></a>
+      </figure>
+    </div>
+
+    <div class="gallery__progress" aria-hidden="true"><i data-hprogress></i></div>
+  </div>
+</section>
+
+<!-- ============ ПОВОДЫ ============ -->
+<section class="occasions" id="occasions" data-theme="cream">
+  <header class="sec-head">
+    <span class="sec-label">Зачем сюда приходят</span>
+  </header>
+
+  <h2 class="occasions__claim" data-reveal-lines>Шесть поводов подняться на высоту птичьего полёта</h2>
+
+  <div class="occ-grid">
+    <article class="occ" data-reveal>
+      <img src="img/case-romantic.jpg" alt="Романтическое свидание в зале с видом на город" loading="lazy">
+      <div class="occ__body">
+        <h3>Романтическое свидание</h3>
+        <p>Сюрприз для второй половинки: приглушённый свет, хорошее кино и огни столицы под ногами.</p>
+      </div>
+    </article>
+    <article class="occ" data-reveal>
+      <img src="img/case-proposal.jpg" alt="Предложение руки и сердца в антикинотеатре" loading="lazy">
+      <div class="occ__body">
+        <h3>Предложение руки и сердца</h3>
+        <p>Решиться и сделать предложение в самой волшебной атмосфере. А потом вернуться на девичник.</p>
+      </div>
+    </article>
+    <article class="occ" data-reveal>
+      <img src="img/case-happy.jpg" alt="Компания с тортом и бенгальскими огнями празднует день рождения" loading="lazy">
+      <div class="occ__body">
+        <h3>День рождения</h3>
+        <p>Отпраздновать свой самый важный день в году феерически и на высоте — так, чтобы запомнилось.</p>
+      </div>
+    </article>
+    <article class="occ" data-reveal>
+      <img src="img/case-friends.jpg" alt="Компания друзей смотрит кино в приватном зале" loading="lazy">
+      <div class="occ__body">
+        <h3>Кино с друзьями</h3>
+        <p>Собрать тех, с кем давно не получалось встретиться, и наконец-то никуда не спешить.</p>
+      </div>
+    </article>
+    <article class="occ" data-reveal>
+      <img src="img/case-jobs.jpg" alt="Корпоративное мероприятие в антикинотеатре" loading="lazy">
+      <div class="occ__body">
+        <h3>Корпоратив</h3>
+        <p>Провести праздник команды на самом высоком уровне — в буквальном смысле, в Москва-Сити.</p>
+      </div>
+    </article>
+    <article class="occ" data-reveal>
+      <img src="img/bday-01.jpg" alt="Вечеринка в зале: шары, неоновая подсветка, гости на пуфах перед экраном" loading="lazy">
+      <div class="occ__body">
+        <h3>Вечеринка и девичник</h3>
+        <p>Мальчишники, девичники, Новый год и просто «потому что пятница» — до сорока человек.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ============ ТАРИФЫ ============ -->
+<section class="pricing" id="pricing" data-theme="dark">
+  <header class="sec-head">
+    <span class="sec-label">Сколько стоит</span>
+  </header>
+
+  <div class="pricing__head">
+    <h2 data-reveal-lines>Тарифы I–III — за три часа. Вечеринки считаем по часам.</h2>
+    <p data-reveal>Бронь ставится после оплаты и заключения договора. Оплата официальная, на расчётный счёт компании.</p>
+  </div>
+
+  <div class="tariffs">
+    <article class="tariff" data-reveal>
+      <div class="tariff__top"><span class="tariff__name">Тариф I</span><span class="tariff__guests">1–2 гостя</span></div>
+      <div class="tariff__price"><b>22 000</b><span>₽ / 3 часа</span></div>
+      <p class="tariff__note">Свидание на двоих. Самый частый выбор для сюрприза.</p>
+      <a class="tariff__cta" href="#contact" data-magnet><span>Заказать</span><svg viewBox="0 0 30 12" aria-hidden="true"><path d="M0 6h24M19 1l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a>
+    </article>
+
+    <article class="tariff" data-reveal>
+      <div class="tariff__top"><span class="tariff__name">Тариф II</span><span class="tariff__guests">3–10 гостей</span></div>
+      <div class="tariff__price"><b>33 000</b><span>₽ / 3 часа</span></div>
+      <p class="tariff__note">Друзья, семья, небольшой день рождения.</p>
+      <a class="tariff__cta" href="#contact" data-magnet><span>Заказать</span><svg viewBox="0 0 30 12" aria-hidden="true"><path d="M0 6h24M19 1l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a>
+    </article>
+
+    <article class="tariff tariff--hot" data-reveal>
+      <div class="tariff__top"><span class="tariff__name">Тариф III</span><span class="tariff__guests">от 11 гостей</span></div>
+      <div class="tariff__price"><b>44 000</b><span>₽ / 3 часа</span></div>
+      <p class="tariff__note">Большая компания и корпоративы. Зал целиком.</p>
+      <a class="tariff__cta" href="#contact" data-magnet><span>Заказать</span><svg viewBox="0 0 30 12" aria-hidden="true"><path d="M0 6h24M19 1l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a>
+    </article>
+
+    <article class="tariff" data-reveal>
+      <div class="tariff__top"><span class="tariff__name">Вечеринка</span><span class="tariff__guests">до 20 гостей</span></div>
+      <div class="tariff__price"><b>20 000</b><span>₽ / час</span></div>
+      <p class="tariff__note">Формат вечеринки — считаем по часам, не пакетом.</p>
+      <a class="tariff__cta" href="#contact" data-magnet><span>Заказать</span><svg viewBox="0 0 30 12" aria-hidden="true"><path d="M0 6h24M19 1l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a>
+    </article>
+
+    <article class="tariff" data-reveal>
+      <div class="tariff__top"><span class="tariff__name">Вечеринка</span><span class="tariff__guests">20–40 гостей</span></div>
+      <div class="tariff__price"><b>25 000</b><span>₽ / час</span></div>
+      <p class="tariff__note">Максимальная вместимость зала.</p>
+      <a class="tariff__cta" href="#contact" data-magnet><span>Заказать</span><svg viewBox="0 0 30 12" aria-hidden="true"><path d="M0 6h24M19 1l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a>
+    </article>
+
+    <article class="tariff tariff--custom" data-reveal>
+      <div class="tariff__top"><span class="tariff__name">Ваш формат</span><span class="tariff__guests">эксклюзив</span></div>
+      <div class="tariff__price"><b>По запросу</b></div>
+      <p class="tariff__note">Нестандартное мероприятие? Партнёры помогут с любым оформлением зала.</p>
+      <a class="tariff__cta" href="#contact" data-magnet><span>Обсудить</span><svg viewBox="0 0 30 12" aria-hidden="true"><path d="M0 6h24M19 1l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a>
+    </article>
+  </div>
+</section>
+
+<!-- ============ СЕРТИФИКАТ ============ -->
+<section class="gift" data-theme="flame">
+  <div class="gift__inner">
+    <span class="tag tag--dark">Подарочный сертификат</span>
+    <h2 data-reveal-lines>Счастье за деньги не купишь. А киноночь — можно.</h2>
+    <p data-reveal>Незабываемый подарок для любимого человека: лучшие фильмы на высоте птичьего полёта, а дату он выберет сам.</p>
+    <a class="btn btn--dark btn--lg" href="#contact" data-magnet><span>Забронировать сертификат</span></a>
+  </div>
+  <div class="gift__marquee" aria-hidden="true">
+    <div class="ticker__track" data-ticker data-dir="-1">
+      <span>Подарок</span><em>✳</em><span>Сертификат</span><em>✳</em><span>Сюрприз</span><em>✳</em>
+      <span>Подарок</span><em>✳</em><span>Сертификат</span><em>✳</em><span>Сюрприз</span><em>✳</em>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ОТЗЫВЫ ============ -->
+<section class="reviews" data-theme="cream">
+  <header class="sec-head">
+    <span class="sec-label">Что говорят гости</span>
+  </header>
+
+  <div class="reviews__head">
+    <h2 data-reveal-lines>Может, это только мы так любим свой антикинотеатр?</h2>
+    <div class="reviews__count" data-reveal>
+      <b data-count="1005">0</b>
+      <span>гостей<br>считают так же</span>
+    </div>
+  </div>
+
+  <div class="review-row">
+    <blockquote class="review" data-reveal>
+      <p>«Очень понравилось, спасибо Виктору! Мы обязательно вернёмся и всем рекомендуем ваш кинотеатр.»</p>
+      <footer><b>Оксана</b><span>отзыв в Instagram*</span></footer>
+    </blockquote>
+    <blockquote class="review review--wide" data-reveal>
+      <p>«Посетили вместе с молодым человеком. Очень романтичное место, где можно полюбоваться ночным видом на Москву с птичьего полёта. Выбирали фильм на свой вкус и наслаждались просмотром на уютном диванчике напротив экрана и панорамными окнами.»</p>
+      <footer><b>Маргарита Исакова</b><span>отзыв в Instagram*</span></footer>
+    </blockquote>
+    <blockquote class="review" data-reveal>
+      <p>«Это был нереальный вид на ночную Москву и очень уютная атмосфера. Большое вам спасибо!»</p>
+      <footer><b>Александра</b><span>отзыв в Instagram*</span></footer>
+    </blockquote>
+  </div>
+  <p class="reviews__note">*Meta Platforms Inc. признана экстремистской организацией на территории РФ.</p>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="faq" id="faq" data-theme="dark">
+  <header class="sec-head">
+    <span class="sec-label">Частые вопросы</span>
+  </header>
+
+  <h2 class="faq__claim" data-reveal-lines>Отвечаем прямо, без звёздочек и мелкого шрифта</h2>
+
+  <div class="acc">
+    <div class="acc__item">
+      <button class="acc__q" aria-expanded="false"><span>Сколько фильмов включено в стоимость?</span><i aria-hidden="true"></i></button>
+      <div class="acc__a"><p>Сколько успеете посмотреть — можно даже нон-стоп.</p></div>
+    </div>
+    <div class="acc__item">
+      <button class="acc__q" aria-expanded="false"><span>Можно принести еду с собой или заказать доставку?</span><i aria-hidden="true"></i></button>
+      <div class="acc__a"><p>Конечно, можно. У нас нет никаких ограничений.</p></div>
+    </div>
+    <div class="acc__item">
+      <button class="acc__q" aria-expanded="false"><span>Администратор будет всю ночь?</span><i aria-hidden="true"></i></button>
+      <div class="acc__a"><p>Да, администратор всегда готов прийти на помощь в любой момент — чтобы вы не думали о мелочах, а наслаждались моментом.</p></div>
+    </div>
+    <div class="acc__item">
+      <button class="acc__q" aria-expanded="false"><span>Что есть из мебели в зале?</span><i aria-hidden="true"></i></button>
+      <div class="acc__a"><p>На любой вкус: большой кожаный диван, кожаные пуфы, стулья, кресла, столы — под любой формат мероприятия.</p></div>
+    </div>
+    <div class="acc__item">
+      <button class="acc__q" aria-expanded="false"><span>Нужна 100% предоплата?</span><i aria-hidden="true"></i></button>
+      <div class="acc__a"><p>Да, это обязательное условие. Чтобы организовать всё на высоком уровне, нужны деньги. К тому же, если кто-то забронирует и не придёт — он и сам не побывает у нас, и другим не даст такой возможности. Поэтому правило твёрдое: бронь ставится только после оплаты.</p></div>
+    </div>
+    <div class="acc__item">
+      <button class="acc__q" aria-expanded="false"><span>Куда я оплачиваю?</span><i aria-hidden="true"></i></button>
+      <div class="acc__a"><p>Все платежи проходят официально на расчётный счёт ООО «Московский офисный центр». Оплата производится только после заключения договора между компанией и арендатором.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ КОНТАКТЫ ============ -->
+<section class="contact" id="contact" data-theme="cream">
+  <header class="sec-head">
+    <span class="sec-label">Давайте знакомиться</span>
+  </header>
+
+  <div class="contact__grid">
+    <div class="contact__info">
+      <h2 data-reveal-lines>Напишите — подберём дату и посчитаем ваш вечер</h2>
+
+      <dl class="contact__list">
+        <div data-reveal>
+          <dt>Для заявок</dt>
+          <dd><a class="contact__big" href="tel:+79037098811">+7 903 709 88 11</a></dd>
+        </div>
+        <div data-reveal>
+          <dt>Общие вопросы</dt>
+          <dd><a class="contact__big" href="tel:+79672348447">+7 967 234 84 47</a></dd>
+        </div>
+        <div data-reveal>
+          <dt>Почта</dt>
+          <dd><a href="mailto:89037098811@mail.ru">89037098811@mail.ru</a></dd>
+        </div>
+        <div data-reveal>
+          <dt>Адрес</dt>
+          <dd>Москва, Пресненская набережная, дом 12<br><span>Москва-Сити</span></dd>
+        </div>
+      </dl>
+    </div>
+
+    <form class="form" novalidate>
+      <div class="field">
+        <label for="f-name">Ваше имя</label>
+        <input id="f-name" name="name" type="text" autocomplete="name" required>
+        <small class="field__err" data-err></small>
+      </div>
+      <div class="field">
+        <label for="f-phone">Номер телефона</label>
+        <input id="f-phone" name="phone" type="tel" autocomplete="tel" placeholder="+7" required>
+        <small class="field__err" data-err></small>
+      </div>
+      <div class="field">
+        <label for="f-mail">E-mail</label>
+        <input id="f-mail" name="email" type="email" autocomplete="email">
+        <small class="field__err" data-err></small>
+      </div>
+      <div class="field">
+        <label for="f-msg">Что планируете?</label>
+        <textarea id="f-msg" name="message" rows="3" placeholder="Повод, дата, сколько гостей"></textarea>
+      </div>
+      <label class="check">
+        <input type="checkbox" required>
+        <span>Согласен с политикой конфиденциальности и на обработку персональных данных</span>
+      </label>
+      <button class="btn btn--dark btn--lg" type="submit" data-magnet><span>Отправить заявку</span></button>
+      <p class="form__hint" data-formhint role="status"></p>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ ФУТЕР ============ -->
+<footer class="foot" data-theme="dark">
+  <div class="foot__big" aria-hidden="true">
+    <div class="ticker__track" data-ticker>
+      <span>КИНОНОЧЬ</span><em>✳</em><span>МОСКВА-СИТИ</span><em>✳</em>
+      <span>КИНОНОЧЬ</span><em>✳</em><span>МОСКВА-СИТИ</span><em>✳</em>
+    </div>
+  </div>
+
+  <div class="foot__cols">
+    <div class="foot__col">
+      <span class="foot__t">Навигация</span>
+      <a href="#about">Зал</a><a href="#gallery">Галерея</a><a href="#occasions">Поводы</a>
+      <a href="#pricing">Цены</a><a href="#faq">Вопросы</a><a href="#contact">Контакты</a>
+    </div>
+    <div class="foot__col">
+      <span class="foot__t">Контакты</span>
+      <a href="tel:+79672348447">+7 967 234 84 47</a>
+      <a href="tel:+79037098811">+7 903 709 88 11</a>
+      <a href="mailto:89037098811@mail.ru">89037098811@mail.ru</a>
+    </div>
+    <div class="foot__col">
+      <span class="foot__t">Адрес</span>
+      <span>Москва,<br>Пресненская наб., 12<br>Москва-Сити</span>
+    </div>
+    <div class="foot__col">
+      <span class="foot__t">Для клиентов</span>
+      <span>Юр. адрес в Москва-Сити</span><span>Виртуальный адрес</span>
+      <span>Переговорная комната</span><span>Конференц-залы</span>
+    </div>
+  </div>
+
+  <div class="foot__legal">
+    <p>© 2013—<span data-year>2026</span> ООО «Московский офисный центр» — официальная управляющая компания в Москва-Сити. Любое использование контента без письменного разрешения запрещено. С целью улучшения качества обслуживания все разговоры записываются.</p>
+    <a class="foot__up" href="#top" data-magnet><span>Наверх</span><svg viewBox="0 0 12 30" aria-hidden="true"><path d="M6 30V6M1 11l5-5 5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a>
+  </div>
+</footer>
+
+<script src="js/vendor/gsap.min.js"></script>
+<script src="js/vendor/ScrollTrigger.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

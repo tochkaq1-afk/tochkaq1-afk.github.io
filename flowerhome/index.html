@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FlowerHome — цветы с доставкой на дом в Минске</title>
+<meta name="description" content="Свежие букеты, композиции, комнатные растения, декор и подарки. Доставка по Минску от 2 часов, при заказе от 170 BYN — бесплатно. ул. Маяковского 146.">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%F0%9F%8C%B8%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Перейти к содержимому</a>
+
+<!-- ============ ИНТРО ============ -->
+<div class="intro" id="preloader" aria-hidden="true">
+
+  <!-- вертикальные ленты фото -->
+  <div class="intro__cols" aria-hidden="true">
+    <div class="intro__col" style="--sp:26s">
+      <div class="intro__strip">
+        <img src="images/products/nezhnoe-priznanie.jpeg" alt=""><img src="images/products/morskaya-laguna.jpeg" alt=""><img src="images/products/bal-cvetov.jpeg" alt="">
+        <img src="images/products/nezhnoe-priznanie.jpeg" alt=""><img src="images/products/morskaya-laguna.jpeg" alt=""><img src="images/products/bal-cvetov.jpeg" alt="">
+      </div>
+    </div>
+    <div class="intro__col intro__col--up" style="--sp:32s">
+      <div class="intro__strip">
+        <img src="images/products/pionovidnaya-simfoniya.jpeg" alt=""><img src="images/products/k-cvetochnaya-polyana.jpeg" alt=""><img src="images/products/lilovye-pocelui.jpeg" alt="">
+        <img src="images/products/pionovidnaya-simfoniya.jpeg" alt=""><img src="images/products/k-cvetochnaya-polyana.jpeg" alt=""><img src="images/products/lilovye-pocelui.jpeg" alt="">
+      </div>
+    </div>
+    <div class="intro__col" style="--sp:23s">
+      <div class="intro__strip">
+        <img src="images/products/rozovyy-rumyanec.jpeg" alt=""><img src="images/products/zolotoe-serdce.jpeg" alt=""><img src="images/products/legkoe-obyatie.jpeg" alt="">
+        <img src="images/products/rozovyy-rumyanec.jpeg" alt=""><img src="images/products/zolotoe-serdce.jpeg" alt=""><img src="images/products/legkoe-obyatie.jpeg" alt="">
+      </div>
+    </div>
+    <div class="intro__col intro__col--up" style="--sp:29s">
+      <div class="intro__strip">
+        <img src="images/products/radost-vstrechi.jpeg" alt=""><img src="images/products/k-eyforiya.jpeg" alt=""><img src="images/products/solnechnyy-zakat.jpeg" alt="">
+        <img src="images/products/radost-vstrechi.jpeg" alt=""><img src="images/products/k-eyforiya.jpeg" alt=""><img src="images/products/solnechnyy-zakat.jpeg" alt="">
+      </div>
+    </div>
+    <div class="intro__col" style="--sp:35s">
+      <div class="intro__strip">
+        <img src="images/products/gimn-vesne.jpeg" alt=""><img src="images/products/svidanie-v-parizhe.jpeg" alt=""><img src="images/products/k-parizhskiy-shik.jpg" alt="">
+        <img src="images/products/gimn-vesne.jpeg" alt=""><img src="images/products/svidanie-v-parizhe.jpeg" alt=""><img src="images/products/k-parizhskiy-shik.jpg" alt="">
+      </div>
+    </div>
+  </div>
+
+  <div class="intro__veil" aria-hidden="true"></div>
+
+  <div class="intro__content">
+    <h2 class="intro__logo">
+      <span class="intro__word"><span>Flower</span></span><span class="intro__word intro__word--it"><span>Home</span></span>
+    </h2>
+
+    <p class="intro__desc">
+      <span class="intro__ln"><span>Уютная студия флористики, где оживает красота природы.</span></span>
+      <span class="intro__ln"><span>Мы создаём авторские букеты и стильные композиции,</span></span>
+      <span class="intro__ln"><span>которые дарят искренние улыбки и наполняют ваш дом теплом.</span></span>
+    </p>
+
+    <p class="intro__motto"><span>Лучшее — лучшим</span></p>
+  </div>
+
+  <div class="intro__bar">
+    <span class="intro__count"><span id="preCount">0</span>%</span>
+    <span class="intro__line"><i id="introFill"></i></span>
+    <span class="intro__max">Минск · с 2015 года</span>
+  </div>
+
+  <!-- занавес: на выходе полосы уезжают вверх -->
+  <div class="intro__curtain" aria-hidden="true">
+    <i style="--c:0"></i><i style="--c:1"></i><i style="--c:2"></i><i style="--c:3"></i><i style="--c:4"></i>
+  </div>
+</div>
+
+<div class="cursor" id="cursor" aria-hidden="true"><span class="cursor__label" id="cursorLabel"></span></div>
+
+<!-- ============ ШАПКА ============ -->
+<header class="header" id="header">
+  <div class="wrap header__inner">
+    <a class="logo" href="index.html" data-cursor="На главную">
+      <svg class="logo__mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+        <circle cx="12" cy="12" r="2.6"/>
+        <path d="M12 9.4c0-3 1.2-4.6 3-4.6s2.4 2 1 4.2M12 14.6c0 3-1.2 4.6-3 4.6s-2.4-2-1-4.2M9.4 12c-3 0-4.6-1.2-4.6-3s2-2.4 4.2-1M14.6 12c3 0 4.6 1.2 4.6 3s-2 2.4-4.2 1"/>
+      </svg>
+      <span><b>Flower</b><span>Home</span></span>
+    </a>
+
+    <nav class="nav" id="nav" aria-label="Основная навигация">
+      <a href="catalog.html">Каталог</a>
+      <a href="#about">О нас</a>
+      <a href="#delivery">Доставка и оплата</a>
+      <a href="#faq">Вопросы</a>
+      <a href="#reviews">Отзывы</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
+
+    <div class="header__actions">
+      <a class="header__phone" href="tel:+375296690981">+375 (29) 669-09-81</a>
+
+      <button class="icon-btn" id="cartBtn" aria-label="Открыть корзину" data-cursor="Корзина">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+          <path d="M3 6h18M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+
+      <button class="burger" id="burger" aria-label="Меню" aria-expanded="false">
+        <span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============ ГЕРОЙ ============ -->
+  <section class="hero" id="hero">
+    <div class="hero__glow" id="heroGlow" aria-hidden="true"></div>
+    <canvas class="petals" id="petals" aria-hidden="true"></canvas>
+
+    <div class="wrap hero__grid">
+      <div class="hero__title">
+        <p class="hero__eyebrow eyebrow">Минск · с 2015 года</p>
+
+        <h1 class="display">
+          <span class="hero__line"><span>Живые</span></span>
+          <span class="hero__line"><span>букеты</span></span>
+          <span class="hero__line"><span><em>к вашей двери</em></span></span>
+        </h1>
+
+        <p class="hero__meta lead">
+          Собираем букеты и композиции из свежих цветов дня, привозим по Минску
+          за два часа. Ещё — комнатные растения, свечи, декор и подарки.
+        </p>
+
+        <div class="hero__cta">
+          <a class="btn" href="catalog.html" data-cursor="Смотреть">
+            Открыть каталог
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="btn btn--ghost" href="#delivery">Условия доставки</a>
+        </div>
+      </div>
+
+      <div class="hero__art" id="heroArt">
+        <div class="hero__card" id="heroCard">
+          <img src="images/hero/hero-1.jpeg" alt="Авторский букет FlowerHome в пастельных тонах" width="800" height="914">
+          <div class="hero__badge">
+            <strong>2 часа</strong>
+            <span>доставка от 70 BYN</span>
+          </div>
+        </div>
+        <img class="hero__float hero__float--a" data-depth="0.05" src="images/hero/hero-3.jpeg" alt="" aria-hidden="true" loading="lazy">
+        <img class="hero__float hero__float--b" data-depth="0.09" src="images/hero/hero-6.jpeg" alt="" aria-hidden="true" loading="lazy">
+      </div>
+    </div>
+
+    <div class="hero__scroll"><i></i> Листайте вниз</div>
+  </section>
+
+  <!-- ============ БЕГУЩАЯ СТРОКА ============ -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track" id="marquee"></div>
+  </div>
+
+  <!-- ============ КАТЕГОРИИ ============ -->
+  <section class="section" id="catalog">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Ассортимент</p>
+        <h2 class="h2">Что у нас есть</h2>
+        <p class="sec-head__side lead">
+          Пять разделов каталога — от свежесрезанных цветов до подарочной упаковки.
+          Всё можно собрать в один заказ и привезти одной доставкой.
+        </p>
+      </div>
+
+      <div class="cats" id="cats"></div>
+    </div>
+  </section>
+
+  <!-- ============ ХИТЫ ============ -->
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Выбор покупателей</p>
+        <h2 class="h2">Чаще всего заказывают</h2>
+        <p class="sec-head__side lead">
+          Букеты и растения, которые берут снова и снова. Состав уточняйте
+          у флориста — собираем из свежих цветов дня.
+        </p>
+      </div>
+
+      <div class="grid-products" id="hits"></div>
+
+      <div style="margin-top:var(--sp-5);text-align:center">
+        <a class="btn btn--ghost" href="catalog.html" data-cursor="Каталог">
+          Весь каталог — 84 позиции
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ШАГИ ============ -->
+  <section class="section" style="background:var(--paper-warm)">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Как это работает</p>
+        <h2 class="h2">Три шага до букета</h2>
+      </div>
+      <div class="steps" id="steps"></div>
+    </div>
+  </section>
+
+  <!-- ============ ПОЧЕМУ ВЫБИРАЮТ НАС ============ -->
+  <section class="section why" id="why">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Почему мы</p>
+        <h2 class="h2">Почему выбирают<br>FlowerHome</h2>
+        <p class="sec-head__side lead" id="whyLead"></p>
+      </div>
+
+      <div class="why__grid">
+        <ol class="why__list" id="whyList"></ol>
+
+        <figure class="why__chart" id="whyChart">
+          <figcaption class="why__chart-head">
+            <p class="eyebrow" id="chartTitle"></p>
+            <p class="why__chart-note" id="chartNote"></p>
+          </figcaption>
+          <div class="chart" id="chart" role="img" aria-labelledby="chartAlt">
+            <p class="sr-only" id="chartAlt"></p>
+          </div>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ О НАС ============ -->
+  <section class="section" id="about">
+    <div class="wrap">
+      <div class="about">
+        <div class="about__art" data-reveal-clip>
+          <img src="images/hero/hero-2.jpeg" alt="Крупная цветочная композиция работы флористов FlowerHome" loading="lazy" width="800" height="914">
+        </div>
+
+        <div>
+          <p class="eyebrow" data-reveal>О нас</p>
+          <p class="about__intro" data-reveal>
+            Добро пожаловать в FlowerHome — ваш идеальный помощник в выборе
+            подарков и создании уюта в доме!
+          </p>
+
+          <div class="about__block" data-reveal>
+            <h3>О нашем магазине</h3>
+            <p>Мы специализируемся на продаже прекрасных и оригинальных подарков, которые
+              подойдут для любого случая. В нашем ассортименте вы найдёте цветы, комнатные
+              растения, стильный декор, упаковку для подарков и многое другое.</p>
+            <p>Наши цветочные букеты и композиции станут прекрасным дополнением к любому
+              празднику, будь то день рождения, юбилей или просто знак внимания для близкого
+              человека. Комнатные растения, кактусы и суккуленты подарят вашему дому живую
+              красоту и свежесть, а уникальные предметы декора — вазы, свечи и сувениры —
+              создадут атмосферу уюта и тепла.</p>
+          </div>
+
+          <div class="about__block" data-reveal>
+            <h3>Почему FlowerHome?</h3>
+            <p>В FlowerHome мы стремимся превзойти ваши ожидания и доставить радость в
+              каждый дом. Наша команда заботится о том, чтобы каждый заказ был выполнен
+              с любовью и вниманием к деталям. Мы гордимся качеством нашего сервиса
+              и всегда готовы помочь вам в выборе идеального подарка.</p>
+            <p>С нами вы можете быть уверены, что ваш подарок будет особенным и принесёт
+              радость тем, кто вам дорог. Спасибо, что выбрали FlowerHome!</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats" id="stats"></div>
+    </div>
+  </section>
+
+  <!-- ============ НАШ САЛОН ============ -->
+  <section class="section salon" id="salon" style="padding-top:0">
+    <div class="wrap">
+      <div class="salon__grid">
+        <div class="salon__art" id="salonArt">
+          <div class="salon__frame" id="salonFrame">
+            <img src="images/hero/salon.jpeg"
+                 alt="Салон FlowerHome на улице Маяковского 146: витрины с цветами, кашпо, шарами и подарками"
+                 loading="lazy" width="680" height="597">
+            <span class="salon__badge">Интернет-магазин flower-home.by открылся</span>
+          </div>
+        </div>
+
+        <div class="salon__text">
+          <p class="eyebrow" data-reveal>Наш салон</p>
+          <h2 class="h2" data-reveal style="margin-top:12px">Заходите<br>к нам вживую</h2>
+
+          <p class="lead" data-reveal style="margin-top:var(--sp-3)">
+            Здесь всё началось. На одной витрине — свежие розы, хризантемы и гортензии,
+            на другой — кашпо, свечи, шары и мягкие игрушки. Всё, что вы видите в каталоге,
+            можно потрогать руками.
+          </p>
+
+          <p data-reveal style="margin-top:var(--sp-2);color:var(--ink-soft)">
+            Приходите без заказа: покажем, что сегодня самое свежее, подскажем, что дольше
+            простоит, и соберём букет прямо при вас — минут за пятнадцать. Сайт мы сделали,
+            чтобы вам не пришлось ехать через весь город. Но если окажетесь рядом — заходите
+            просто так. Мы всегда рады гостям.
+          </p>
+
+          <dl class="salon__meta" data-reveal>
+            <div>
+              <dt>Адрес</dt>
+              <dd>г. Минск, ул. Маяковского 146</dd>
+            </div>
+            <div>
+              <dt>Часы работы</dt>
+              <dd>Пн — Вс, 09:00 — 21:00</dd>
+            </div>
+          </dl>
+
+          <div class="salon__cta" data-reveal>
+            <a class="btn" href="tel:+375296690981" data-cursor="Позвонить">Позвонить в салон</a>
+            <a class="btn btn--ghost" href="catalog.html">Смотреть каталог</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ УСЛУГИ + АКЦИИ ============ -->
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Дополнительно</p>
+        <h2 class="h2">Не только букеты</h2>
+      </div>
+
+      <div class="services" id="services"></div>
+      <div class="promos" id="promos"></div>
+    </div>
+  </section>
+
+  <!-- ============ ДОСТАВКА И ОПЛАТА ============ -->
+  <section class="section" id="delivery" style="background:var(--paper-warm)">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Доставка и оплата</p>
+        <h2 class="h2">Привезём и примем оплату<br>как вам удобно</h2>
+      </div>
+
+      <div class="deliver">
+        <div>
+          <div class="tiers" id="tiers"></div>
+          <div class="facts" id="facts"></div>
+        </div>
+
+        <div>
+          <div class="pay" id="pay"></div>
+          <p class="pay__note" id="payNote"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ЧАСТЫЕ ВОПРОСЫ ============ -->
+  <section class="section" id="faq">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Вопрос — ответ</p>
+        <h2 class="h2">Часто задаваемые<br>вопросы</h2>
+        <p class="sec-head__side lead">
+          Не нашли своего вопроса? Позвоните или напишите в мессенджер —
+          ответим и поможем выбрать.
+        </p>
+      </div>
+
+      <div class="faq" id="faqList"></div>
+
+      <div class="faq__cta">
+        <p>Остались вопросы?</p>
+        <a class="btn btn--clay" href="tel:+375296690981" data-cursor="Позвонить">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
+          +375 (29) 669-09-81
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ОТЗЫВЫ ============ -->
+  <section class="section" id="reviews">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Отзывы</p>
+        <h2 class="h2">Что о нас говорят</h2>
+        <p class="sec-head__side lead">
+          Собрали отзывы из Instagram, Google Карт, Viber и Яндекс Карт.
+          Наведите на карточку, чтобы прочитать целиком.
+        </p>
+      </div>
+
+      <div class="stack" id="reviewsList"></div>
+    </div>
+  </section>
+
+  <!-- ============ КОНТАКТЫ ============ -->
+  <section class="section" id="contacts" style="background:var(--paper-warm)">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Контакты</p>
+        <h2 class="h2">Заходите или звоните</h2>
+      </div>
+
+      <div class="contacts">
+        <dl class="contacts__list">
+          <div class="contact-row">
+            <dt>Телефон</dt>
+            <dd><a href="tel:+375296690981">+375 (29) 669-09-81</a></dd>
+          </div>
+          <div class="contact-row">
+            <dt>Почта</dt>
+            <dd><a href="mailto:flowerhome_by@mail.ru">flowerhome_by@mail.ru</a></dd>
+          </div>
+          <div class="contact-row">
+            <dt>Салон</dt>
+            <dd>г. Минск, ул. Маяковского 146</dd>
+          </div>
+          <div class="contact-row">
+            <dt>Часы работы</dt>
+            <dd>Понедельник — Воскресенье<br>09:00 — 21:00</dd>
+          </div>
+        </dl>
+
+        <div>
+          <p class="eyebrow" style="margin-bottom:var(--sp-2)">Мы на связи</p>
+          <div class="socials" id="socials"></div>
+
+          <p class="lead" style="margin-top:var(--sp-4)">
+            Не уверены, что выбрать? Напишите нам в любой мессенджер — подскажем,
+            что сейчас самое свежее, и соберём букет под ваш бюджет.
+          </p>
+
+          <div style="margin-top:var(--sp-3);display:flex;gap:12px;flex-wrap:wrap">
+            <a class="btn btn--clay" href="tel:+375296690981" data-cursor="Позвонить">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
+              Позвонить
+            </a>
+            <a class="btn btn--ghost" href="catalog.html">Перейти в каталог</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ ПОДВАЛ ============ -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a class="logo" href="index.html">
+          <svg class="logo__mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+            <circle cx="12" cy="12" r="2.6"/>
+            <path d="M12 9.4c0-3 1.2-4.6 3-4.6s2.4 2 1 4.2M12 14.6c0 3-1.2 4.6-3 4.6s-2.4-2-1-4.2M9.4 12c-3 0-4.6-1.2-4.6-3s2-2.4 4.2-1M14.6 12c3 0 4.6 1.2 4.6 3s-2 2.4-4.2 1"/>
+          </svg>
+          <span><b>Flower</b><span>Home</span></span>
+        </a>
+        <p class="footer__tag">Цветы, растения, декор и подарки с доставкой по Минску. Работаем с 2015 года.</p>
+      </div>
+
+      <div class="footer__col">
+        <h4>Каталог</h4>
+        <ul id="footerCats"></ul>
+      </div>
+
+      <div class="footer__col">
+        <h4>Информация</h4>
+        <ul>
+          <li><a href="#about">О нас</a></li>
+          <li><a href="#delivery">Доставка и оплата</a></li>
+          <li><a href="#faq">Частые вопросы</a></li>
+          <li><a href="#reviews">Отзывы</a></li>
+          <li><a href="#contacts">Контакты</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4>Контакты</h4>
+        <ul>
+          <li><a href="tel:+375296690981">+375 (29) 669-09-81</a></li>
+          <li><a href="mailto:flowerhome_by@mail.ru">flowerhome_by@mail.ru</a></li>
+          <li><span>г. Минск, ул. Маяковского 146</span></li>
+          <li><span>Пн — Вс, 09:00 — 21:00</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <p class="footer__legal">
+        ИП Мазуро Татьяна Ивановна · УНП 192435011 · 220020, г. Минск, пр. Победителей д. 95 корп. 1 кв. 334 ·
+        р/с BY40MTBK30130001093300077956 в ЗАО «МТБанк», БИК MTBKBY22, УНП 100394906 ·
+        В Торговом реестре с 05.09.2024
+      </p>
+      <p>© <span id="year">2026</span> FlowerHome</p>
+    </div>
+  </div>
+</footer>
+
+<button class="to-top" id="toTop" aria-label="Наверх">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
+</button>
+
+<!-- ============ КОРЗИНА ============ -->
+<div class="drawer__scrim" id="drawerScrim"></div>
+
+<aside class="drawer" id="drawer" aria-label="Корзина" aria-hidden="true">
+  <div class="drawer__head">
+    <h2>Корзина</h2>
+    <button class="icon-btn" id="drawerClose" aria-label="Закрыть корзину">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+
+  <div class="drawer__body" id="drawerBody"></div>
+  <div class="drawer__foot" id="drawerFoot" hidden></div>
+</aside>
+
+<!-- ============ МОДАЛКА ТОВАРА ============ -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
+  <div class="modal__backdrop" data-close></div>
+  <div class="modal__panel">
+    <button class="modal__close" data-close aria-label="Закрыть">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="modal__media"><img id="modalImg" alt=""></div>
+    <div class="modal__body">
+      <p class="modal__cat" id="modalCat"></p>
+      <h3 class="modal__title" id="modalTitle"></h3>
+      <p class="modal__price" id="modalPrice"></p>
+      <p class="modal__note" id="modalNote"></p>
+      <button class="btn btn--full" id="modalAdd">В корзину</button>
+      <div class="modal__meta">
+        <span>Доставка по Минску от 2 часов при заказе от 70 BYN</span>
+        <span>Самовывоз из салона на ул. Маяковского 146 — бесплатно</span>
+        <span>Состав уточняйте у флориста — собираем из свежих цветов дня</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="js/data.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/app.js"></script>
+<script src="js/animations.js"></script>
+</body>
+</html>
