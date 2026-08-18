@@ -10,7 +10,7 @@
     {
       "name": "flowerhome",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "8124", "--directory", "C:/Users/tochk/OneDrive/Desktop/сайт 3"],
+      "runtimeArgs": ["devserver.py", "8124", "flowerhome"],
       "port": 8124
     },
     {
@@ -72,6 +72,30 @@
       "runtimeExecutable": "python",
       "runtimeArgs": ["devserver.py", "8134", "converter"],
       "port": 8134
+    },
+    {
+      "name": "portfolio",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["devserver.py", "8135", "portfolio"],
+      "port": 8135
+    },
+    {
+      "name": "repo",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["devserver.py", "8140", "."],
+      "port": 8140
+    },
+    {
+      "name": "lab",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["devserver.py", "8141", "lab"],
+      "port": 8141
+    },
+    {
+      "name": "hero-lab",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["devserver.py", "8142", "hero-lab"],
+      "port": 8142
     }
   ]
 }

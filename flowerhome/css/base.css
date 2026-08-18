@@ -686,7 +686,14 @@ body::before {
 @media (max-width: 1000px) {
   .nav {
     position: fixed;
-    inset: 0;
+    /* у .header есть backdrop-filter — он становится containing block для fixed,
+       поэтому inset:0 сжимал меню до полоски шапки и половина пунктов уезжала за экран */
+    top: 0;
+    left: 0;
+    right: auto;
+    bottom: auto;
+    width: 100vw;
+    height: 100svh;
     flex-direction: column;
     justify-content: center;
     gap: var(--sp-2);

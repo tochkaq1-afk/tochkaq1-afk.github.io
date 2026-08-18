@@ -781,3 +781,25 @@
   .card.is-filtering { animation: none; }
   .ci { animation: none; }
 }
+
+/* ============================================================
+   ТЕЛЕФОН: читаемость и цели касания
+   ============================================================ */
+@media (max-width: 760px) {
+  /* подписи 10.5–11.8px на телефоне мелковаты */
+  .eyebrow,
+  .chart__label,
+  .card__tag,
+  .chip__n { font-size: 0.78rem; }
+  .card__sub,
+  .rev__src,
+  .rev__order { font-size: 0.82rem; }
+
+  /* ссылки-строки в шапке, контактах и подвале — палец в 18–22px не попадает */
+  .logo,
+  .footer__col a,
+  .contacts dd a,
+  .footer__list a,
+  .crumbs a,
+  .reset-link { display: inline-flex; align-items: center; min-height: 44px; }
+}

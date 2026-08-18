@@ -848,3 +848,33 @@ p{margin:0}
   .post__media{clip-path:none}
   .hero__title b,.ignition__word span,.menu__list a{transform:none!important}
 }
+/* =========================================================
+   ТЕЛЕФОН: читаемость мелких подписей и цели касания
+   ========================================================= */
+@media (max-width:720px){
+  /* моноширинные подписи 9–11px на телефоне не читаются */
+  .lbl,.eyebrow,
+  .prod__badge,
+  .intro__unit{font-size:12px}
+  .field__lbl,
+  .revs__note,
+  .ware__brand,
+  .ware__price,
+  .bchip,
+  .arena__hint,
+  .cat__kicker,
+  .prod__brand,
+  .score__src,
+  .rev__date,
+  .reel__len{font-size:11px}
+  .cat__kicker,.prod__brand{letter-spacing:.18em}
+
+  /* ссылки-строки: палец не попадает в 21px */
+  .bchip{min-height:38px;display:inline-flex;align-items:center}
+  .link-arw,
+  .foot__col a,
+  .menu__meta a,
+  dd a,
+  .hdr__logo{display:inline-flex;align-items:center;min-height:44px}
+  .foot__col li{margin:0}
+}

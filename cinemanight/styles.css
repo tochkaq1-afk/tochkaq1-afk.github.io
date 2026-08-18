@@ -841,3 +841,29 @@ body.cursor-hot .cursor__ring{ width:62px; height:62px; border-color:var(--acid)
   .loader{ display:none; }
   .cursor{ display:none; }
 }
+
+/* =========================================================
+   ТЕЛЕФОН: узкие экраны
+   ========================================================= */
+@media (max-width:520px){
+  /* шапка перестаёт вылезать за поля: кнопка ужимается, бургер не сплющивается */
+  .nav{ gap:12px; }
+  .nav__right{ gap:8px; }
+  .nav__right .btn--sm{ padding:0 13px; letter-spacing:.08em; }
+  .burger{ flex:none; }
+}
+
+@media (max-width:600px){
+  /* мелкие подписи на телефоне: 10.5–11px нечитаемо, поднимаем и добавляем контраст */
+  .tag,
+  .gslide__hint,
+  .tariff__guests,
+  .field label{ font-size:12px; }
+  .reviews__note,
+  .foot__t,
+  .review footer span,
+  .foot__legal p{ font-size:12px; }
+  .reviews__note{ opacity:.7; }
+  .foot__t{ opacity:.62; }
+  .check{ font-size:14px; }
+}
