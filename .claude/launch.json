@@ -76,8 +76,20 @@
     {
       "name": "portfolio",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["devserver.py", "8135", "portfolio"],
+      "runtimeArgs": ["devserver.py", "8135", "."],
       "port": 8135
+    },
+    {
+      "name": "draft",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["devserver.py", "8136", "draft"],
+      "port": 8136
+    },
+    {
+      "name": "lekalo",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["devserver.py", "8143", "lekalo"],
+      "port": 8143
     },
     {
       "name": "repo",
