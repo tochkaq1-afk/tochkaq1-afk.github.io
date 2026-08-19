@@ -4,13 +4,13 @@
     {
       "name": "cinemanight",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "8123", "--directory", "cinemanight"],
+      "runtimeArgs": ["-m", "http.server", "8123", "--directory", "C:/Users/tochk/OneDrive/Desktop/sites/cinemanight"],
       "port": 8123
     },
     {
       "name": "flowerhome",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["devserver.py", "8124", "flowerhome"],
+      "runtimeArgs": ["devserver.py", "8124", "C:/Users/tochk/OneDrive/Desktop/sites/flowerhome"],
       "port": 8124
     },
     {
@@ -22,7 +22,7 @@
     {
       "name": "motoarena",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "8126", "--directory", "motoarena"],
+      "runtimeArgs": ["-m", "http.server", "8126", "--directory", "C:/Users/tochk/OneDrive/Desktop/sites/motoarena"],
       "port": 8126
     },
     {
