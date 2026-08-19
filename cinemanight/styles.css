@@ -791,12 +791,25 @@ body.cursor-hot .cursor__ring{ width:62px; height:62px; border-color:var(--acid)
   .hero__shot-inner{
     position:absolute; inset:0; border:0; transform:none !important;
   }
+  /* Лёгкое размытие фона обязательно: на снимке зала виден интерфейс
+     подборки — мелкие надписи и кнопки. Через контурные буквы «НОЧЬ»
+     они просвечивали насквозь и налезали на абзац, экран читался кашей.
+     Размытие оставляет узнаваемый зал, но убирает мелочь, спорящую
+     с текстом. */
   .hero__shot img{
     width:100%; height:100%; object-fit:cover; object-position:50% 34%;
+    filter:blur(4px); transform:scale(1.05);   /* scale прячет светлый край от размытия */
   }
+  /* Провал затемнения приходился ровно на заголовок и абзац: в середине
+     оставалось 52% и фон побеждал текст. Держим тёмным весь блок, где
+     стоят буквы, а прозрачнее делаем только верх — там одни метки. */
   .hero__shot::after{
     content:''; position:absolute; inset:0;
-    background:linear-gradient(180deg,rgba(10,10,10,.80) 0%,rgba(10,10,10,.52) 40%,rgba(10,10,10,.94) 100%);
+    background:linear-gradient(180deg,
+      rgba(10,10,10,.84) 0%,
+      rgba(10,10,10,.70) 26%,
+      rgba(10,10,10,.90) 50%,
+      rgba(10,10,10,.96) 100%);
   }
   .hero__light,
   .hero__shot-shine,
