@@ -12,13 +12,10 @@ _preview.html
 # Установленный локально инструмент дизайн-скилла — не часть сайта
 .claude/skills/
 
-# Черновики и лаборатории портфолио — в публикацию не идут.
-# Портфолио переехало в корень репозитория (домен aeternastudio.ru),
-# пути без префикса portfolio/ — proto-intro.html и proto-texts.html
-# исключение: они добавлены в репозиторий явно (git add -f)
-proto-*
-*.bak
-about-me.md
-cursor.js
-assets/flow/
+# Черновики и лаборатории портфолио — в публикацию не идут
+portfolio/proto-*
+portfolio/*.bak
+portfolio/about-me.md
+portfolio/cursor.js
+portfolio/assets/flow/
 # обложки работ — боевые ассеты портфолио

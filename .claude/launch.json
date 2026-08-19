@@ -76,7 +76,7 @@
     {
       "name": "portfolio",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["devserver.py", "8135", "."],
+      "runtimeArgs": ["devserver.py", "8135", "C:/Users/tochk/OneDrive/Desktop/aeternastudio"],
       "port": 8135
     },
     {
@@ -88,7 +88,7 @@
     {
       "name": "lekalo",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["devserver.py", "8143", "lekalo"],
+      "runtimeArgs": ["devserver.py", "8143", "."],
       "port": 8143
     },
     {
